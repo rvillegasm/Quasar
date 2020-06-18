@@ -2,6 +2,7 @@
 
 namespace Quasar
 {
+
     class Application
     {
     public:
@@ -13,4 +14,5 @@ namespace Quasar
 
     // To be defined in the CLIENT
     Application *createApplication();
+
 } // namespace Quasar

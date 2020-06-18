@@ -3,13 +3,9 @@
 class Sandbox : public Quasar::Application
 {
 public:
-    Sandbox()
-    {
-    }
+    Sandbox() {}
 
-    ~Sandbox()
-    {
-    }
+    ~Sandbox() {}
 };
 
 Quasar::Application *Quasar::createApplication()

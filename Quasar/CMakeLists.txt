@@ -14,11 +14,12 @@ if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
 endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
+set(SOURCE_DIR "src")
 
 # Source files
 set(SOURCES 
   ${SOURCE_DIR}/Quasar/Application.cpp
+  ${SOURCE_DIR}/Quasar/Log.cpp
 )
 
 # Add the library
@@ -30,3 +31,7 @@ set_target_properties(quasar PROPERTIES PUBLIC_HEADER include/Quasar.h)
 # Top level include directories
 target_include_directories(quasar PRIVATE include)
 target_include_directories(quasar PRIVATE src)
+
+# ----- Third party dependencies -----
+target_include_directories(quasar PUBLIC vendor/spdlog/include)
+# ------------------------------------
