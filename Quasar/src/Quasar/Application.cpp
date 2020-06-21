@@ -1,5 +1,8 @@
 #include "Application.hpp"
 
+#include "Quasar/Log.hpp"
+#include "Quasar/Events/ApplicationEvent.hpp"
+
 namespace Quasar
 {
 
@@ -9,8 +12,17 @@ namespace Quasar
 
     void Application::run()
     {
-        while (true)
-            ;
+        WindowResizeEvent e(1280, 720);
+        if (e.isInCategory(EventCategoryApplication))
+        {
+            QS_TRACE(e);
+        }
+        if (e.isInCategory(EventCategoryInput))
+        {
+            QS_TRACE(e);
+        }
+
+        while (true);
     }
 
 } // namespace Quasar
