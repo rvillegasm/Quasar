@@ -6,23 +6,19 @@
 namespace Quasar
 {
 
-    Application::Application() {}
+    Application::Application()
+    {
+        m_Window = std::unique_ptr<Window>(Window::create());
+    }
 
     Application::~Application() {}
 
     void Application::run()
     {
-        WindowResizeEvent e(1280, 720);
-        if (e.isInCategory(EventCategoryApplication))
+        while (m_Running)
         {
-            QS_TRACE(e);
+            m_Window->onUpdate();
         }
-        if (e.isInCategory(EventCategoryInput))
-        {
-            QS_TRACE(e);
-        }
-
-        while (true);
     }
 
 } // namespace Quasar

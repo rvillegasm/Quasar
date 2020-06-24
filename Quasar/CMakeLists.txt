@@ -20,6 +20,7 @@ set(SOURCE_DIR "src")
 set(SOURCES 
   ${SOURCE_DIR}/Quasar/Application.cpp
   ${SOURCE_DIR}/Quasar/Log.cpp
+  ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
 )
 
 # Add the library
@@ -33,5 +34,15 @@ target_include_directories(quasar PRIVATE include)
 target_include_directories(quasar PRIVATE src)
 
 # ----- Third party dependencies -----
+# spdlog
 target_include_directories(quasar PUBLIC vendor/spdlog/include)
+# GLFW
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(vendor/GLFW)
+target_link_libraries(quasar glfw)
 # ------------------------------------
+
+# compile definitions
+target_compile_definitions(quasar PRIVATE QS_ENABLE_ASSERTS)

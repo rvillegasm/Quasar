@@ -38,6 +38,8 @@ namespace Quasar
 
     class Event
     {
+        friend class EventDispatcher;
+        
     protected:
         bool m_Handled = false;
 
