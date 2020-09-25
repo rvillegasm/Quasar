@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Quasar/Events/Event.hpp"
+
 #include <string>
 #include <functional>
-
-#include "Quasar/Events/Event.hpp"
 
 namespace Quasar
 {
@@ -30,7 +30,7 @@ namespace Quasar
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
-        // virtual ~Window();
+        virtual ~Window() {}
 
         virtual void onUpdate() = 0;
 
@@ -41,6 +41,7 @@ namespace Quasar
         virtual void setVSync(bool enabled) = 0;
         virtual bool isVSync() const = 0;
 
+        // Implemented per-platform in order to be platform agnostic
         static Window *create(const WindowProps &props = WindowProps());
     };
 }

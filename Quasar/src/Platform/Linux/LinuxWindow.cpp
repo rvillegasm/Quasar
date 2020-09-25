@@ -3,9 +3,18 @@
 #include "Quasar/Core.hpp"
 #include "Quasar/Log.hpp"
 
+#include "Quasar/Events/ApplicationEvent.hpp"
+#include "Quasar/Events/MouseEvent.hpp"
+#include "Quasar/Events/KeyEvent.hpp"
+
 namespace Quasar
 {
     static bool s_GLFWInitialized = false;
+
+    static void GLFWErrorCallback(int error, const char *description)
+    {
+        QS_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+    }
 
     Window *Window::create(const WindowProps &props)
     {
@@ -37,6 +46,7 @@ namespace Quasar
         {
             int success = glfwInit();
             QS_CORE_ASSERT(success, "Could not initialize GLFW!");
+            glfwSetErrorCallback(GLFWErrorCallback);
             s_GLFWInitialized = true;
         }
 
@@ -50,6 +60,93 @@ namespace Quasar
         glfwMakeContextCurrent(m_Window);
         glfwSetWindowUserPointer(m_Window, &m_Data);
         setVSync(true);
+
+        // ----- set GLFW callbacks -----
+
+        glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            data.width = width;
+            data.height = height;
+
+            WindowResizeEvent event(width, height);
+            data.eventCallback(event);
+        });
+
+        glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowCloseEvent event;
+            data.eventCallback(event);
+        });
+
+        glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    KeyPressedEvent event(key, 0);
+                    data.eventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    KeyReleasedEvent event(key);
+                    data.eventCallback(event);
+                    break;
+                }
+                case GLFW_REPEAT:
+                {
+                    KeyPressedEvent event(key, 1);
+                    data.eventCallback(event);
+                    break;
+                }
+                default:
+                    break;
+            }
+        });
+
+        glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+
+            switch (action)
+            {
+                case GLFW_PRESS:
+                {
+                    MouseButtonPressedEvent event(button);
+                    data.eventCallback(event);
+                    break;
+                }
+                case GLFW_RELEASE:
+                {
+                    MouseButtonReleasedEvent event(button);
+                    data.eventCallback(event);
+                    break;
+                }
+                default:
+                    break;
+            }
+        });
+
+        glfwSetScrollCallback(m_Window, [](GLFWwindow *window, double xOffset, double yOffset)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+
+            MouseScolledEvent event((float) xOffset, (float) yOffset);
+            data.eventCallback(event);
+        });
+
+        glfwSetCursorPosCallback(m_Window, [](GLFWwindow *window, double xPos, double yPos)
+        {
+            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+
+            MouseMovedEvent event((float) xPos, (float) yPos);
+            data.eventCallback(event);
+        });
     }
 
     void LinuxWindow::shutdown()

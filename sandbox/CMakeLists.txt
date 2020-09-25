@@ -19,10 +19,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 add_executable(sandbox src/SandboxApp.cpp)
 
 # include directories
-target_include_directories(sandbox PRIVATE 
-  "${CMAKE_SOURCE_DIR}/../Quasar/include/"
+target_include_directories(sandbox PRIVATE
   "${CMAKE_SOURCE_DIR}/../Quasar/src"
   "${CMAKE_SOURCE_DIR}/../Quasar/vendor/spdlog/include"
+  "${CMAKE_SOURCE_DIR}/../Quasar/vendor/GLFW/include"
 )
 
 # link libraries

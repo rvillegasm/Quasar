@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-# set the project name
+# project name
 project(Quasar)
 
 # specify the C++ standard
@@ -27,21 +27,24 @@ set(SOURCES
 add_library(quasar SHARED ${SOURCES})
 
 # Set public API
-set_target_properties(quasar PROPERTIES PUBLIC_HEADER include/Quasar.h)
+set_target_properties(quasar PROPERTIES PUBLIC_HEADER src/Quasar.h)
 
 # Top level include directories
-target_include_directories(quasar PRIVATE include)
 target_include_directories(quasar PRIVATE src)
 
 # ----- Third party dependencies -----
+
 # spdlog
 target_include_directories(quasar PUBLIC vendor/spdlog/include)
-# GLFW
+
+# GLFW (and OpenGL)
+find_package(OpenGL REQUIRED)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/GLFW)
-target_link_libraries(quasar glfw)
+target_link_libraries(quasar glfw OpenGL::GL)
+
 # ------------------------------------
 
 # compile definitions

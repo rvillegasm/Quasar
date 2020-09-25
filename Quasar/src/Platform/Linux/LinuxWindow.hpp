@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
-
 #include "Quasar/Window.hpp"
 
 #include "GLFW/glfw3.h"
+
+#include <string>
 
 namespace Quasar
 {
@@ -35,7 +35,7 @@ namespace Quasar
         inline unsigned int getHeight() const override { return m_Data.height; }
 
         inline void setEventCallback(const EventCallbackFn &callback) override 
-        { 
+        {
             m_Data.eventCallback = callback;
         }
         void setVSync(bool enabled) override;
