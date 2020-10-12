@@ -20,6 +20,8 @@ set(SOURCE_DIR "src")
 set(SOURCES 
   ${SOURCE_DIR}/Quasar/Application.cpp
   ${SOURCE_DIR}/Quasar/Log.cpp
+  ${SOURCE_DIR}/Quasar/Layer.cpp
+  ${SOURCE_DIR}/Quasar/LayerStack.cpp
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
 )
 

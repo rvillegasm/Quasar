@@ -39,7 +39,7 @@ namespace Quasar
     class Event
     {
         friend class EventDispatcher;
-        
+
     protected:
         bool m_Handled = false;
 
@@ -53,6 +53,9 @@ namespace Quasar
         {
             return getCategoryFlags() & category;
         }
+
+        inline void setHandled(bool handled) { m_Handled = handled; }
+        inline bool isHandled() { return m_Handled; }
     };
 
     class EventDispatcher
