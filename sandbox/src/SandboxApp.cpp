@@ -25,6 +25,7 @@ public:
     Sandbox() 
     {
         pushLayer(new ExampleLayer());
+        pushOverlay(new Quasar::ImGuiLayer());
     }
 
     ~Sandbox() 

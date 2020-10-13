@@ -16,6 +16,7 @@ namespace Quasar
         std::unique_ptr<Window> m_Window;
         bool m_Running = true;
         LayerStack m_LayerStack;
+        static Application *s_Instance;
 
         bool onWindowClosed(WindowCloseEvent &e);
 
@@ -29,6 +30,10 @@ namespace Quasar
 
         void pushLayer(Layer *layer);
         void pushOverlay(Layer *overlay);
+
+        inline Window &getWindow() { return *m_Window; }
+        
+        inline static Application &get() { return *s_Instance; }
     };
 
     // To be defined in the CLIENT
