@@ -40,14 +40,21 @@ target_include_directories(quasar PRIVATE src)
 target_include_directories(quasar PUBLIC vendor/spdlog/include)
 
 # GLFW (and OpenGL)
-find_package(OpenGL REQUIRED)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/GLFW)
-target_link_libraries(quasar glfw OpenGL::GL)
+
+# glad
+add_subdirectory(vendor/glad)
+
+# link every lib
+target_link_libraries(quasar PRIVATE glad glfw)
 
 # ------------------------------------
 
 # compile definitions
-target_compile_definitions(quasar PRIVATE QS_ENABLE_ASSERTS)
+target_compile_definitions(quasar PRIVATE 
+  GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
+  QS_ENABLE_ASSERTS
+)

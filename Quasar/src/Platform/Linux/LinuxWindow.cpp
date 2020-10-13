@@ -7,6 +7,8 @@
 #include "Quasar/Events/MouseEvent.hpp"
 #include "Quasar/Events/KeyEvent.hpp"
 
+#include <glad/glad.h>
+
 namespace Quasar
 {
     static bool s_GLFWInitialized = false;
@@ -58,6 +60,8 @@ namespace Quasar
             nullptr
         );
         glfwMakeContextCurrent(m_Window);
+        int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+        QS_CORE_ASSERT(status, "Failed to initialize glad!");
         glfwSetWindowUserPointer(m_Window, &m_Data);
         setVSync(true);
 
