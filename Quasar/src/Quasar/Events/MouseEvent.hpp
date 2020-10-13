@@ -29,13 +29,13 @@ namespace Quasar
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
     };
 
-    class MouseScolledEvent : public Event
+    class MouseScrolledEvent : public Event
     {
     private:
         float m_XOffset, m_YOffset;
 
     public:
-        MouseScolledEvent(float xOffset, float yOffset)
+        MouseScrolledEvent(float xOffset, float yOffset)
             : m_XOffset(xOffset), m_YOffset(yOffset) {}
 
         inline float getXOffset() const { return m_XOffset; }

@@ -10,7 +10,7 @@ namespace Quasar
     {
     protected:
         int m_KeyCode;
-        KeyEvent(int keyCode) 
+        KeyEvent(int keyCode)
             : m_KeyCode(keyCode) {}
 
     public:
@@ -55,4 +55,21 @@ namespace Quasar
 
         EVENT_CLASS_TYPE(EventType::KeyReleased)
     };
+
+    class KeyTypedEvent : public KeyEvent
+    {
+    public:
+        KeyTypedEvent(int keyCode)
+            : KeyEvent(keyCode) {}
+
+        std::string toString() const override
+        {
+            std::stringstream ss;
+            ss << "KeyTyped Event: " << m_KeyCode;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(EventType::KeyTyped)
+    };
+
 } // namespace Quasar
