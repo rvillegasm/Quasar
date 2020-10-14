@@ -25,6 +25,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
 
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
+  ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
   ${SOURCE_DIR}/Platform/OpenGL/ImGuiOpenGLRenderer.cpp
 )
 

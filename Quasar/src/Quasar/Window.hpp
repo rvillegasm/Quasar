@@ -41,6 +41,8 @@ namespace Quasar
         virtual void setVSync(bool enabled) = 0;
         virtual bool isVSync() const = 0;
 
+        virtual void *getNativeWindow() const = 0;
+
         // Implemented per-platform in order to be platform agnostic
         static Window *create(const WindowProps &props = WindowProps());
     };

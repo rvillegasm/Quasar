@@ -1,6 +1,7 @@
 #include "Application.hpp"
 
 #include "Quasar/Log.hpp"
+#include "Quasar/Input.hpp"
 
 #include <glad/glad.h>
 
@@ -62,6 +63,9 @@ namespace Quasar
             {
                 layer->onUpdate();
             }
+
+            auto [x, y] = Input::getMousePosition();
+            QS_CORE_TRACE("{0}, {1}", x, y);
 
             m_Window->onUpdate();
         }
