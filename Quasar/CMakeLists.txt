@@ -38,7 +38,9 @@ set_target_properties(quasar PROPERTIES PUBLIC_HEADER src/Quasar.h)
 # Top level include directories
 target_include_directories(quasar PRIVATE src)
 
+# ------------------------------------
 # ----- Third party dependencies -----
+# ------------------------------------
 
 # spdlog
 target_include_directories(quasar PUBLIC vendor/spdlog/include)
@@ -68,9 +70,14 @@ target_include_directories(imgui PUBLIC vendor/imgui)
 target_compile_options(imgui PRIVATE -fPIC)
 target_include_directories(quasar PUBLIC vendor/imgui)
 
+# glm
+target_include_directories(quasar PUBLIC vendor/glm)
+
 # link every library
 target_link_libraries(quasar PRIVATE glad glfw imgui)
 
+# ------------------------------------
+# --------------- END ----------------
 # ------------------------------------
 
 # compile definitions

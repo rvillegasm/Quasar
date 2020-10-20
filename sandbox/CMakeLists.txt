@@ -22,7 +22,7 @@ add_executable(sandbox src/SandboxApp.cpp)
 target_include_directories(sandbox PRIVATE
   "${CMAKE_SOURCE_DIR}/../Quasar/src"
   "${CMAKE_SOURCE_DIR}/../Quasar/vendor/spdlog/include"
-  "${CMAKE_SOURCE_DIR}/../Quasar/vendor/GLFW/include"
+  "${CMAKE_SOURCE_DIR}/../Quasar/vendor/glm"
 )
 
 # link libraries

@@ -7,3 +7,6 @@
 [submodule "Quasar/vendor/imgui"]
 	path = Quasar/vendor/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Quasar/vendor/glm"]
+	path = Quasar/vendor/glm
+	url = https://github.com/g-truc/glm.git
