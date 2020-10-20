@@ -5,6 +5,8 @@
 #include "Quasar/Events/Event.hpp"
 #include "Quasar/Events/ApplicationEvent.hpp"
 
+#include "Quasar/ImGui/ImGuiLayer.hpp"
+
 #include <memory>
 
 namespace Quasar
@@ -14,6 +16,7 @@ namespace Quasar
     {
     private:
         std::unique_ptr<Window> m_Window;
+        ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
         static Application *s_Instance;

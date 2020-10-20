@@ -27,6 +27,10 @@ public:
             }
         }
     }
+
+    void onImGuiRender() override
+    {
+    }
 };
 
 class Sandbox : public Quasar::Application
@@ -35,7 +39,6 @@ public:
     Sandbox() 
     {
         pushLayer(new ExampleLayer());
-        pushOverlay(new Quasar::ImGuiLayer());
     }
 
     ~Sandbox() 

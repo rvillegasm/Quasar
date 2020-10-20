@@ -23,10 +23,10 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Layer.cpp
   ${SOURCE_DIR}/Quasar/LayerStack.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
+  ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
 
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
   ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
-  ${SOURCE_DIR}/Platform/OpenGL/ImGuiOpenGLRenderer.cpp
 )
 
 # Add the library
@@ -62,9 +62,11 @@ set(IMGUI_SOURCES
   vendor/imgui/imgui_widgets.cpp
   vendor/imgui/imgui_draw.cpp
   vendor/imgui/imgui_demo.cpp
+  vendor/imgui/backends/imgui_impl_glfw.cpp
+  vendor/imgui/backends/imgui_impl_opengl3.cpp
 )
 add_library(imgui ${IMGUI_SOURCES})
-target_include_directories(imgui PUBLIC vendor/imgui)
+target_include_directories(imgui PUBLIC vendor/imgui vendor/GLFW/include vendor/glad/include)
 # compiler flags
 # -fPIC to allow position independent code when using this lib to build a shared object
 target_compile_options(imgui PRIVATE -fPIC)
