@@ -10,12 +10,22 @@ public:
 
     void onUpdate() override
     {
-        QS_INFO("ExampleLayer::Update");
+        if (Quasar::Input::isKeyPressed(QS_KEY_TAB))
+        {
+            QS_TRACE("TAB key pressed! (polling)");
+        }
     }
 
     void onEvent(Quasar::Event &event) override
     {
-        QS_TRACE("{0}", event);
+        if (event.getEventType() == Quasar::EventType::KeyPressed)
+        {
+            Quasar::KeyPressedEvent &e = (Quasar::KeyPressedEvent&)event;
+            if (e.getKeyCode() == QS_KEY_TAB)
+            {
+                QS_TRACE("TAB key pressed! (event)");
+            }
+        }
     }
 };
 
