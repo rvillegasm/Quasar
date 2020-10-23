@@ -28,11 +28,12 @@ namespace Quasar
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO(); (void)io;
-        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;    // Enable Keyboard Controls
+        ImGuiIO &io = ImGui::GetIO();
+        (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  //  Enable Gamepad Controls
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;        //  Enable Docking Controls
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;      //  Enable Multi-Viewports Controls
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;   //  Enable Docking Controls
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; //  Enable Multi-Viewports Controls
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcon;
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
@@ -47,7 +48,7 @@ namespace Quasar
         }
 
         Application &app = Application::get();
-        GLFWwindow *window = static_cast<GLFWwindow*>(app.getWindow().getNativeWindow());
+        GLFWwindow *window = static_cast<GLFWwindow *>(app.getWindow().getNativeWindow());
 
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -72,7 +73,7 @@ namespace Quasar
     {
         ImGuiIO &io = ImGui::GetIO();
         Application &app = Application::get();
-        io.DisplaySize = ImVec2(app.getWindow().getWidth(), app.getWindow().getHeight());
+        io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeight());
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

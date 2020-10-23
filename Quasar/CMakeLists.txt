@@ -14,6 +14,7 @@ if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
 endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(SOURCE_DIR "src")
 
 # Source files
@@ -30,7 +31,7 @@ set(SOURCES
 )
 
 # Add the library
-add_library(quasar SHARED ${SOURCES})
+add_library(quasar STATIC ${SOURCES})
 
 # Set public API
 set_target_properties(quasar PROPERTIES PUBLIC_HEADER src/Quasar.h)
@@ -44,46 +45,29 @@ target_include_directories(quasar PRIVATE src)
 
 # spdlog
 target_include_directories(quasar PUBLIC vendor/spdlog/include)
-
 # GLFW (and OpenGL)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(vendor/GLFW)
 target_include_directories(quasar PUBLIC vendor/GLFW/include)
-
 # glad
-add_subdirectory(vendor/glad)
 target_include_directories(quasar PUBLIC vendor/glad/include)
-
 # ImGui
-set(IMGUI_SOURCES
-  vendor/imgui/imgui.cpp
-  vendor/imgui/imgui_widgets.cpp
-  vendor/imgui/imgui_draw.cpp
-  vendor/imgui/imgui_demo.cpp
-  vendor/imgui/backends/imgui_impl_glfw.cpp
-  vendor/imgui/backends/imgui_impl_opengl3.cpp
-)
-add_library(imgui ${IMGUI_SOURCES})
-target_include_directories(imgui PUBLIC vendor/imgui vendor/GLFW/include vendor/glad/include)
-# compiler flags
-# -fPIC to allow position independent code when using this lib to build a shared object
-target_compile_options(imgui PRIVATE -fPIC)
 target_include_directories(quasar PUBLIC vendor/imgui)
-
 # glm
 target_include_directories(quasar PUBLIC vendor/glm)
-
-# link every library
-target_link_libraries(quasar PRIVATE glad glfw imgui)
 
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------
 
-# compile definitions
-target_compile_definitions(quasar PRIVATE 
+# compiler definitions
+target_compile_definitions(quasar PRIVATE
   GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
   QS_ENABLE_ASSERTS
 )
+# show warnings on debug build
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  target_compile_options(quasar PRIVATE
+    $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+      -Wall>
+    $<$<CXX_COMPILER_ID:MSVC>:
+      /W4>)
+endif()

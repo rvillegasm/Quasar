@@ -23,7 +23,7 @@ namespace Quasar
             Application::get().getWindow().getNativeWindow()
         );
         int state = glfwGetMouseButton(window, button);
-        return GLFW_PRESS;
+        return state == GLFW_PRESS;
     }
 
     std::pair<float, float> LinuxInput::getMousePositionImpl()

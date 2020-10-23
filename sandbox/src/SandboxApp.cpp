@@ -1,5 +1,7 @@
 #include <Quasar.hpp>
 
+#include "imgui.h"
+
 class ExampleLayer : public Quasar::Layer
 {
 public:
@@ -30,6 +32,9 @@ public:
 
     void onImGuiRender() override
     {
+        ImGui::Begin("Test");
+        ImGui::Text("Hello World!");
+        ImGui::End();
     }
 };
 
