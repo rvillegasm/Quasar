@@ -25,6 +25,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/LayerStack.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
 
