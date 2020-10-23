@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Quasar/Log.hpp"
+
 #ifdef QS_ENABLE_ASSERTS
     #include <cstdlib>
     #define QS_ASSERT(x, ...)                                   \

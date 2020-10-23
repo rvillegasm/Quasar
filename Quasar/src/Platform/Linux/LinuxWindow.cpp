@@ -7,7 +7,7 @@
 #include "Quasar/Events/MouseEvent.hpp"
 #include "Quasar/Events/KeyEvent.hpp"
 
-#include <glad/glad.h>
+#include "Platform/OpenGL/OpenGLContext.hpp"
 
 namespace Quasar
 {
@@ -59,9 +59,10 @@ namespace Quasar
             nullptr,
             nullptr
         );
-        glfwMakeContextCurrent(m_Window);
-        int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-        QS_CORE_ASSERT(status, "Failed to initialize glad!");
+
+        m_Context = new OpenGLContext(m_Window);
+        m_Context->init();
+
         glfwSetWindowUserPointer(m_Window, &m_Data);
         setVSync(true);
 
@@ -163,13 +164,14 @@ namespace Quasar
 
     void LinuxWindow::shutdown()
     {
+        // delete m_Context;
         glfwDestroyWindow(m_Window);
     }
 
     void LinuxWindow::onUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_Window); 
+        m_Context->swapBuffers();
     }
 
     void LinuxWindow::setVSync(bool enabled)
