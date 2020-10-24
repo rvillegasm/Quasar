@@ -23,11 +23,16 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Log.cpp
   ${SOURCE_DIR}/Quasar/Layer.cpp
   ${SOURCE_DIR}/Quasar/LayerStack.cpp
+
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
+
   ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/Buffer.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/Renderer.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
 
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
   ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
