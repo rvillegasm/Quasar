@@ -9,6 +9,7 @@ namespace Quasar
     {
     private:
         uint32_t m_RendererID;
+        BufferLayout m_Layout;
 
     public:
         OpenGLVertexBuffer(float *vertices, uint32_t size);
@@ -16,6 +17,9 @@ namespace Quasar
 
         void bind() const override;
         void unbind() const override;
+
+        const BufferLayout &getLayout() const override { return m_Layout; }
+        void setLayout(const BufferLayout &layout) override { m_Layout = layout; }
     };
 
     class OpenGLIndexBuffer : public IndexBuffer
