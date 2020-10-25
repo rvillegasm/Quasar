@@ -45,7 +45,7 @@ namespace Quasar
 
     OpenGLIndexBuffer::~OpenGLIndexBuffer()
     {
-
+        glDeleteBuffers(1, &m_RendererID);
     }
 
     void OpenGLIndexBuffer::bind() const
