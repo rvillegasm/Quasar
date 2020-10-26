@@ -9,7 +9,7 @@
 namespace Quasar
 {
     
-    class OpenGLVertexArray : public VertexArray
+    class OpenGLVertexArray final : public VertexArray
     {
     private:
         uint32_t m_RendererID;

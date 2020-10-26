@@ -7,7 +7,7 @@ struct GLFWwindow;
 namespace Quasar
 {
     
-    class OpenGLContext : public GraphicsContext
+    class OpenGLContext final : public GraphicsContext
     {
     private:
         GLFWwindow *m_WindowHandle;

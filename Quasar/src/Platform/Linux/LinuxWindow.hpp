@@ -9,7 +9,7 @@
 
 namespace Quasar
 {
-    class LinuxWindow : public Window
+    class LinuxWindow final : public Window
     {
     private:
         GLFWwindow *m_Window;

@@ -1,21 +1,22 @@
 #pragma once
 
+#include "Quasar/Renderer/RenderCommand.hpp"
+#include "Quasar/Renderer/VertexArray.hpp"
+
+#include <memory>
+
 namespace Quasar
 {
-    
-    enum class RendererAPI
-    {
-        None = 0,
-        OpenGL = 1,
-    };
 
     class Renderer
     {
-    private:
-        static RendererAPI s_RendererAPI;
-
     public:
-        inline static RendererAPI getAPI() { return s_RendererAPI; }
+        static void beginScene();
+        static void endScene();
+
+        static void submit(const std::shared_ptr<VertexArray> &vertexArray);
+
+        inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
     };  
 
 } // namespace Quasar

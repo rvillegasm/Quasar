@@ -5,7 +5,7 @@
 namespace Quasar
 {
     
-    class OpenGLVertexBuffer : public VertexBuffer
+    class OpenGLVertexBuffer final : public VertexBuffer
     {
     private:
         uint32_t m_RendererID;

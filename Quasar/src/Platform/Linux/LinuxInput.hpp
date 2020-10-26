@@ -7,7 +7,7 @@
 namespace Quasar
 {
     
-    class LinuxInput : public Input
+    class LinuxInput final : public Input
     {
     protected:
         virtual bool isKeyPressedImpl(int keycode) override;
