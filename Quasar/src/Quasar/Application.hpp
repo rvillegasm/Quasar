@@ -10,6 +10,7 @@
 #include "Quasar/Renderer/Shader.hpp"
 #include "Quasar/Renderer/Buffer.hpp"
 #include "Quasar/Renderer/VertexArray.hpp"
+#include "Quasar/Renderer/OrthographicCamera.hpp"
 
 #include <memory>
 
@@ -29,6 +30,8 @@ namespace Quasar
 
         std::shared_ptr<Shader> m_BlueShader;
         std::shared_ptr<VertexArray> m_SquareVA;
+
+        OrthographicCamera m_Camera;
 
         static Application *s_Instance;
 

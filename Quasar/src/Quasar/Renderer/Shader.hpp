@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <string>
 
 namespace Quasar
@@ -16,6 +18,8 @@ namespace Quasar
 
         void bind() const;
         void unbind() const;
+
+        void uploadUniformMat4(const std::string& name, const glm::mat4 &matrix);
     };
 
 } // namespace Quasar
