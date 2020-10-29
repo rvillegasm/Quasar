@@ -1,9 +1,7 @@
 #include "Application.hpp"
 
+#include "Quasar/Core.hpp"
 #include "Quasar/Log.hpp"
-#include "Quasar/Input.hpp"
-
-#include "Quasar/Renderer/Renderer.hpp"
 
 namespace Quasar
 {
@@ -13,7 +11,6 @@ namespace Quasar
     Application *Application::s_Instance = nullptr;
 
     Application::Application()
-        : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
         QS_CORE_ASSERT(!s_Instance, "An Application already exists!");
         s_Instance = this;
@@ -23,115 +20,6 @@ namespace Quasar
 
         m_ImGuiLayer = new ImGuiLayer();
         pushOverlay(m_ImGuiLayer);
-
-        m_VertexArray.reset(VertexArray::create());
-
-        float vertices[3 * 7] = {
-            -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
-             0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-             0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
-        };
-
-        std::shared_ptr<VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(VertexBuffer::create(vertices, sizeof(vertices)));
-        BufferLayout layout = {
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float4, "a_Color" },
-        };
-        vertexBuffer->setLayout(layout);
-        m_VertexArray->addVertexBuffer(vertexBuffer);
-
-        unsigned int indices[3] = { 0, 1, 2 };
-        std::shared_ptr<IndexBuffer> indexBuffer;
-        indexBuffer.reset(IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
-        m_VertexArray->setIndexBuffer(indexBuffer);
-
-        m_SquareVA.reset(VertexArray::create());
-        float squareVertices[4 * 3] = {
-            -0.75f, -0.75f, 0.0f,
-             0.75f, -0.75f, 0.0f,
-             0.75f,  0.75f, 0.0f,
-            -0.75f,  0.75f, 0.0f
-        };
-
-        std::shared_ptr<VertexBuffer> squareVB;
-        squareVB.reset(VertexBuffer::create(squareVertices, sizeof(squareVertices)));
-        squareVB->setLayout({
-            { ShaderDataType::Float3, "a_Position" },
-        });
-        m_SquareVA->addVertexBuffer(squareVB);
-
-        unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        std::shared_ptr<IndexBuffer> squareIB;
-        squareIB.reset(IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))); 
-        m_SquareVA->setIndexBuffer(squareIB);
-
-        const std::string vertexSrc = R"(
-            #version 330 core
-
-            layout(location = 0) in vec3 a_Position;
-            layout(location = 1) in vec4 a_Color;
-
-            uniform mat4 u_ViewProjection;
-
-            out vec3 v_Position;
-            out vec4 v_Color;
-
-            void main()
-            {
-                v_Position = a_Position;
-                v_Color = a_Color;
-                gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-            }
-        )";
-
-        const std::string fragmentSrc = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 color;
-
-            in vec3 v_Position;
-            in vec4 v_Color;
-
-            void main()
-            {
-                color = vec4(v_Position * 0.5 + 0.5, 1.0);
-                color = v_Color;
-            }
-        )";
-
-        m_Shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
-
-        const std::string blueShaderVertexSrc = R"(
-            #version 330 core
-
-            layout(location = 0) in vec3 a_Position;
-
-            uniform mat4 u_ViewProjection;
-
-            out vec3 v_Position;
-
-            void main()
-            {
-                v_Position = a_Position;
-                gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
-            }
-        )";
-
-        const std::string blueShaderFragmentSrc = R"(
-            #version 330 core
-
-            layout(location = 0) out vec4 color;
-
-            in vec3 v_Position;
-
-            void main()
-            {
-                color = vec4(0.2, 0.3, 0.8, 1.0);
-            }
-        )";
-
-        m_BlueShader = std::make_shared<Shader>(blueShaderVertexSrc, blueShaderFragmentSrc);
     }
 
     Application::~Application() 
@@ -169,19 +57,6 @@ namespace Quasar
     {
         while (m_Running)
         {
-            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            RenderCommand::clear();
-
-            m_Camera.setPosition({ 0.5f, 0.5f, 0.0f });
-            m_Camera.setRotation(45.0f);
-
-            Renderer::beginScene(m_Camera);
-            
-            Renderer::submit(m_BlueShader, m_SquareVA);
-            Renderer::submit(m_Shader, m_VertexArray);
-            
-            Renderer::endScene();
-
             for (Layer *layer : m_LayerStack)
             {
                 layer->onUpdate();

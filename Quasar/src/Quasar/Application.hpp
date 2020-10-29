@@ -7,11 +7,6 @@
 
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 
-#include "Quasar/Renderer/Shader.hpp"
-#include "Quasar/Renderer/Buffer.hpp"
-#include "Quasar/Renderer/VertexArray.hpp"
-#include "Quasar/Renderer/OrthographicCamera.hpp"
-
 #include <memory>
 
 namespace Quasar
@@ -24,14 +19,6 @@ namespace Quasar
         ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
-
-        std::shared_ptr<Shader> m_Shader;
-        std::shared_ptr<VertexArray> m_VertexArray;
-
-        std::shared_ptr<Shader> m_BlueShader;
-        std::shared_ptr<VertexArray> m_SquareVA;
-
-        OrthographicCamera m_Camera;
 
         static Application *s_Instance;
 
