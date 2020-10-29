@@ -19,6 +19,7 @@ namespace Quasar
         void bind() const;
         void unbind() const;
 
+        void uploadUniformFloat4(const std::string& name, const glm::vec4 &values);
         void uploadUniformMat4(const std::string& name, const glm::mat4 &matrix);
     };
 

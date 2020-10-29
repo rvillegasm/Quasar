@@ -134,12 +134,18 @@ namespace Quasar
         glUseProgram(0);
     }
 
+    void Shader::uploadUniformFloat4(const std::string& name, const glm::vec4 &values)
+    {
+        // make sure to bind before calling
+        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        glUniform4f(location, values.x, values.y, values.z, values.w);
+    }
+
     void Shader::uploadUniformMat4(const std::string& name, const glm::mat4 &matrix)
     {
         // make sure to bind before calling
         GLint location = glGetUniformLocation(m_RendererID, name.c_str());
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-
     }
 
 } // namespace Quasar
