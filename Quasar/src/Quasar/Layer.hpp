@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Quasar/Core/Timestep.hpp"
+
 #include "Quasar/Events/Event.hpp"
 
 #include <string>
@@ -19,7 +21,7 @@ namespace Quasar
 
         virtual void onAttach() {}
         virtual void onDetach() {}
-        virtual void onUpdate() {}
+        virtual void onUpdate(Timestep ts) {}
         virtual void onImGuiRender() {}
         virtual void onEvent(Event &event) {}
 

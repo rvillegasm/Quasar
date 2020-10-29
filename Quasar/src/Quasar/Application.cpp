@@ -3,6 +3,10 @@
 #include "Quasar/Core.hpp"
 #include "Quasar/Log.hpp"
 
+#include "Quasar/Core/Timestep.hpp"
+
+#include <GLFW/glfw3.h> // Temporary, here just to get the time
+
 namespace Quasar
 {
 
@@ -57,9 +61,13 @@ namespace Quasar
     {
         while (m_Running)
         {
+            float time = (float)glfwGetTime(); // Move to Platform::GetTime() or something like that
+            Timestep timestep = time - m_LastFrameTime;
+            m_LastFrameTime = time;
+
             for (Layer *layer : m_LayerStack)
             {
-                layer->onUpdate();
+                layer->onUpdate(timestep);
             }
 
             m_ImGuiLayer->begin();

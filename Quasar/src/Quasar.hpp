@@ -7,6 +7,8 @@
 #include "Quasar/Core.hpp"
 #include "Quasar/Log.hpp"
 
+#include "Quasar/Core/Timestep.hpp"
+
 #include "Quasar/Input.hpp"
 #include "Quasar/KeyCodes.hpp"
 #include "Quasar/MouseButtonCodes.hpp"
