@@ -2,15 +2,21 @@
 
 #include "Quasar/Renderer/Shader.hpp"
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
+
+#include <unordered_map>
 
 namespace Quasar
 {
     
-    class OpenGLShader : public Shader
+    class OpenGLShader final : public Shader
     {
     private:
         uint32_t m_RendererID;
+        mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
+
+        GLint getUniformLocation(const std::string &name) const;
 
     public:
         OpenGLShader(const std::string &vertexSrc, const std::string &fragmentSrc);

@@ -137,50 +137,66 @@ namespace Quasar
     void OpenGLShader::uploadUniformInt(const std::string& name, int value)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniform1i(location, value);
     }
 
     void OpenGLShader::uploadUniformFloat(const std::string& name, float value)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniform1f(location, value);
     }
 
     void OpenGLShader::uploadUniformFloat2(const std::string& name, const glm::vec2 &values)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniform2f(location, values.x, values.y);
     }
 
     void OpenGLShader::uploadUniformFloat3(const std::string& name, const glm::vec3 &values)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniform3f(location, values.x, values.y, values.z);
     }
 
     void OpenGLShader::uploadUniformFloat4(const std::string& name, const glm::vec4 &values)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniform4f(location, values.x, values.y, values.z, values.w);
     }
 
     void OpenGLShader::uploadUniformMat3(const std::string& name, const glm::mat3 &matrix)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
     void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4 &matrix)
     {
         // make sure to bind before calling
-        GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+        GLint location = getUniformLocation(name);
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+    }
+
+    // ----- PRIVATE -----
+
+    GLint OpenGLShader::getUniformLocation(const std::string &name) const
+    {
+        if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
+        {
+            return m_UniformLocationCache[name];
+        }
+        else
+        {
+            GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+            m_UniformLocationCache[name] = location;
+            return location;
+        }
     }
 
 } // namespace Quasar
