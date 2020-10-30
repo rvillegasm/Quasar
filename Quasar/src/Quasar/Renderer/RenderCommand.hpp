@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Quasar/Core.hpp"
 #include "Quasar/Renderer/RendererAPI.hpp"
 #include "Quasar/Renderer/VertexArray.hpp"
 
@@ -24,7 +25,7 @@ namespace Quasar
             s_RendererAPI->clear();
         }
 
-        inline static void drawIndexed(const std::shared_ptr<VertexArray> &vertexArray)
+        inline static void drawIndexed(const Ref<VertexArray> &vertexArray)
         {
             s_RendererAPI->drawIndexed(vertexArray);
         }

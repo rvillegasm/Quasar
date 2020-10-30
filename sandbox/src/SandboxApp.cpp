@@ -10,11 +10,11 @@
 class ExampleLayer : public Quasar::Layer
 {
 private:
-    std::shared_ptr<Quasar::Shader> m_Shader;
-    std::shared_ptr<Quasar::VertexArray> m_VertexArray;
+    Quasar::Ref<Quasar::Shader> m_Shader;
+    Quasar::Ref<Quasar::VertexArray> m_VertexArray;
 
-    std::shared_ptr<Quasar::Shader> m_FlatColorShader;
-    std::shared_ptr<Quasar::VertexArray> m_SquareVA;
+    Quasar::Ref<Quasar::Shader> m_FlatColorShader;
+    Quasar::Ref<Quasar::VertexArray> m_SquareVA;
 
     Quasar::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;
@@ -37,7 +37,7 @@ public:
              0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
         };
 
-        std::shared_ptr<Quasar::VertexBuffer> vertexBuffer;
+        Quasar::Ref<Quasar::VertexBuffer> vertexBuffer;
         vertexBuffer.reset(Quasar::VertexBuffer::create(vertices, sizeof(vertices)));
         Quasar::BufferLayout layout = {
             { Quasar::ShaderDataType::Float3, "a_Position" },
@@ -47,7 +47,7 @@ public:
         m_VertexArray->addVertexBuffer(vertexBuffer);
 
         unsigned int indices[3] = { 0, 1, 2 };
-        std::shared_ptr<Quasar::IndexBuffer> indexBuffer;
+        Quasar::Ref<Quasar::IndexBuffer> indexBuffer;
         indexBuffer.reset(Quasar::IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_VertexArray->setIndexBuffer(indexBuffer);
 
@@ -59,7 +59,7 @@ public:
             -0.5f,  0.5f, 0.0f
         };
 
-        std::shared_ptr<Quasar::VertexBuffer> squareVB;
+        Quasar::Ref<Quasar::VertexBuffer> squareVB;
         squareVB.reset(Quasar::VertexBuffer::create(squareVertices, sizeof(squareVertices)));
         squareVB->setLayout({
             { Quasar::ShaderDataType::Float3, "a_Position" },
@@ -67,7 +67,7 @@ public:
         m_SquareVA->addVertexBuffer(squareVB);
 
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        std::shared_ptr<Quasar::IndexBuffer> squareIB;
+        Quasar::Ref<Quasar::IndexBuffer> squareIB;
         squareIB.reset(Quasar::IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))); 
         m_SquareVA->setIndexBuffer(squareIB);
 

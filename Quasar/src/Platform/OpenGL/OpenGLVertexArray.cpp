@@ -49,7 +49,7 @@ namespace Quasar
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::addVertexBuffer(const std::shared_ptr<VertexBuffer> &vertexBuffer)
+    void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer> &vertexBuffer)
     {
         const auto &layout = vertexBuffer->getLayout();
         QS_CORE_ASSERT(layout.getElements().size(), "VertexBuffer has no layout!");
@@ -75,7 +75,7 @@ namespace Quasar
         m_VertexBuffers.push_back(vertexBuffer);
     }
 
-    void OpenGLVertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer> &indexBuffer)
+    void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer> &indexBuffer)
     {
         glBindVertexArray(m_RendererID);
         indexBuffer->bind();

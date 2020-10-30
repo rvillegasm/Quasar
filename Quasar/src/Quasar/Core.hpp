@@ -2,6 +2,8 @@
 
 #include "Quasar/Log.hpp"
 
+#include <memory>
+
 #ifdef QS_ENABLE_ASSERTS
     #include <cstdlib>
     #define QS_ASSERT(x, ...)                                   \
@@ -28,3 +30,14 @@
 #define BIT(x) (1 << x)
 
 #define QS_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
+
+namespace Quasar
+{
+    
+    template<typename T>
+    using Scope = std::unique_ptr<T>;
+
+    template<typename T>
+    using Ref = std::shared_ptr<T>;
+
+} // namespace Quasar
