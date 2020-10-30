@@ -36,6 +36,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCamera.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLVertexArray.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp

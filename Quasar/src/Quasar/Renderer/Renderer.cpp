@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
 
+#include "Platform/OpenGL/OpenGLShader.hpp"
+
 namespace Quasar
 {
     Renderer::SceneData *Renderer::s_SceneData = new Renderer::SceneData();
@@ -19,8 +21,8 @@ namespace Quasar
         const glm::mat4 &transform)
     {
         shader->bind();
-        shader->uploadUniformMat4("u_ViewProjection", s_SceneData->viewProjectionMatrix);
-        shader->uploadUniformMat4("u_Transform", transform);
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_ViewProjection", s_SceneData->viewProjectionMatrix); // in order to get rid of this, a material system is needed
+        std::dynamic_pointer_cast<OpenGLShader>(shader)->uploadUniformMat4("u_Transform", transform);
 
         vertexArray->bind();
         RenderCommand::drawIndexed(vertexArray);

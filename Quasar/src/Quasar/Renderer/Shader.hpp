@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 #include <string>
 
 namespace Quasar
@@ -9,18 +7,13 @@ namespace Quasar
     
     class Shader
     {
-    private:
-        uint32_t m_RendererID;
-
     public:
-        Shader(const std::string &vertexSrc, const std::string &fragmentSrc);
-        ~Shader();
+        virtual ~Shader() = default;
 
-        void bind() const;
-        void unbind() const;
+        virtual void bind() const = 0;
+        virtual void unbind() const = 0;
 
-        void uploadUniformFloat4(const std::string& name, const glm::vec4 &values);
-        void uploadUniformMat4(const std::string& name, const glm::mat4 &matrix);
+        static Shader *create(const std::string &vertexSrc, const std::string &fragmentSrc);
     };
 
 } // namespace Quasar
