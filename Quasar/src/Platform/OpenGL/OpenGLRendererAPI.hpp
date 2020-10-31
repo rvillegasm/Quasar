@@ -12,6 +12,8 @@ namespace Quasar
     private:
 
     public:
+        void init() override;
+
         void setClearColor(const glm::vec4 &color) override;
         void clear() override;
 

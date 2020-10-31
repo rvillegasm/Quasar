@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Quasar/Core.hpp"
 #include "Quasar/Renderer/Texture.hpp"
 
 namespace Quasar

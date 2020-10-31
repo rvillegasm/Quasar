@@ -2,8 +2,9 @@
 
 #include "Quasar/Core.hpp"
 #include "Quasar/Log.hpp"
-
 #include "Quasar/Core/Timestep.hpp"
+
+#include "Quasar/Renderer/Renderer.hpp"
 
 #include <GLFW/glfw3.h> // Temporary, here just to get the time
 
@@ -21,6 +22,8 @@ namespace Quasar
 
         m_Window = std::unique_ptr<Window>(Window::create());
         m_Window->setEventCallback(BIND_EVENT_FN(Application::onEvent));
+
+        Renderer::init();
 
         m_ImGuiLayer = new ImGuiLayer();
         pushOverlay(m_ImGuiLayer);
