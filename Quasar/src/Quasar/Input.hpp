@@ -11,6 +11,8 @@ namespace Quasar
         static Input *s_Instance;
 
     protected:
+        Input() = default;
+
         virtual bool isKeyPressedImpl(int keycode) = 0;
         virtual bool isMouseButtonPressedImpl(int button) = 0;
         virtual std::pair<float, float> getMousePositionImpl() = 0;
@@ -18,6 +20,9 @@ namespace Quasar
         virtual float getMouseYImpl() = 0;
 
     public:
+        Input(const Input&) = delete;
+        Input &operator=(const Input&) = delete;
+
         inline static bool isKeyPressed(int keycode)
         { 
             return s_Instance->isKeyPressedImpl(keycode); 

@@ -57,19 +57,18 @@ namespace Quasar
         glBindVertexArray(m_RendererID);
         vertexBuffer->bind();
 
-        uint32_t index = 0;
         for (const auto &element : layout)
         {
-            glEnableVertexAttribArray(index);
+            glEnableVertexAttribArray(m_VertexBuffersIndex);
             glVertexAttribPointer(
-                index,
+                m_VertexBuffersIndex,
                 element.getComponentCount(),
                 shaderDataTypeToOpenGLBaseType(element.type),
                 element.normalized ? GL_TRUE : GL_FALSE,
                 layout.getStride(),
-                (const void *)element.offset
+                (const void *)(intptr_t)element.offset
             );
-            index++;
+            m_VertexBuffersIndex++;
         }
 
         m_VertexBuffers.push_back(vertexBuffer);
