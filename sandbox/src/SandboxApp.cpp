@@ -13,8 +13,10 @@ private:
     Quasar::Ref<Quasar::Shader> m_Shader;
     Quasar::Ref<Quasar::VertexArray> m_VertexArray;
 
-    Quasar::Ref<Quasar::Shader> m_FlatColorShader;
+    Quasar::Ref<Quasar::Shader> m_FlatColorShader, m_TextureShader;
     Quasar::Ref<Quasar::VertexArray> m_SquareVA;
+
+    Quasar::Ref<Quasar::Texture2D> m_Texture;
 
     Quasar::OrthographicCamera m_Camera;
     glm::vec3 m_CameraPosition;
@@ -52,17 +54,18 @@ public:
         m_VertexArray->setIndexBuffer(indexBuffer);
 
         m_SquareVA.reset(Quasar::VertexArray::create());
-        float squareVertices[4 * 3] = {
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.5f,  0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f
+        float squareVertices[4 * 5] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
         Quasar::Ref<Quasar::VertexBuffer> squareVB;
         squareVB.reset(Quasar::VertexBuffer::create(squareVertices, sizeof(squareVertices)));
         squareVB->setLayout({
             { Quasar::ShaderDataType::Float3, "a_Position" },
+            { Quasar::ShaderDataType::Float2, "a_TexCoord" },
         });
         m_SquareVA->addVertexBuffer(squareVB);
 
@@ -141,6 +144,46 @@ public:
         )";
 
         m_FlatColorShader.reset(Quasar::Shader::create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+        const std::string textureShaderVertexSrc = R"(
+            #version 330 core
+
+            layout(location = 0) in vec3 a_Position;
+            layout(location = 0) in vec2 a_TexCoord;
+
+            uniform mat4 u_ViewProjection;
+            uniform mat4 u_Transform;
+
+            out vec2 v_TexCoord;
+
+            void main()
+            {
+                v_TexCoord = a_TexCoord;
+                gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+            }
+        )";
+
+        const std::string textureShaderFragmentSrc = R"(
+            #version 330 core
+
+            layout(location = 0) out vec4 color;
+
+            in vec2 v_TexCoord;
+
+            uniform sampler2D u_Texture;
+
+            void main()
+            {
+                color = texture(u_Texture, v_TexCoord);
+            }
+        )";
+
+        m_TextureShader.reset(Quasar::Shader::create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+        m_Texture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png"); 
+
+        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_TextureShader)->bind();
+        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_TextureShader)->uploadUniformInt("u_Texture", 0);
     }
 
     void onUpdate(Quasar::Timestep ts) override
@@ -195,7 +238,12 @@ public:
                 Quasar::Renderer::submit(m_FlatColorShader, m_SquareVA, transform);
             }
         }
-        Quasar::Renderer::submit(m_Shader, m_VertexArray);
+
+        m_Texture->bind();
+        Quasar::Renderer::submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f))); 
+
+        // Triangle
+        // Quasar::Renderer::submit(m_Shader, m_VertexArray);
         
         Quasar::Renderer::endScene();   
     }

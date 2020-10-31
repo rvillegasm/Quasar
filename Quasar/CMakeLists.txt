@@ -34,15 +34,19 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/RenderCommand.cpp
   ${SOURCE_DIR}/Quasar/Renderer/RendererAPI.cpp
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCamera.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/Texture.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLVertexArray.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLTexture.cpp
 
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
   ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
+
+  vendor/stb_image/stb_image.cpp
 )
 
 # Add the library
@@ -68,7 +72,8 @@ target_include_directories(quasar PUBLIC vendor/glad/include)
 target_include_directories(quasar PUBLIC vendor/imgui)
 # glm
 target_include_directories(quasar PUBLIC vendor/glm)
-
+# stb_image (compiled right here in this library)
+target_include_directories(quasar PUBLIC vendor/stb_image)
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------
