@@ -6,7 +6,7 @@
 namespace Quasar
 {
     
-    class OpenGLTexture2D : public Texture2D
+    class OpenGLTexture2D final : public Texture2D
     {
     private:
         std::string m_Path;

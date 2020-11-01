@@ -2,10 +2,13 @@
 
 #include "Quasar/Renderer/Shader.hpp"
 
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 #include <unordered_map>
+
+// TODO: Remove when this file is not included in sandbox anymore
+typedef unsigned int GLenum;
+typedef int GLint;
 
 namespace Quasar
 {
@@ -16,9 +19,14 @@ namespace Quasar
         uint32_t m_RendererID;
         mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
 
+        std::string readFile(const std::string &filepath);
+        std::unordered_map<GLenum, std::string> preProcess(const std::string &source);
+        void compile(const std::unordered_map<GLenum, std::string> &shaderSources);
+        
         GLint getUniformLocation(const std::string &name) const;
 
     public:
+        OpenGLShader(const std::string &filepath);
         OpenGLShader(const std::string &vertexSrc, const std::string &fragmentSrc);
         virtual ~OpenGLShader();
 
