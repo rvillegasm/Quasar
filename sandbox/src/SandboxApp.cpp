@@ -10,10 +10,11 @@
 class ExampleLayer : public Quasar::Layer
 {
 private:
+    Quasar::ShaderLibrary m_ShaderLibrary;
     Quasar::Ref<Quasar::Shader> m_Shader;
     Quasar::Ref<Quasar::VertexArray> m_VertexArray;
 
-    Quasar::Ref<Quasar::Shader> m_FlatColorShader, m_TextureShader;
+    Quasar::Ref<Quasar::Shader> m_FlatColorShader;
     Quasar::Ref<Quasar::VertexArray> m_SquareVA;
 
     Quasar::Ref<Quasar::Texture2D> m_Texture, m_ChernoLogoTexture;
@@ -109,7 +110,7 @@ public:
             }
         )";
 
-        m_Shader.reset(Quasar::Shader::create(vertexSrc, fragmentSrc));
+        m_Shader = Quasar::Shader::create("VertexPosColor", vertexSrc, fragmentSrc);
 
         const std::string flatColorShaderVertexSrc = R"(
             #version 330 core
@@ -143,15 +144,15 @@ public:
             }
         )";
 
-        m_FlatColorShader.reset(Quasar::Shader::create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+        m_FlatColorShader = Quasar::Shader::create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-        m_TextureShader.reset(Quasar::Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl"));
+        auto textureShader = m_ShaderLibrary.load("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
 
         m_Texture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
         m_ChernoLogoTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/ChernoLogo.png");
 
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_TextureShader)->bind();
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_TextureShader)->uploadUniformInt("u_Texture", 0);
+        std::dynamic_pointer_cast<Quasar::OpenGLShader>(textureShader)->bind();
+        std::dynamic_pointer_cast<Quasar::OpenGLShader>(textureShader)->uploadUniformInt("u_Texture", 0);
     }
 
     void onUpdate(Quasar::Timestep ts) override
@@ -207,11 +208,13 @@ public:
             }
         }
 
+        auto textureShader = m_ShaderLibrary.get("Texture");
+
         m_Texture->bind();
-        Quasar::Renderer::submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Quasar::Renderer::submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
         m_ChernoLogoTexture->bind();
         Quasar::Renderer::submit(
-            m_TextureShader,
+            textureShader,
             m_SquareVA,
             glm::scale(glm::mat4(1.0f), glm::vec3(1.5f))
         );

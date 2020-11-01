@@ -17,6 +17,8 @@ namespace Quasar
     {
     private:
         uint32_t m_RendererID;
+        std::string m_Name;
+
         mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
 
         std::string readFile(const std::string &filepath);
@@ -27,11 +29,13 @@ namespace Quasar
 
     public:
         OpenGLShader(const std::string &filepath);
-        OpenGLShader(const std::string &vertexSrc, const std::string &fragmentSrc);
+        OpenGLShader(const std::string &name, const std::string &vertexSrc, const std::string &fragmentSrc);
         virtual ~OpenGLShader();
 
         void bind() const override;
         void unbind() const override;
+
+        const std::string &getName() const override { return m_Name; }
 
         void uploadUniformInt(const std::string& name, int value);
 
