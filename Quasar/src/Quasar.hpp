@@ -12,6 +12,7 @@
 #include "Quasar/Input.hpp"
 #include "Quasar/KeyCodes.hpp"
 #include "Quasar/MouseButtonCodes.hpp"
+#include "Quasar/OrthographicCameraController.hpp"
 
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 

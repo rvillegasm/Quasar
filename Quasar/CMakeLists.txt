@@ -23,6 +23,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Log.cpp
   ${SOURCE_DIR}/Quasar/Layer.cpp
   ${SOURCE_DIR}/Quasar/LayerStack.cpp
+  ${SOURCE_DIR}/Quasar/OrthographicCameraController.cpp
 
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
