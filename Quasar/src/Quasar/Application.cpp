@@ -48,7 +48,8 @@ namespace Quasar
     void Application::onEvent(Event &e)
     {
         EventDispatcher dispatcher(e);
-        dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClosed));
+        dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
+        dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
 
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
         {
@@ -68,9 +69,12 @@ namespace Quasar
             Timestep timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
-            for (Layer *layer : m_LayerStack)
+            if (!m_Minimized)
             {
-                layer->onUpdate(timestep);
+                for (Layer *layer : m_LayerStack)
+                {
+                    layer->onUpdate(timestep);
+                }
             }
 
             m_ImGuiLayer->begin();
@@ -84,10 +88,24 @@ namespace Quasar
         }
     }
 
-    bool Application::onWindowClosed(WindowCloseEvent &e)
+    bool Application::onWindowClose(WindowCloseEvent &e)
     {
         m_Running = false;
         return true;
+    }
+
+    bool Application::onWindowResize(WindowResizeEvent &e)
+    {
+        if (e.getWidth() == 0 || e.getHeight() == 0)
+        {
+            m_Minimized = true;
+            return false;
+        }
+
+        m_Minimized = false;
+        Renderer::onWindowResize(e.getWidth(), e.getHeight());
+
+        return false;
     }
 
 } // namespace Quasar

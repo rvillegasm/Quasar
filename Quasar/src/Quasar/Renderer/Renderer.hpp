@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-#include <memory>
+#include <cstdint>
 
 namespace Quasar
 {
@@ -25,6 +25,8 @@ namespace Quasar
 
     public:
         static void init();
+
+        static void onWindowResize(uint32_t width, uint32_t height);
 
         static void beginScene(OrthographicCamera &camera);
         static void endScene();
