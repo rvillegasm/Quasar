@@ -11,10 +11,9 @@ namespace Quasar
 
     LayerStack::~LayerStack()
     {
-        // the LayerStack own the Layers, and they get destroyed when
-        // the application terminates (at least for now)
         for (Layer *layer : m_Layers)
         {
+            layer->onDetach();
             delete layer;
         }
     }

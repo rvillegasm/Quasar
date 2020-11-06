@@ -227,6 +227,7 @@ namespace Quasar
         for (auto id : glShaderIDs)
         {
             glDetachShader(program, id);
+            glDeleteShader(id);
         }
 
         m_RendererID = program;
