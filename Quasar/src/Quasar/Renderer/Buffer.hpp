@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Quasar/Core.hpp>
+#include <Quasar/Core/Core.hpp>
 
 #include <cstdint>
 #include <vector>

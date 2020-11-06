@@ -1,7 +1,7 @@
 #include "OpenGLContext.hpp"
 
-#include "Quasar/Core.hpp"
-#include "Quasar/Log.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Log.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

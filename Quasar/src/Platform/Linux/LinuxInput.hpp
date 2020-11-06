@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Input.hpp"
+#include "Quasar/Core/Input.hpp"
 
 #include <utility>
 

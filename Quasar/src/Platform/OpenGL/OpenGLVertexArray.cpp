@@ -1,6 +1,6 @@
 #include "OpenGLVertexArray.hpp"
 
-#include "Quasar/Core.hpp"
+#include "Quasar/Core/Core.hpp"
 
 #include <glad/glad.h>
 

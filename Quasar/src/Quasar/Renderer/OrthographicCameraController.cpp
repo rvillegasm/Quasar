@@ -1,8 +1,8 @@
-#include "Quasar/OrthographicCameraController.hpp"
+#include "Quasar/Renderer/OrthographicCameraController.hpp"
 
-#include "Quasar/Core.hpp"
-#include "Quasar/Input.hpp"
-#include "Quasar/KeyCodes.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Input.hpp"
+#include "Quasar/Core/KeyCodes.hpp"
 
 namespace Quasar
 {

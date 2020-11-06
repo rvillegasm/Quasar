@@ -1,7 +1,7 @@
 #include "LinuxWindow.hpp"
 
-#include "Quasar/Core.hpp"
-#include "Quasar/Log.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Log.hpp"
 
 #include "Quasar/Events/ApplicationEvent.hpp"
 #include "Quasar/Events/MouseEvent.hpp"

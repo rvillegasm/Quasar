@@ -1,6 +1,6 @@
 #include "Shader.hpp"
 
-#include "Quasar/Core.hpp"
+#include "Quasar/Core/Core.hpp"
 #include "Quasar/Renderer/Renderer.hpp"
 
 #include "Platform/OpenGL/OpenGLShader.hpp"

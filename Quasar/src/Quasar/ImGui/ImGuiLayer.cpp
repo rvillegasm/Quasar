@@ -4,8 +4,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-#include "Quasar/Core.hpp"
-#include "Quasar/Application.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Application.hpp"
 
 // TEMPORARY
 #include <glad/glad.h>

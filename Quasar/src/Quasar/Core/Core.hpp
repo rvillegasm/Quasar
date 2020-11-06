@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Log.hpp"
+#include "Quasar/Core/Log.hpp"
 
 #include <memory>
 

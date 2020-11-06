@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Quasar/Window.hpp"
-#include "Quasar/LayerStack.hpp"
+#include "Quasar/Core/Window.hpp"
+#include "Quasar/Core/LayerStack.hpp"
 #include "Quasar/Events/Event.hpp"
 #include "Quasar/Events/ApplicationEvent.hpp"
 

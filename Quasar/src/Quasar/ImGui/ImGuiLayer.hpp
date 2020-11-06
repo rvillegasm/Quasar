@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Layer.hpp"
+#include "Quasar/Core/Layer.hpp"
 #include "Quasar/Events/ApplicationEvent.hpp"
 #include "Quasar/Events/KeyEvent.hpp"
 #include "Quasar/Events/MouseEvent.hpp"

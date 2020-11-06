@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Window.hpp"
+#include "Quasar/Core/Window.hpp"
 #include "Quasar/Renderer/GraphicsContext.hpp"
 
 #include "GLFW/glfw3.h"

@@ -1,6 +1,6 @@
 #include "LinuxInput.hpp"
 
-#include "Quasar/Application.hpp"
+#include "Quasar/Core/Application.hpp"
 
 #include <GLFW/glfw3.h>
 

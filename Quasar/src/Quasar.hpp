@@ -2,17 +2,16 @@
 
 // For use by Quasar Apps
 
-#include "Quasar/Application.hpp"
-#include "Quasar/Layer.hpp"
-#include "Quasar/Core.hpp"
-#include "Quasar/Log.hpp"
+#include "Quasar/Core/Application.hpp"
+#include "Quasar/Core/Layer.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Log.hpp"
 
 #include "Quasar/Core/Timestep.hpp"
 
-#include "Quasar/Input.hpp"
-#include "Quasar/KeyCodes.hpp"
-#include "Quasar/MouseButtonCodes.hpp"
-#include "Quasar/OrthographicCameraController.hpp"
+#include "Quasar/Core/Input.hpp"
+#include "Quasar/Core/KeyCodes.hpp"
+#include "Quasar/Core/MouseButtonCodes.hpp"
 
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 
@@ -26,8 +25,9 @@
 #include "Quasar/Renderer/VertexArray.hpp"
 
 #include "Quasar/Renderer/OrthographicCamera.hpp"
+#include "Quasar/Renderer/OrthographicCameraController.hpp"
 // --------------------
 
 // ----- Entry Point -----
-#include "Quasar/EntryPoint.hpp"
+#include "Quasar/Core/EntryPoint.hpp"
 // -----------------------

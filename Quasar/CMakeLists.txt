@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Quasar)
 
 # specify the C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Disable in-source builds to prevent source tree corruption.
@@ -19,11 +19,10 @@ set(SOURCE_DIR "src")
 
 # Source files
 set(SOURCES 
-  ${SOURCE_DIR}/Quasar/Application.cpp
-  ${SOURCE_DIR}/Quasar/Log.cpp
-  ${SOURCE_DIR}/Quasar/Layer.cpp
-  ${SOURCE_DIR}/Quasar/LayerStack.cpp
-  ${SOURCE_DIR}/Quasar/OrthographicCameraController.cpp
+  ${SOURCE_DIR}/Quasar/Core/Application.cpp
+  ${SOURCE_DIR}/Quasar/Core/Log.cpp
+  ${SOURCE_DIR}/Quasar/Core/Layer.cpp
+  ${SOURCE_DIR}/Quasar/Core/LayerStack.cpp
 
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
@@ -35,6 +34,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/RenderCommand.cpp
   ${SOURCE_DIR}/Quasar/Renderer/RendererAPI.cpp
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCamera.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/OrthographicCameraController.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Texture.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
