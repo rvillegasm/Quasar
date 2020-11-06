@@ -143,20 +143,20 @@ namespace Quasar
 
         const char *typeToken = "#type";
         size_t typeTokenLenght = strlen(typeToken);
-        size_t pos = source.find(typeToken, 0);
+        size_t pos = source.find(typeToken, 0); // Start of shader type declaration line
         while (pos != std::string::npos)
         {
-            size_t eol = source.find_first_of("\r\n", pos);
+            size_t eol = source.find_first_of("\r\n", pos); // End of shader type declaration line
             QS_CORE_ASSERT(eol != std::string::npos, "Syntax error in shader file");
-            size_t begin = pos + typeTokenLenght + 1;
+            size_t begin = pos + typeTokenLenght + 1; // Start of shader type name (after typeToken)
             std::string type = source.substr(begin, eol - begin);
 
-            size_t nextLinePos = source.find_first_not_of("\r\n", eol);
-            pos = source.find(typeToken, nextLinePos);
-            shaderSources[shaderTypeFromString(type)] = source.substr(
-                nextLinePos,
-                pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos)
-            );
+            size_t nextLinePos = source.find_first_not_of("\r\n", eol); //Start of shader code after shader type declaration line
+            QS_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error in shader file");
+
+            pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
+            shaderSources[shaderTypeFromString(type)] = pos == std::string::npos ? 
+                source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
         }
 
         return shaderSources;
