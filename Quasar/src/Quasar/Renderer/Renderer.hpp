@@ -21,7 +21,7 @@ namespace Quasar
             glm::mat4 viewProjectionMatrix;
         };
 
-        static SceneData *s_SceneData;
+        static Scope<SceneData> s_SceneData;
 
     public:
         static void init();

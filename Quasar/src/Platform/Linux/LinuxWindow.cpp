@@ -60,7 +60,7 @@ namespace Quasar
             nullptr
         );
 
-        m_Context = new OpenGLContext(m_Window);
+        m_Context = createScope<OpenGLContext>(m_Window);
         m_Context->init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);

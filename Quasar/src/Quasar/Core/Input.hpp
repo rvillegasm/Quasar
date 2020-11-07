@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Quasar/Core/Core.hpp"
+
 #include <utility>
 
 namespace Quasar
@@ -8,7 +10,7 @@ namespace Quasar
     class Input
     {
     private:
-        static Input *s_Instance;
+        static Scope<Input> s_Instance;
 
     protected:
         Input() = default;

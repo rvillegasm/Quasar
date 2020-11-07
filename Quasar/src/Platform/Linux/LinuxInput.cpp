@@ -6,7 +6,7 @@
 
 namespace Quasar
 {
-    Input *Input::s_Instance = new LinuxInput();
+    Scope<Input> Input::s_Instance = createScope<LinuxInput>();
     
     bool LinuxInput::isKeyPressedImpl(int keycode)
     {
