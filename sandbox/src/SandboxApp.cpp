@@ -1,11 +1,14 @@
 #include <Quasar.hpp>
+#include <Quasar/Core/EntryPoint.hpp>
 
 #include "Platform/OpenGL/OpenGLShader.hpp"
 
-#include "imgui.h"
+#include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "Sandbox2D.hpp"
 
 class ExampleLayer : public Quasar::Layer
 {
@@ -21,13 +24,13 @@ private:
 
     Quasar::OrthographicCameraController m_CameraController;
 
-    glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.4f };
+    glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 
 public:
     ExampleLayer()
         : Layer("Example"), m_CameraController(1280.0f / 720.0f)
     {
-        m_VertexArray.reset(Quasar::VertexArray::create());
+        m_VertexArray = Quasar::VertexArray::create();
 
         float vertices[3 * 7] = {
             -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -49,7 +52,7 @@ public:
         indexBuffer.reset(Quasar::IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
         m_VertexArray->setIndexBuffer(indexBuffer);
 
-        m_SquareVA.reset(Quasar::VertexArray::create());
+        m_SquareVA = Quasar::VertexArray::create();
         float squareVertices[4 * 5] = {
             -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
              0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
@@ -213,7 +216,8 @@ class Sandbox : public Quasar::Application
 public:
     Sandbox() 
     {
-        pushLayer(new ExampleLayer());
+        // pushLayer(new ExampleLayer());
+        pushLayer(new Sandbox2D());
     }
 
     ~Sandbox() 

@@ -1,6 +1,5 @@
 #include "VertexArray.hpp"
 
-#include "Quasar/Core/Core.hpp"
 #include "Quasar/Renderer/Renderer.hpp"
 
 #include "Platform/OpenGL/OpenGLVertexArray.hpp"
@@ -8,7 +7,7 @@
 namespace Quasar
 {
     
-    VertexArray *VertexArray::create()
+    Ref<VertexArray> VertexArray::create()
     {
         switch (Renderer::getAPI())
         {
@@ -17,7 +16,7 @@ namespace Quasar
             return nullptr;
 
         case RendererAPI::API::OpenGL:
-            return new OpenGLVertexArray();
+            return createRef<OpenGLVertexArray>();
         
         default:
             QS_CORE_ASSERT(false, "Unknown RendererAPI!");

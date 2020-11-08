@@ -27,7 +27,3 @@
 #include "Quasar/Renderer/OrthographicCamera.hpp"
 #include "Quasar/Renderer/OrthographicCameraController.hpp"
 // --------------------
-
-// ----- Entry Point -----
-#include "Quasar/Core/EntryPoint.hpp"
-// -----------------------
