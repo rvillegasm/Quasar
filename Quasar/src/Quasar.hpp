@@ -17,6 +17,7 @@
 
 // ----- Renderer -----
 #include "Quasar/Renderer/Renderer.hpp"
+#include "Quasar/Renderer/Renderer2D.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"
 
 #include "Quasar/Renderer/Buffer.hpp"

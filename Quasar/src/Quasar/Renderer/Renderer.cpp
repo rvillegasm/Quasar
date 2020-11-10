@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
 
+#include "Quasar/Renderer/Renderer2D.hpp"
+
 #include "Platform/OpenGL/OpenGLShader.hpp"
 
 namespace Quasar
@@ -10,6 +12,7 @@ namespace Quasar
     void Renderer::init() 
     {
         RenderCommand::init();
+        Renderer2D::init();
     }
     
     void Renderer::onWindowResize(uint32_t width, uint32_t height) 
