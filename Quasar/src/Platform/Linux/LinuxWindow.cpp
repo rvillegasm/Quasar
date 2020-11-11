@@ -11,7 +11,7 @@
 
 namespace Quasar
 {
-    static bool s_GLFWInitialized = false;
+    static uint8_t s_GLFWWindowCount = 0;
 
     static void GLFWErrorCallback(int error, const char *description)
     {
@@ -44,12 +44,12 @@ namespace Quasar
             props.title, props.width, props.height
         );
 
-        if (!s_GLFWInitialized)
+        if (s_GLFWWindowCount == 0)
         {
+            QS_CORE_INFO("Initializing GLFW");
             int success = glfwInit();
             QS_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
-            s_GLFWInitialized = true;
         }
 
         m_Window = glfwCreateWindow(
@@ -59,6 +59,7 @@ namespace Quasar
             nullptr,
             nullptr
         );
+        s_GLFWWindowCount++;
 
         m_Context = createScope<OpenGLContext>(m_Window);
         m_Context->init();
@@ -164,8 +165,14 @@ namespace Quasar
 
     void LinuxWindow::shutdown()
     {
-        // delete m_Context;
         glfwDestroyWindow(m_Window);
+        s_GLFWWindowCount--;
+
+        if (s_GLFWWindowCount == 0)
+        {
+            QS_CORE_INFO("Terminating GLFW");
+            glfwTerminate();
+        }
     }
 
     void LinuxWindow::onUpdate()
