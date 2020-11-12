@@ -10,6 +10,8 @@ private:
     Quasar::Ref<Quasar::VertexArray> m_SquareVA;
     Quasar::Ref<Quasar::Shader> m_FlatColorShader;
 
+    Quasar::Ref<Quasar::Texture2D> m_CheckerboardTexture;
+
     glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 
 public:

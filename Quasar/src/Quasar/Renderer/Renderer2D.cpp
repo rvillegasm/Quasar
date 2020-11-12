@@ -14,6 +14,7 @@ namespace Quasar
     {
         Ref<VertexArray> quadVertexArray;
         Ref<Shader> flatColorShader;
+        Ref<Shader> textureShader;
     };
 
     static Renderer2DStorage *s_Data;
@@ -23,17 +24,18 @@ namespace Quasar
         s_Data = new Renderer2DStorage();
         s_Data->quadVertexArray = VertexArray::create();
 
-        float squareVertices[4 * 3] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.5f,  0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f
+        float squareVertices[4 * 5] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
         Ref<VertexBuffer> squareVB;
         squareVB.reset(VertexBuffer::create(squareVertices, sizeof(squareVertices)));
         squareVB->setLayout({
-            { ShaderDataType::Float3, "a_Position" }
+            { ShaderDataType::Float3, "a_Position" },
+            { ShaderDataType::Float2, "a_TexCoord" }
         });
         s_Data->quadVertexArray->addVertexBuffer(squareVB);
 
@@ -43,6 +45,9 @@ namespace Quasar
         s_Data->quadVertexArray->setIndexBuffer(squareIB);
 
         s_Data->flatColorShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/FlatColorShader.glsl");
+        s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
+        s_Data->textureShader->bind();
+        s_Data->textureShader->setInt("u_Texture", 0);
     }
     
     void Renderer2D::shutdown() 
@@ -54,6 +59,9 @@ namespace Quasar
     {
         s_Data->flatColorShader->bind();
         s_Data->flatColorShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
+
+        s_Data->textureShader->bind();
+        s_Data->textureShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
     }
     
     void Renderer2D::endScene() 
@@ -75,6 +83,26 @@ namespace Quasar
             glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
         s_Data->flatColorShader->setMat4("u_Transform", transform);
+
+        s_Data->quadVertexArray->bind();
+        RenderCommand::drawIndexed(s_Data->quadVertexArray);
+    }
+    
+    void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture) 
+    {
+        drawQuad({ position.x, position.y, 0.0f }, size, texture);
+    }
+    
+    void Renderer2D::drawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture) 
+    {
+        s_Data->textureShader->bind();
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+            glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+        s_Data->textureShader->setMat4("u_Transform", transform);
+
+        texture->bind();
 
         s_Data->quadVertexArray->bind();
         RenderCommand::drawIndexed(s_Data->quadVertexArray);
