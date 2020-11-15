@@ -19,10 +19,6 @@ namespace Quasar
     {
     }
 
-    ImGuiLayer::~ImGuiLayer()
-    {
-    }
-
     void ImGuiLayer::onAttach()
     {
         // Setup Dear ImGui context

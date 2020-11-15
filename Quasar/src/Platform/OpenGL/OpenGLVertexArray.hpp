@@ -4,7 +4,6 @@
 #include "Quasar/Renderer/VertexArray.hpp"
 
 #include <vector>
-#include <memory>
 #include <cstdint>
 
 namespace Quasar

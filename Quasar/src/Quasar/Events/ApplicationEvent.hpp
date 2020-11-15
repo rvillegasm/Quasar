@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Event.hpp"
+#include "Quasar/Events/Event.hpp"
 
 #include <sstream>
 
 namespace Quasar
 {
+    
     class WindowResizeEvent : public Event
     {
     private:
@@ -32,7 +33,7 @@ namespace Quasar
     class WindowCloseEvent : public Event
     {
     public:
-        WindowCloseEvent() {}
+        WindowCloseEvent() = default;
 
         EVENT_CLASS_TYPE(EventType::WindowClose)
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -41,7 +42,7 @@ namespace Quasar
     class AppTickEvent : Event
     {
     public:
-        AppTickEvent() {}
+        AppTickEvent() = default;
 
         EVENT_CLASS_TYPE(EventType::AppTick)
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -50,7 +51,7 @@ namespace Quasar
     class AppUpdateEvent : Event
     {
     public:
-        AppUpdateEvent() {}
+        AppUpdateEvent() = default;
 
         EVENT_CLASS_TYPE(EventType::AppUpdate)
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -59,9 +60,10 @@ namespace Quasar
     class AppRenderEvent : Event
     {
     public:
-        AppRenderEvent() {}
+        AppRenderEvent() = default;
 
         EVENT_CLASS_TYPE(EventType::AppRender)
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
+
 } // namespace Quasar

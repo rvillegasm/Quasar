@@ -8,7 +8,6 @@
 namespace Quasar
 {
     // For now, every event in Quasar is blocking and processed immediately
-
     enum class EventType
     {
         None = 0,
@@ -86,4 +85,5 @@ namespace Quasar
     {
         return os << e.toString();
     }
+    
 } // namespace Quasar

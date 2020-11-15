@@ -5,6 +5,6 @@
 namespace Quasar
 {
     
-    Scope<RendererAPI> RenderCommand::s_RendererAPI = createScope<OpenGLRendererAPI>();
+    Scope<RendererAPI> RenderCommand::s_RendererAPI = RendererAPI::create();
 
 } // namespace Quasar

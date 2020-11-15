@@ -27,6 +27,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
 
+  ${SOURCE_DIR}/Quasar/Renderer/GraphicsContext.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Buffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/VertexArray.cpp

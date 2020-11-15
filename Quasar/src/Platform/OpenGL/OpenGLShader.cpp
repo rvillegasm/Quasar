@@ -3,7 +3,6 @@
 #include "Quasar/Core/Core.hpp"
 #include "Quasar/Core/Log.hpp"
 
-#include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <fstream>

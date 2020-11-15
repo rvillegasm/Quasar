@@ -31,8 +31,8 @@ namespace Quasar
             -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
-        Ref<VertexBuffer> squareVB;
-        squareVB.reset(VertexBuffer::create(squareVertices, sizeof(squareVertices)));
+        Ref<VertexBuffer> squareVB = VertexBuffer::create(squareVertices, sizeof(squareVertices));
+        
         squareVB->setLayout({
             { ShaderDataType::Float3, "a_Position" },
             { ShaderDataType::Float2, "a_TexCoord" }
@@ -40,8 +40,9 @@ namespace Quasar
         s_Data->quadVertexArray->addVertexBuffer(squareVB);
 
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        Ref<Quasar::IndexBuffer> squareIB;
-        squareIB.reset(IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))); 
+        
+        Ref<IndexBuffer> squareIB = IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+
         s_Data->quadVertexArray->setIndexBuffer(squareIB);
 
         s_Data->whiteTexture = Texture2D::create(1, 1);

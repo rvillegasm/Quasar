@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Quasar/Core/Core.hpp"
 #include "Quasar/Events/Event.hpp"
 
 #include <string>
@@ -30,7 +31,7 @@ namespace Quasar
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
-        virtual ~Window() {}
+        virtual ~Window() = default;
 
         virtual void onUpdate() = 0;
 
@@ -44,6 +45,6 @@ namespace Quasar
         virtual void *getNativeWindow() const = 0;
 
         // Implemented per-platform in order to be platform agnostic
-        static Window *create(const WindowProps &props = WindowProps());
+        static Scope<Window> create(const WindowProps &props = WindowProps());
     };
 }

@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Event.hpp"
+#include "Quasar/Events/Event.hpp"
 
 #include <sstream>
 
 namespace Quasar
 {
+    
     class KeyEvent : public Event
     {
     protected:

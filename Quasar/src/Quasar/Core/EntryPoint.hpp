@@ -1,5 +1,7 @@
 #pragma once
-#include "Application.hpp"
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Log.hpp"
+#include "Quasar/Core/Application.hpp"
 
 extern Quasar::Application *Quasar::createApplication();
 

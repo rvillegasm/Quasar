@@ -11,8 +11,6 @@
 namespace Quasar
 {
 
-#define BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
-
     Application *Application::s_Instance = nullptr;
 
     Application::Application()
@@ -20,8 +18,8 @@ namespace Quasar
         QS_CORE_ASSERT(!s_Instance, "An Application already exists!");
         s_Instance = this;
 
-        m_Window = std::unique_ptr<Window>(Window::create());
-        m_Window->setEventCallback(BIND_EVENT_FN(Application::onEvent));
+        m_Window = Window::create();
+        m_Window->setEventCallback(QS_BIND_EVENT_FN(Application::onEvent));
 
         Renderer::init();
 
@@ -31,6 +29,7 @@ namespace Quasar
 
     Application::~Application() 
     {
+        Renderer::shutdown();
     }
 
     void Application::pushLayer(Layer *layer)
@@ -48,8 +47,8 @@ namespace Quasar
     void Application::onEvent(Event &e)
     {
         EventDispatcher dispatcher(e);
-        dispatcher.dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::onWindowClose));
-        dispatcher.dispatch<WindowResizeEvent>(BIND_EVENT_FN(Application::onWindowResize));
+        dispatcher.dispatch<WindowCloseEvent>(QS_BIND_EVENT_FN(Application::onWindowClose));
+        dispatcher.dispatch<WindowResizeEvent>(QS_BIND_EVENT_FN(Application::onWindowResize));
 
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
         {

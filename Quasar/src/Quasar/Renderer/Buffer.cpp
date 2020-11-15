@@ -1,6 +1,5 @@
 #include "Buffer.hpp"
 
-#include "Quasar/Core/Core.hpp"
 #include "Quasar/Renderer/Renderer.hpp"
 
 #include "Platform/OpenGL/OpenGLBuffer.hpp"
@@ -90,7 +89,7 @@ namespace Quasar
     // ----- VERTEX BUFFER -----
     // -------------------------
 
-    VertexBuffer *VertexBuffer::create(float *vertices, uint32_t size)
+    Ref<VertexBuffer> VertexBuffer::create(float *vertices, uint32_t size)
     {
         switch (Renderer::getAPI())
         {
@@ -99,7 +98,7 @@ namespace Quasar
                 return nullptr;
 
             case RendererAPI::API::OpenGL:
-                return new OpenGLVertexBuffer(vertices, size);
+                return createRef<OpenGLVertexBuffer>(vertices, size);
 
             default:
                 QS_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -111,7 +110,7 @@ namespace Quasar
     // ----- INDEX BUFFER -----
     // ------------------------
 
-    IndexBuffer *IndexBuffer::create(uint32_t *indices, uint32_t count)
+    Ref<IndexBuffer> IndexBuffer::create(uint32_t *indices, uint32_t count)
     {
         switch (Renderer::getAPI())
         {
@@ -120,7 +119,7 @@ namespace Quasar
                 return nullptr;
 
             case RendererAPI::API::OpenGL:
-                return new OpenGLIndexBuffer(indices, count);
+                return createRef<OpenGLIndexBuffer>(indices, count);
 
             default:
                 QS_CORE_ASSERT(false, "Unknown RendererAPI!");

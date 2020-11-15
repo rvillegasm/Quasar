@@ -18,9 +18,9 @@ namespace Quasar
         QS_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    Window *Window::create(const WindowProps &props)
+    Scope<Window> Window::create(const WindowProps &props)
     {
-        return new LinuxWindow(props);
+        return createScope<LinuxWindow>(props);
     }
 
     LinuxWindow::LinuxWindow(const WindowProps &props)
@@ -46,7 +46,6 @@ namespace Quasar
 
         if (s_GLFWWindowCount == 0)
         {
-            QS_CORE_INFO("Initializing GLFW");
             int success = glfwInit();
             QS_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
@@ -61,7 +60,7 @@ namespace Quasar
         );
         s_GLFWWindowCount++;
 
-        m_Context = createScope<OpenGLContext>(m_Window);
+        m_Context = GraphicsContext::create(m_Window);
         m_Context->init();
 
         glfwSetWindowUserPointer(m_Window, &m_Data);
@@ -170,7 +169,6 @@ namespace Quasar
 
         if (s_GLFWWindowCount == 0)
         {
-            QS_CORE_INFO("Terminating GLFW");
             glfwTerminate();
         }
     }

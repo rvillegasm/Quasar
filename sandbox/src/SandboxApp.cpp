@@ -1,8 +1,6 @@
 #include <Quasar.hpp>
 #include <Quasar/Core/EntryPoint.hpp>
 
-#include "Platform/OpenGL/OpenGLShader.hpp"
-
 #include <imgui.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -38,8 +36,7 @@ public:
              0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
         };
 
-        Quasar::Ref<Quasar::VertexBuffer> vertexBuffer;
-        vertexBuffer.reset(Quasar::VertexBuffer::create(vertices, sizeof(vertices)));
+        Quasar::Ref<Quasar::VertexBuffer> vertexBuffer = Quasar::VertexBuffer::create(vertices, sizeof(vertices));
         Quasar::BufferLayout layout = {
             { Quasar::ShaderDataType::Float3, "a_Position" },
             { Quasar::ShaderDataType::Float4, "a_Color" },
@@ -48,8 +45,11 @@ public:
         m_VertexArray->addVertexBuffer(vertexBuffer);
 
         unsigned int indices[3] = { 0, 1, 2 };
-        Quasar::Ref<Quasar::IndexBuffer> indexBuffer;
-        indexBuffer.reset(Quasar::IndexBuffer::create(indices, sizeof(indices) / sizeof(uint32_t)));
+        Quasar::Ref<Quasar::IndexBuffer> indexBuffer = Quasar::IndexBuffer::create(
+            indices,
+            sizeof(indices) / sizeof(uint32_t)
+        );
+        
         m_VertexArray->setIndexBuffer(indexBuffer);
 
         m_SquareVA = Quasar::VertexArray::create();
@@ -60,8 +60,10 @@ public:
             -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
-        Quasar::Ref<Quasar::VertexBuffer> squareVB;
-        squareVB.reset(Quasar::VertexBuffer::create(squareVertices, sizeof(squareVertices)));
+        Quasar::Ref<Quasar::VertexBuffer> squareVB = Quasar::VertexBuffer::create(
+            squareVertices,
+            sizeof(squareVertices)
+        );
         squareVB->setLayout({
             { Quasar::ShaderDataType::Float3, "a_Position" },
             { Quasar::ShaderDataType::Float2, "a_TexCoord" },
@@ -69,8 +71,10 @@ public:
         m_SquareVA->addVertexBuffer(squareVB);
 
         unsigned int squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-        Quasar::Ref<Quasar::IndexBuffer> squareIB;
-        squareIB.reset(Quasar::IndexBuffer::create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t))); 
+        Quasar::Ref<Quasar::IndexBuffer> squareIB = Quasar::IndexBuffer::create(
+            squareIndices,
+            sizeof(squareIndices) / sizeof(uint32_t)
+        );
         m_SquareVA->setIndexBuffer(squareIB);
 
         const std::string vertexSrc = R"(
@@ -149,8 +153,8 @@ public:
         m_Texture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
         m_ChernoLogoTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/ChernoLogo.png");
 
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(textureShader)->bind();
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(textureShader)->uploadUniformInt("u_Texture", 0);
+        textureShader->bind();
+        textureShader->setInt("u_Texture", 0);
     }
 
     void onUpdate(Quasar::Timestep ts) override
@@ -166,8 +170,8 @@ public:
 
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_FlatColorShader)->bind();
-        std::dynamic_pointer_cast<Quasar::OpenGLShader>(m_FlatColorShader)->uploadUniformFloat3("u_Color", m_SquareColor);
+        m_FlatColorShader->bind();
+        m_FlatColorShader->setFloat3("u_Color", m_SquareColor);
 
         for (int y = 0; y < 20; y++)
         {

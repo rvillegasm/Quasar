@@ -15,7 +15,7 @@ namespace Quasar
 
     public:
         ImGuiLayer();
-        ~ImGuiLayer();
+        ~ImGuiLayer() = default;
 
         void onAttach() override;
         void onDetach() override;

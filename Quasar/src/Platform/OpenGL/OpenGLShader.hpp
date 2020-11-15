@@ -2,9 +2,7 @@
 
 #include "Quasar/Renderer/Shader.hpp"
 
-// TODO: Remove when this file is not included in sandbox anymore
-typedef unsigned int GLenum;
-typedef int GLint;
+#include <glad/glad.h>
 
 namespace Quasar
 {

@@ -2,9 +2,9 @@
 
 // For use by Quasar Apps
 
+#include "Quasar/Core/Core.hpp"
 #include "Quasar/Core/Application.hpp"
 #include "Quasar/Core/Layer.hpp"
-#include "Quasar/Core/Core.hpp"
 #include "Quasar/Core/Log.hpp"
 
 #include "Quasar/Core/Timestep.hpp"

@@ -14,7 +14,7 @@ namespace Quasar
         unsigned int m_LayerInsertIndex = 0;
     
     public:
-        LayerStack();
+        LayerStack() = default;
         ~LayerStack();
 
         void pushLayer(Layer *layer);
