@@ -36,6 +36,7 @@ namespace Quasar
             GL_UNSIGNED_INT,
             nullptr
         );
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
 } // namespace Quasar
