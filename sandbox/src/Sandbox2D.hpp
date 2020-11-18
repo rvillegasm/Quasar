@@ -2,6 +2,8 @@
 
 #include <Quasar.hpp>
 
+#include <vector> 
+
 class Sandbox2D : public Quasar::Layer
 {
 private:
@@ -11,6 +13,13 @@ private:
     Quasar::Ref<Quasar::Shader> m_FlatColorShader;
 
     Quasar::Ref<Quasar::Texture2D> m_CheckerboardTexture;
+
+    struct ProfileResult
+    {
+        const char *name;
+        float time;
+    };
+    std::vector<ProfileResult> m_ProfileResults;
 
     glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
 

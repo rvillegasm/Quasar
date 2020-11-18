@@ -83,10 +83,4 @@ namespace Quasar
         }
     }
 
-    void ImGuiLayer::onImGuiRender()
-    {
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
-    }
-
 } // namespace Quasar
