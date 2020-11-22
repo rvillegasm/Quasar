@@ -82,9 +82,11 @@ target_include_directories(quasar PUBLIC vendor/stb_image)
 # ------------------------------------
 
 # compiler definitions
-target_compile_definitions(quasar PRIVATE
+target_compile_definitions(quasar PUBLIC
   GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
+  # Debug flags (move to debug config later on)
   QS_ENABLE_ASSERTS
+  QS_PROFILE
 )
 # show warnings on debug build
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
