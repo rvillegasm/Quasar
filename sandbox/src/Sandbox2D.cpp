@@ -11,7 +11,7 @@ Sandbox2D::Sandbox2D()
 {
 }
 
-void Sandbox2D::onAttach() 
+void Sandbox2D::onAttach()
 {
     m_CheckerboardTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
 }

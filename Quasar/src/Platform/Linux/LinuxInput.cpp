@@ -49,6 +49,4 @@ namespace Quasar
         return y;
     }
 
-
-
 } // namespace Quasar

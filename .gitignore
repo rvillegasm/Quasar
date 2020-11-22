@@ -38,3 +38,6 @@ build
 
 # Editor config
 .vscode
+
+# Profiling Output
+QuasarProfile-*

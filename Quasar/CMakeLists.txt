@@ -24,6 +24,8 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Core/Layer.cpp
   ${SOURCE_DIR}/Quasar/Core/LayerStack.cpp
 
+  ${SOURCE_DIR}/Quasar/System/FileSystem.cpp
+
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiLayer.cpp
   ${SOURCE_DIR}/Quasar/ImGui/ImGuiBuild.cpp
 
