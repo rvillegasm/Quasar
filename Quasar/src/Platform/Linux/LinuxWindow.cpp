@@ -9,6 +9,8 @@
 
 #include "Platform/OpenGL/OpenGLContext.hpp"
 
+#include"Quasar/Debug/Instrumentor.hpp"
+
 namespace Quasar
 {
     static uint8_t s_GLFWWindowCount = 0;
@@ -25,16 +27,22 @@ namespace Quasar
 
     LinuxWindow::LinuxWindow(const WindowProps &props)
     {
+        QS_PROFILE_FUNCTION();
+
         init(props);
     }
 
     LinuxWindow::~LinuxWindow()
     {
+        QS_PROFILE_FUNCTION();
+
         shutdown();
     }
 
     void LinuxWindow::init(const WindowProps &props)
     {
+        QS_PROFILE_FUNCTION();
+
         m_Data.title = props.title;
         m_Data.width = props.width;
         m_Data.height = props.height;
@@ -46,19 +54,23 @@ namespace Quasar
 
         if (s_GLFWWindowCount == 0)
         {
+            QS_PROFILE_SCOPE("glfwInit");
             int success = glfwInit();
             QS_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
         }
 
-        m_Window = glfwCreateWindow(
-            (int) props.width,
-            (int) props.height,
-            m_Data.title.c_str(),
-            nullptr,
-            nullptr
-        );
-        s_GLFWWindowCount++;
+        {
+            QS_PROFILE_SCOPE("glfwCreateWindow");
+            m_Window = glfwCreateWindow(
+                (int) props.width,
+                (int) props.height,
+                m_Data.title.c_str(),
+                nullptr,
+                nullptr
+            );
+            s_GLFWWindowCount++;
+        }
 
         m_Context = GraphicsContext::create(m_Window);
         m_Context->init();
@@ -86,7 +98,7 @@ namespace Quasar
         });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
-        {
+        {QS_PROFILE_FUNCTION();
             WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
 
             switch (action)
@@ -164,6 +176,8 @@ namespace Quasar
 
     void LinuxWindow::shutdown()
     {
+        QS_PROFILE_FUNCTION();
+
         glfwDestroyWindow(m_Window);
         s_GLFWWindowCount--;
 
@@ -175,12 +189,16 @@ namespace Quasar
 
     void LinuxWindow::onUpdate()
     {
+        QS_PROFILE_FUNCTION();
+
         glfwPollEvents();
         m_Context->swapBuffers();
     }
 
     void LinuxWindow::setVSync(bool enabled)
     {
+        QS_PROFILE_FUNCTION();
+
         if (enabled)
         {
             glfwSwapInterval(1);

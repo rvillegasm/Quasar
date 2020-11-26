@@ -3,6 +3,8 @@
 #include "Quasar/Core/Core.hpp"
 #include "Quasar/Core/Log.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -17,6 +19,8 @@ namespace Quasar
 
     void OpenGLContext::init()
     {
+        QS_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(m_WindowHandle);
         int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
         QS_CORE_ASSERT(status, "Failed to initialize glad!");
@@ -41,6 +45,8 @@ namespace Quasar
 
     void OpenGLContext::swapBuffers()
     {
+        QS_PROFILE_FUNCTION();
+
         glfwSwapBuffers(m_WindowHandle); 
     }
 

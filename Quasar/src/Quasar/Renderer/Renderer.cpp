@@ -2,6 +2,8 @@
 
 #include "Quasar/Renderer/Renderer2D.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 namespace Quasar
 {
 
@@ -9,6 +11,8 @@ namespace Quasar
     
     void Renderer::init() 
     {
+        QS_PROFILE_FUNCTION();
+
         RenderCommand::init();
         Renderer2D::init();
     }

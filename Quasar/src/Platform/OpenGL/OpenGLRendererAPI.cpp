@@ -1,5 +1,7 @@
 #include "OpenGLRendererAPI.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <glad/glad.h>
 
 namespace Quasar
@@ -7,6 +9,8 @@ namespace Quasar
     
     void OpenGLRendererAPI::init()
     {
+        QS_PROFILE_FUNCTION();
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

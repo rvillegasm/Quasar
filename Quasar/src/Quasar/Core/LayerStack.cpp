@@ -27,7 +27,7 @@ namespace Quasar
 
     void LayerStack::popLayer(Layer *layer)
     {
-        auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
+        auto it = std::find(m_Layers.begin(), m_Layers.begin() + m_LayerInsertIndex, layer);
         if (it != m_Layers.begin() + m_LayerInsertIndex)
         {
             layer->onDetach();

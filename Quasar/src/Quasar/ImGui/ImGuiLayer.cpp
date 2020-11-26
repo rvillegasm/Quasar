@@ -1,11 +1,13 @@
 #include "ImGuiLayer.hpp"
 
+#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Application.hpp"
+
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
-
-#include "Quasar/Core/Core.hpp"
-#include "Quasar/Core/Application.hpp"
 
 // TEMPORARY
 #include <glad/glad.h>
@@ -21,6 +23,8 @@ namespace Quasar
 
     void ImGuiLayer::onAttach()
     {
+        QS_PROFILE_FUNCTION();
+
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -53,6 +57,8 @@ namespace Quasar
 
     void ImGuiLayer::onDetach()
     {
+        QS_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -60,6 +66,8 @@ namespace Quasar
 
     void ImGuiLayer::begin()
     {
+        QS_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -67,6 +75,8 @@ namespace Quasar
 
     void ImGuiLayer::end()
     {
+        QS_PROFILE_FUNCTION();
+
         ImGuiIO &io = ImGui::GetIO();
         Application &app = Application::get();
         io.DisplaySize = ImVec2((float)app.getWindow().getWidth(), (float)app.getWindow().getHeight());

@@ -6,6 +6,8 @@
 
 #include "Quasar/Renderer/Renderer.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <GLFW/glfw3.h> // Temporary, here just to get the time
 
 namespace Quasar
@@ -15,6 +17,8 @@ namespace Quasar
 
     Application::Application()
     {
+        QS_PROFILE_FUNCTION();
+
         QS_CORE_ASSERT(!s_Instance, "An Application already exists!");
         s_Instance = this;
 
@@ -29,23 +33,31 @@ namespace Quasar
 
     Application::~Application() 
     {
+        QS_PROFILE_FUNCTION();
+
         Renderer::shutdown();
     }
 
     void Application::pushLayer(Layer *layer)
     {
+        QS_PROFILE_FUNCTION();
+
         m_LayerStack.pushLayer(layer);
         layer->onAttach();
     }
 
     void Application::pushOverlay(Layer *overlay)
     {
+        QS_PROFILE_FUNCTION();
+
         m_LayerStack.pushOverlay(overlay);
         overlay->onAttach();
     }
 
     void Application::onEvent(Event &e)
     {
+        QS_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<WindowCloseEvent>(QS_BIND_EVENT_FN(Application::onWindowClose));
         dispatcher.dispatch<WindowResizeEvent>(QS_BIND_EVENT_FN(Application::onWindowResize));
@@ -62,26 +74,39 @@ namespace Quasar
 
     void Application::run()
     {
+        QS_PROFILE_FUNCTION();
+
         while (m_Running)
         {
+            QS_PROFILE_SCOPE("RunLoop Iteration");
+
             float time = (float)glfwGetTime(); // Move to Platform::GetTime() or something like that
             Timestep timestep = time - m_LastFrameTime;
             m_LastFrameTime = time;
 
             if (!m_Minimized)
             {
-                for (Layer *layer : m_LayerStack)
                 {
-                    layer->onUpdate(timestep);
+                    QS_PROFILE_SCOPE("LayerStack onUpdate");
+
+                    for (Layer *layer : m_LayerStack)
+                    {
+                        layer->onUpdate(timestep);
+                    }
                 }
+
+                m_ImGuiLayer->begin();
+                {
+                    QS_PROFILE_SCOPE("LayerStack onImGuiRender");
+
+                    for (Layer *layer : m_LayerStack)
+                    {
+                        layer->onImGuiRender();
+                    }
+                }
+                m_ImGuiLayer->end();
             }
 
-            m_ImGuiLayer->begin();
-            for (Layer *layer : m_LayerStack)
-            {
-                layer->onImGuiRender();
-            }
-            m_ImGuiLayer->end();
 
             m_Window->onUpdate();
         }
@@ -95,6 +120,8 @@ namespace Quasar
 
     bool Application::onWindowResize(WindowResizeEvent &e)
     {
+        QS_PROFILE_FUNCTION();
+
         if (e.getWidth() == 0 || e.getHeight() == 0)
         {
             m_Minimized = true;

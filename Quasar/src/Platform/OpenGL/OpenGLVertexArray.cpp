@@ -2,6 +2,8 @@
 
 #include "Quasar/Core/Core.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <glad/glad.h>
 
 namespace Quasar
@@ -31,26 +33,36 @@ namespace Quasar
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
+        QS_PROFILE_FUNCTION();
+
         glCreateVertexArrays(1, &m_RendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
     {
+        QS_PROFILE_FUNCTION();
+        
         glDeleteVertexArrays(1, &m_RendererID);
     }
 
     void OpenGLVertexArray::bind() const
     {
+        QS_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
     }
 
     void OpenGLVertexArray::unbind() const
     {
+        QS_PROFILE_FUNCTION();
+
         glBindVertexArray(0);
     }
 
     void OpenGLVertexArray::addVertexBuffer(const Ref<VertexBuffer> &vertexBuffer)
     {
+        QS_PROFILE_FUNCTION();
+
         const auto &layout = vertexBuffer->getLayout();
         QS_CORE_ASSERT(layout.getElements().size(), "VertexBuffer has no layout!");
 
@@ -76,6 +88,8 @@ namespace Quasar
 
     void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer> &indexBuffer)
     {
+        QS_PROFILE_FUNCTION();
+
         glBindVertexArray(m_RendererID);
         indexBuffer->bind();
 

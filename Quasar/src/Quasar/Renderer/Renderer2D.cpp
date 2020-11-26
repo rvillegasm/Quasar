@@ -5,6 +5,8 @@
 #include "Quasar/Renderer/VertexArray.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Quasar
@@ -21,6 +23,8 @@ namespace Quasar
 
     void Renderer2D::init() 
     {
+        QS_PROFILE_FUNCTION();
+
         s_Data = new Renderer2DStorage();
         s_Data->quadVertexArray = VertexArray::create();
 
@@ -56,17 +60,23 @@ namespace Quasar
     
     void Renderer2D::shutdown() 
     {
+        QS_PROFILE_FUNCTION();
+
         delete s_Data;
     }
     
     void Renderer2D::beginScene(const OrthographicCamera &camera) 
     {
+        QS_PROFILE_FUNCTION();
+
         s_Data->textureShader->bind();
         s_Data->textureShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
     }
     
     void Renderer2D::endScene() 
     {
+        QS_PROFILE_FUNCTION();
+
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) 
@@ -76,6 +86,8 @@ namespace Quasar
     
     void Renderer2D::drawQuad(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color) 
     {
+        QS_PROFILE_FUNCTION();
+
         s_Data->textureShader->setFloat4("u_Color", color);
         s_Data->whiteTexture->bind();
 
@@ -95,6 +107,8 @@ namespace Quasar
     
     void Renderer2D::drawQuad(const glm::vec3 &position, const glm::vec2 &size, const Ref<Texture2D> &texture) 
     {
+        QS_PROFILE_FUNCTION();
+
         s_Data->textureShader->setFloat4("u_Color", glm::vec4(1.0f));
         texture->bind();
 

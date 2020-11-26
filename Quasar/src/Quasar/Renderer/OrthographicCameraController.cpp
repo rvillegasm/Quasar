@@ -1,8 +1,10 @@
-#include "Quasar/Renderer/OrthographicCameraController.hpp"
+#include "OrthographicCameraController.hpp"
 
 #include "Quasar/Core/Core.hpp"
 #include "Quasar/Core/Input.hpp"
 #include "Quasar/Core/KeyCodes.hpp"
+
+#include "Quasar/Debug/Instrumentor.hpp"
 
 namespace Quasar
 {
@@ -16,6 +18,8 @@ namespace Quasar
     
     void OrthographicCameraController::onUpdate(Timestep ts) 
     {
+        QS_PROFILE_FUNCTION();
+
         if (Input::isKeyPressed(QS_KEY_A))
         {
             m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
@@ -68,6 +72,8 @@ namespace Quasar
     
     void OrthographicCameraController::onEvent(Event &e) 
     {
+        QS_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<MouseScrolledEvent>(QS_BIND_EVENT_FN(OrthographicCameraController::onMouseScrolled));
         dispatcher.dispatch<WindowResizeEvent>(QS_BIND_EVENT_FN(OrthographicCameraController::onWindowResized));
@@ -75,6 +81,8 @@ namespace Quasar
 
     bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent &e) 
     {
+        QS_PROFILE_FUNCTION();
+
         m_ZoomLevel -= e.getYOffset() * 0.25f;
         m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
         m_Camera.setProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -84,6 +92,8 @@ namespace Quasar
     
     bool OrthographicCameraController::onWindowResized(WindowResizeEvent &e) 
     {
+        QS_PROFILE_FUNCTION();
+
         m_AspectRatio = (float)e.getWidth() / (float)e.getHeight();
         m_Camera.setProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 

@@ -1,5 +1,7 @@
 #include "OpenGLTexture.hpp"
 
+#include "Quasar/Debug/Instrumentor.hpp"
+
 #include <stb_image.h>
 
 namespace Quasar
@@ -8,9 +10,15 @@ namespace Quasar
     OpenGLTexture2D::OpenGLTexture2D(const std::string &path)
         : m_Path(path)
     {
+        QS_PROFILE_FUNCTION();
+
         int widht, height, channels;
         stbi_set_flip_vertically_on_load(1);
-        stbi_uc *data = stbi_load(path.c_str(), &widht, &height, &channels, 0);
+        stbi_uc *data = nullptr;
+        {
+            QS_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string &)");
+            data = stbi_load(path.c_str(), &widht, &height, &channels, 0);
+        }
         QS_CORE_ASSERT(data, "Failed to load image for 2D Texture!");
         m_Width = widht;
         m_Height = height;
@@ -50,6 +58,8 @@ namespace Quasar
     OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
         : m_Width(width), m_Height(height)
     {
+        QS_PROFILE_FUNCTION();
+
         m_InternalFormat = GL_RGBA8;
         m_DataFormat = GL_RGBA;
 
@@ -65,11 +75,15 @@ namespace Quasar
     
     OpenGLTexture2D::~OpenGLTexture2D()
     {
+        QS_PROFILE_FUNCTION();
+
         glDeleteTextures(1, &m_RendererID);
     }
 
     void OpenGLTexture2D::setData(void *data, uint32_t size)
     {
+        QS_PROFILE_FUNCTION();
+
 #ifdef QS_ENABLE_ASSERTS
         uint32_t bytesPerChannel = m_DataFormat == GL_RGBA ? 4 : 3;
         QS_CORE_ASSERT(size == m_Width * m_Height * bytesPerChannel, "Data must be an entire texture!");
@@ -79,6 +93,8 @@ namespace Quasar
     
     void OpenGLTexture2D::bind(uint32_t slot) const
     {
+        QS_PROFILE_FUNCTION();
+
         glBindTextureUnit(slot, m_RendererID);
     }
 

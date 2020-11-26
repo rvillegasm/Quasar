@@ -13,11 +13,14 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::onAttach()
 {
+    QS_PROFILE_FUNCTION();
+
     m_CheckerboardTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::onDetach() 
 {
+    QS_PROFILE_FUNCTION();
     
 }
 
@@ -26,10 +29,7 @@ void Sandbox2D::onUpdate(Quasar::Timestep ts)
     QS_PROFILE_FUNCTION();
 
     // Update
-    {
-        QS_PROFILE_SCOPE("CameraController::onUpdate");
-        m_CameraController.onUpdate(ts);
-    }
+    m_CameraController.onUpdate(ts);
 
     // Render
     {
