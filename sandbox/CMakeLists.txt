@@ -23,7 +23,7 @@ set(QUASAR_DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/../Quasar/vendor")
 set(QUASAR_LIB_DIR "${CMAKE_SOURCE_DIR}/../Quasar/build/lib")
 
 # add the executable
-add_executable(sandbox src/SandboxApp.cpp src/Sandbox2D.cpp)
+add_executable(sandbox src/SandboxApp.cpp src/Sandbox2D.cpp src/ExampleLayer.cpp)
 
 # include directories
 target_include_directories(sandbox PRIVATE

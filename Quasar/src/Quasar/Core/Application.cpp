@@ -62,9 +62,9 @@ namespace Quasar
         dispatcher.dispatch<WindowCloseEvent>(QS_BIND_EVENT_FN(Application::onWindowClose));
         dispatcher.dispatch<WindowResizeEvent>(QS_BIND_EVENT_FN(Application::onWindowResize));
 
-        for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+        for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
         {
-            (*--it)->onEvent(e);
+            (*it)->onEvent(e);
             if (e.isHandled())
             {
                 break;
