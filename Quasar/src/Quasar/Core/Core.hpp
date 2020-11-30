@@ -50,13 +50,6 @@
 #endif
 // End of automatic platform detection
 
-// Platform specific defines
-#ifdef QS_PLATFORM_WINDOWS
-    #define QS_PRETTY_FUNCTION __FUNCSIG__
-#else
-    #define QS_PRETTY_FUNCTION __PRETTY_FUNCTION__
-#endif
-
 #ifdef QS_ENABLE_ASSERTS
     #include <cstdlib>
     #define QS_ASSERT(x, ...)                                   \

@@ -133,10 +133,29 @@ namespace Quasar
 } // namespace Quasar
 
 #if QS_PROFILE
+    #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
+        #define QS_FUNC_SIG __PRETTY_FUNCTION__
+    #elif defined(__DMC__) && (__DMC__ >= 0x810)
+		#define QS_FUNC_SIG __PRETTY_FUNCTION__
+    #elif defined(__FUNCSIG__)
+		#define QS_FUNC_SIG __FUNCSIG__
+    #elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+		#define QS_FUNC_SIG __FUNCTION__
+    #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
+		#define QS_FUNC_SIG __FUNC__
+    #elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+		#define QS_FUNC_SIG __func__
+    #elif defined(__cplusplus) && (__cplusplus >= 201103)
+		#define QS_FUNC_SIG __func__
+    #else
+		#define QS_FUNC_SIG "QS_FUNC_SIG unknown!"
+	#endif
+
     #define QS_PROFILE_BEGIN_SESSION(name, filepath) ::Quasar::Instrumentor::get().beginSession(name, filepath)
     #define QS_PROFILE_END_SESSION() ::Quasar::Instrumentor::get().endSession()
     #define QS_PROFILE_SCOPE(name) ::Quasar::InstrumentationTimer timer##__LINE__(name)
-    #define QS_PROFILE_FUNCTION() QS_PROFILE_SCOPE(QS_PRETTY_FUNCTION)
+    #define QS_PROFILE_FUNCTION() QS_PROFILE_SCOPE(QS_FUNC_SIG)
+    
 #else
     #define QS_PROFILE_BEGIN_SESSION(name, filepath)
     #define QS_PROFILE_END_SESSION()
