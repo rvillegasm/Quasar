@@ -77,6 +77,7 @@ target_link_libraries(sandbox PRIVATE
 # compile definitions
 target_compile_definitions(sandbox PRIVATE
   GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
+  QS_DEBUG
   QS_ENABLE_ASSERTS
   QS_PROFILE
 )

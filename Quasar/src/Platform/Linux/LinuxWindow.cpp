@@ -7,6 +7,8 @@
 #include "Quasar/Events/MouseEvent.hpp"
 #include "Quasar/Events/KeyEvent.hpp"
 
+#include "Quasar/Renderer/Renderer.hpp"
+
 #include "Platform/OpenGL/OpenGLContext.hpp"
 
 #include"Quasar/Debug/Instrumentor.hpp"
@@ -62,6 +64,14 @@ namespace Quasar
 
         {
             QS_PROFILE_SCOPE("glfwCreateWindow");
+
+#ifdef QS_DEBUG
+            if (Renderer::getAPI() == RendererAPI::API::OpenGL)
+            {
+                glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+            }
+#endif
+
             m_Window = glfwCreateWindow(
                 (int) props.width,
                 (int) props.height,
