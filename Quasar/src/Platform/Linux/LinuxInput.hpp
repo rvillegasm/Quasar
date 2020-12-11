@@ -10,11 +10,11 @@ namespace Quasar
     class LinuxInput final : public Input
     {
     protected:
-        virtual bool isKeyPressedImpl(int keycode) override;
-        virtual bool isMouseButtonPressedImpl(int button) override;
-        virtual std::pair<float, float> getMousePositionImpl() override;
-        virtual float getMouseXImpl() override;
-        virtual float getMouseYImpl() override;
+        bool isKeyPressedImpl(KeyCode key) override;
+        bool isMouseButtonPressedImpl(MouseCode button) override;
+        std::pair<float, float> getMousePositionImpl() override;
+        float getMouseXImpl() override;
+        float getMouseYImpl() override;
     };
 
 } // namespace Quasar

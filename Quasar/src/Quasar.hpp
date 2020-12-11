@@ -11,13 +11,12 @@
 
 #include "Quasar/Core/Input.hpp"
 #include "Quasar/Core/KeyCodes.hpp"
-#include "Quasar/Core/MouseButtonCodes.hpp"
+#include "Quasar/Core/MouseCodes.hpp"
 
 #include "Quasar/System/FileSystem.hpp"
 
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 
-// ----- Renderer -----
 #include "Quasar/Renderer/Renderer.hpp"
 #include "Quasar/Renderer/Renderer2D.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"
@@ -29,4 +28,3 @@
 
 #include "Quasar/Renderer/OrthographicCamera.hpp"
 #include "Quasar/Renderer/OrthographicCameraController.hpp"
-// --------------------

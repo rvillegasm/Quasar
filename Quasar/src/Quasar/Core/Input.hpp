@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/KeyCodes.hpp"
+#include "Quasar/Core/MouseCodes.hpp"
 
 #include <utility>
 
@@ -15,8 +17,8 @@ namespace Quasar
     protected:
         Input() = default;
 
-        virtual bool isKeyPressedImpl(int keycode) = 0;
-        virtual bool isMouseButtonPressedImpl(int button) = 0;
+        virtual bool isKeyPressedImpl(KeyCode key) = 0;
+        virtual bool isMouseButtonPressedImpl(MouseCode button) = 0;
         virtual std::pair<float, float> getMousePositionImpl() = 0;
         virtual float getMouseXImpl() = 0;
         virtual float getMouseYImpl() = 0;
@@ -25,12 +27,12 @@ namespace Quasar
         Input(const Input&) = delete;
         Input &operator=(const Input&) = delete;
 
-        inline static bool isKeyPressed(int keycode)
+        inline static bool isKeyPressed(KeyCode key)
         { 
-            return s_Instance->isKeyPressedImpl(keycode); 
+            return s_Instance->isKeyPressedImpl(key); 
         }
 
-        inline static bool isMouseButtonPressed(int button)
+        inline static bool isMouseButtonPressed(MouseCode button)
         { 
             return s_Instance->isMouseButtonPressedImpl(button); 
         }

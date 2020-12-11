@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Quasar/Events/Event.hpp"
+#include "Quasar/Core/KeyCodes.hpp"
 
 #include <sstream>
 
@@ -10,12 +11,13 @@ namespace Quasar
     class KeyEvent : public Event
     {
     protected:
-        int m_KeyCode;
-        KeyEvent(int keyCode)
+        KeyCode m_KeyCode;
+
+        KeyEvent(KeyCode keyCode)
             : m_KeyCode(keyCode) {}
 
     public:
-        inline int getKeyCode() const { return m_KeyCode; }
+        inline KeyCode getKeyCode() const { return m_KeyCode; }
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     };
@@ -26,7 +28,7 @@ namespace Quasar
         int m_RepeatCount;
 
     public:
-        KeyPressedEvent(int keyCode, int repeatCount)
+        KeyPressedEvent(KeyCode keyCode, int repeatCount)
             : KeyEvent(keyCode), m_RepeatCount(repeatCount) {}
 
         inline int getRepeatCount() const { return m_RepeatCount; }
@@ -44,7 +46,7 @@ namespace Quasar
     class KeyReleasedEvent : public KeyEvent
     {
     public:
-        KeyReleasedEvent(int keyCode)
+        KeyReleasedEvent(KeyCode keyCode)
             : KeyEvent(keyCode) {}
 
         std::string toString() const override
@@ -60,7 +62,7 @@ namespace Quasar
     class KeyTypedEvent : public KeyEvent
     {
     public:
-        KeyTypedEvent(int keyCode)
+        KeyTypedEvent(KeyCode keyCode)
             : KeyEvent(keyCode) {}
 
         std::string toString() const override

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Quasar/Events/Event.hpp"
+#include "Quasar/Core/MouseCodes.hpp"
 
 #include <sstream>
 
@@ -55,13 +56,13 @@ namespace Quasar
     class MouseButtonEvent : public Event
     {
     protected:
-        int m_Button;
+        MouseCode m_Button;
 
-        MouseButtonEvent(int button)
+        MouseButtonEvent(MouseCode button)
             : m_Button(button) {}
 
     public:
-        inline int getMouseButton() const { return m_Button; }
+        inline MouseCode getMouseButton() const { return m_Button; }
 
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput) 
     };
@@ -69,7 +70,7 @@ namespace Quasar
     class MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonPressedEvent(int button)
+        MouseButtonPressedEvent(MouseCode button)
             : MouseButtonEvent(button) {}
 
         std::string toString() const override
@@ -85,7 +86,7 @@ namespace Quasar
     class MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonReleasedEvent(int button)
+        MouseButtonReleasedEvent(MouseCode button)
             : MouseButtonEvent(button) {}
 
         std::string toString() const override

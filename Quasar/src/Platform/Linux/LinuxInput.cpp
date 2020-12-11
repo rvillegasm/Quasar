@@ -8,21 +8,21 @@ namespace Quasar
 {
     Scope<Input> Input::s_Instance = createScope<LinuxInput>();
     
-    bool LinuxInput::isKeyPressedImpl(int keycode)
+    bool LinuxInput::isKeyPressedImpl(KeyCode key)
     {
         auto window = static_cast<GLFWwindow*>(
             Application::get().getWindow().getNativeWindow()
         );
-        int state = glfwGetKey(window, keycode);
+        int state = glfwGetKey(window, static_cast<int32_t>(key));
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool LinuxInput::isMouseButtonPressedImpl(int button)
+    bool LinuxInput::isMouseButtonPressedImpl(MouseCode button)
     {
         auto window = static_cast<GLFWwindow*>(
             Application::get().getWindow().getNativeWindow()
         );
-        int state = glfwGetMouseButton(window, button);
+        int state = glfwGetMouseButton(window, static_cast<int32_t>(button));
         return state == GLFW_PRESS;
     }
 
