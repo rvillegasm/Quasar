@@ -6,8 +6,7 @@
 
 namespace Quasar
 {
-    Scope<Input> Input::s_Instance = createScope<LinuxInput>();
-    
+       
     bool LinuxInput::isKeyPressedImpl(KeyCode key)
     {
         auto window = static_cast<GLFWwindow*>(

@@ -23,6 +23,8 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Core/Log.cpp
   ${SOURCE_DIR}/Quasar/Core/Layer.cpp
   ${SOURCE_DIR}/Quasar/Core/LayerStack.cpp
+  ${SOURCE_DIR}/Quasar/Core/Input.cpp
+  ${SOURCE_DIR}/Quasar/Core/Window.cpp
 
   ${SOURCE_DIR}/Quasar/System/FileSystem.cpp
 

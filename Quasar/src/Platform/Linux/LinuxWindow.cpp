@@ -22,11 +22,6 @@ namespace Quasar
         QS_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
-    Scope<Window> Window::create(const WindowProps &props)
-    {
-        return createScope<LinuxWindow>(props);
-    }
-
     LinuxWindow::LinuxWindow(const WindowProps &props)
     {
         QS_PROFILE_FUNCTION();

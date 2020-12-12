@@ -44,7 +44,6 @@ namespace Quasar
 
         virtual void *getNativeWindow() const = 0;
 
-        // Implemented per-platform in order to be platform agnostic
         static Scope<Window> create(const WindowProps &props = WindowProps());
     };
 }

@@ -44,6 +44,8 @@ namespace Quasar
 
         inline static float getMouseX() { return s_Instance->getMouseXImpl(); }
         inline static float getMouseY() { return s_Instance->getMouseYImpl(); }
+
+        static Scope<Input> create();
     };
 
 } // namespace Quasar
