@@ -9,6 +9,8 @@
 
 #include <memory>
 
+int main(int argc, char **argv);
+
 namespace Quasar
 {
 
@@ -24,14 +26,16 @@ namespace Quasar
 
         static Application *s_Instance;
 
+        void run();
+
         bool onWindowClose(WindowCloseEvent &e);
         bool onWindowResize(WindowResizeEvent &e);
+
+        friend int ::main(int argc, char **argv);
 
     public:
         Application();
         virtual ~Application();
-
-        void run();
 
         void onEvent(Event &e);
 
