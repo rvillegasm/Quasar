@@ -34,10 +34,10 @@ namespace Quasar
 
 // Core logger
 
-#define QS_CORE_TRACE(...) ::Quasar::Log::getCoreLogger()->trace(__VA_ARGS__);
-#define QS_CORE_INFO(...)  ::Quasar::Log::getCoreLogger()->info(__VA_ARGS__);
-#define QS_CORE_WARN(...)  ::Quasar::Log::getCoreLogger()->warn(__VA_ARGS__);
-#define QS_CORE_ERROR(...) ::Quasar::Log::getCoreLogger()->error(__VA_ARGS__);
+#define QS_CORE_TRACE(...)    ::Quasar::Log::getCoreLogger()->trace(__VA_ARGS__);
+#define QS_CORE_INFO(...)     ::Quasar::Log::getCoreLogger()->info(__VA_ARGS__);
+#define QS_CORE_WARN(...)     ::Quasar::Log::getCoreLogger()->warn(__VA_ARGS__);
+#define QS_CORE_ERROR(...)    ::Quasar::Log::getCoreLogger()->error(__VA_ARGS__);
 #define QS_CORE_CRITICAL(...) ::Quasar::Log::getCoreLogger()->critical(__VA_ARGS__);
 
 // Client logger
@@ -46,6 +46,6 @@ namespace Quasar
 #define QS_INFO(...)       ::Quasar::Log::getClientLogger()->info(__VA_ARGS__);
 #define QS_WARN(...)       ::Quasar::Log::getClientLogger()->warn(__VA_ARGS__);
 #define QS_ERROR(...)      ::Quasar::Log::getClientLogger()->error(__VA_ARGS__);
-#define QS_CRITICAL(...)      ::Quasar::Log::getClientLogger()->critical(__VA_ARGS__);
+#define QS_CRITICAL(...)   ::Quasar::Log::getClientLogger()->critical(__VA_ARGS__);
 
 // --------------------------------------
