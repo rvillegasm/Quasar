@@ -1,7 +1,5 @@
 #include "Sandbox2D.hpp"
 
-#include "Quasar/Debug/Instrumentor.hpp"
-
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -41,9 +39,9 @@ void Sandbox2D::onUpdate(Quasar::Timestep ts)
     {
         QS_PROFILE_SCOPE("Renderer Draw");
         Quasar::Renderer2D::beginScene(m_CameraController.getCamera());
-        Quasar::Renderer2D::drawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+        Quasar::Renderer2D::drawRotatedQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
         Quasar::Renderer2D::drawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-        Quasar::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture);
+        Quasar::Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerboardTexture, 10.0f);
         Quasar::Renderer2D::endScene();
     }
 }

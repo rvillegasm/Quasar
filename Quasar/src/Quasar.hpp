@@ -28,3 +28,5 @@
 
 #include "Quasar/Renderer/OrthographicCamera.hpp"
 #include "Quasar/Renderer/OrthographicCameraController.hpp"
+
+#include "Quasar/Debug/Instrumentor.hpp"
