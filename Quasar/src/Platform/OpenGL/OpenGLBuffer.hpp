@@ -12,11 +12,14 @@ namespace Quasar
         BufferLayout m_Layout;
 
     public:
+        OpenGLVertexBuffer(uint32_t size);
         OpenGLVertexBuffer(float *vertices, uint32_t size);
         ~OpenGLVertexBuffer();
 
         void bind() const override;
         void unbind() const override;
+
+        void setData(const void *data, uint32_t size) override;
 
         const BufferLayout &getLayout() const override { return m_Layout; }
         void setLayout(const BufferLayout &layout) override { m_Layout = layout; }
