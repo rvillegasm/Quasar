@@ -32,7 +32,7 @@ namespace Quasar
 
         virtual void drawIndexed(const Ref<VertexArray> &vertexArray, uint32_t indexCount = 0) = 0;
 
-        inline static API getAPI() { return s_API; }
+        static API getAPI() { return s_API; }
         static Scope<RendererAPI> create();
     };
 

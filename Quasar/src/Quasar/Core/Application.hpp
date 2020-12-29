@@ -42,9 +42,9 @@ namespace Quasar
         void pushLayer(Layer *layer);
         void pushOverlay(Layer *overlay);
 
-        inline Window &getWindow() { return *m_Window; }
+        Window &getWindow() { return *m_Window; }
         
-        inline static Application &get() { return *s_Instance; }
+        static Application &get() { return *s_Instance; }
     };
 
     // To be defined in the CLIENT

@@ -38,7 +38,7 @@ namespace Quasar
             const glm::mat4 &transform = glm::mat4(1.0f)
         );
 
-        inline static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
+        static RendererAPI::API getAPI() { return RendererAPI::getAPI(); }
     };  
 
 } // namespace Quasar

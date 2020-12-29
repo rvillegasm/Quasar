@@ -33,16 +33,13 @@ namespace Quasar
 
         void onUpdate() override;
 
-        inline unsigned int getWidth() const override { return m_Data.width; }
-        inline unsigned int getHeight() const override { return m_Data.height; }
+        unsigned int getWidth() const override { return m_Data.width; }
+        unsigned int getHeight() const override { return m_Data.height; }
 
-        inline void setEventCallback(const EventCallbackFn &callback) override 
-        {
-            m_Data.eventCallback = callback;
-        }
+        void setEventCallback(const EventCallbackFn &callback) override { m_Data.eventCallback = callback; }
         void setVSync(bool enabled) override;
         bool isVSync() const override;
 
-        inline virtual void *getNativeWindow() const override { return m_Window; }
+        virtual void *getNativeWindow() const override { return m_Window; }
     };
 }

@@ -27,23 +27,12 @@ namespace Quasar
         Input(const Input&) = delete;
         Input &operator=(const Input&) = delete;
 
-        inline static bool isKeyPressed(KeyCode key)
-        { 
-            return s_Instance->isKeyPressedImpl(key); 
-        }
+        static bool isKeyPressed(KeyCode key) { return s_Instance->isKeyPressedImpl(key); }
 
-        inline static bool isMouseButtonPressed(MouseCode button)
-        { 
-            return s_Instance->isMouseButtonPressedImpl(button); 
-        }
-
-        inline static std::pair<float, float> getMousePosition() 
-        { 
-            return s_Instance->getMousePositionImpl();
-        }
-
-        inline static float getMouseX() { return s_Instance->getMouseXImpl(); }
-        inline static float getMouseY() { return s_Instance->getMouseYImpl(); }
+        static bool isMouseButtonPressed(MouseCode button) { return s_Instance->isMouseButtonPressedImpl(button); }
+        static std::pair<float, float> getMousePosition() { return s_Instance->getMousePositionImpl(); }
+        static float getMouseX() { return s_Instance->getMouseXImpl(); }
+        static float getMouseY() { return s_Instance->getMouseYImpl(); }
 
         static Scope<Input> create();
     };

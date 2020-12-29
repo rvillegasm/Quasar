@@ -25,7 +25,7 @@ namespace Quasar
         virtual void onImGuiRender() {}
         virtual void onEvent(Event &event) {}
 
-        inline const std::string &getName() const { return m_DebugName; }
+        const std::string &getName() const { return m_DebugName; }
     };
 
 } // namespace Quasar

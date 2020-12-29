@@ -48,13 +48,10 @@ namespace Quasar
         virtual int getCategoryFlags() const = 0;
         virtual std::string toString() const { return getName(); }
 
-        inline bool isInCategory(EventCategory category)
-        {
-            return getCategoryFlags() & category;
-        }
+        bool isInCategory(EventCategory category) { return getCategoryFlags() & category; }
 
-        inline void setHandled(bool handled) { m_Handled = handled; }
-        inline bool isHandled() { return m_Handled; }
+        void setHandled(bool handled) { m_Handled = handled; }
+        bool isHandled() { return m_Handled; }
     };
 
     class EventDispatcher

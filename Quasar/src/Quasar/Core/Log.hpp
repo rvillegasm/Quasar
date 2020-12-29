@@ -13,15 +13,8 @@ namespace Quasar
     public:
         static void init();
 
-        inline static std::shared_ptr<spdlog::logger> &getCoreLogger()
-        {
-            return s_CoreLogger;
-        }
-
-        inline static std::shared_ptr<spdlog::logger> &getClientLogger()
-        {
-            return s_ClientLogger;
-        }
+        static std::shared_ptr<spdlog::logger> &getCoreLogger() { return s_CoreLogger; }
+        static std::shared_ptr<spdlog::logger> &getClientLogger() { return s_ClientLogger; }
 
     private:
         static std::shared_ptr<spdlog::logger> s_CoreLogger;

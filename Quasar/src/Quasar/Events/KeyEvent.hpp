@@ -17,7 +17,7 @@ namespace Quasar
             : m_KeyCode(keyCode) {}
 
     public:
-        inline KeyCode getKeyCode() const { return m_KeyCode; }
+        KeyCode getKeyCode() const { return m_KeyCode; }
 
         EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
     };
@@ -31,7 +31,7 @@ namespace Quasar
         KeyPressedEvent(KeyCode keyCode, int repeatCount)
             : KeyEvent(keyCode), m_RepeatCount(repeatCount) {}
 
-        inline int getRepeatCount() const { return m_RepeatCount; }
+        int getRepeatCount() const { return m_RepeatCount; }
 
         std::string toString() const override
         {
