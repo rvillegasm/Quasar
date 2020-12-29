@@ -29,6 +29,11 @@ namespace Quasar
         void setData(void *data, uint32_t size) override;
 
         void bind(uint32_t slot = 0) const override;
+
+        bool operator==(const Texture &other) const override
+        { 
+            return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
+        };
     };
 
 } // namespace Quasar

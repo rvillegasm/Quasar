@@ -67,6 +67,13 @@ namespace Quasar
         uploadUniformInt(name, value);
     }
 
+    void OpenGLShader::setIntArray(const std::string &name, int *values, uint32_t count)
+    {
+        QS_PROFILE_FUNCTION();
+
+        uploadUniformIntArray(name, values, count);
+    }
+
     void OpenGLShader::setFloat(const std::string &name, float value)
     {
         QS_PROFILE_FUNCTION();
@@ -100,6 +107,12 @@ namespace Quasar
         // make sure to bind before calling
         GLint location = getUniformLocation(name);
         glUniform1i(location, value);
+    }
+
+    void OpenGLShader::uploadUniformIntArray(const std::string& name, int *values, uint32_t count)
+    {
+        GLint location = getUniformLocation(name);
+        glUniform1iv(location, count, values);
     }
 
     void OpenGLShader::uploadUniformFloat(const std::string& name, float value)

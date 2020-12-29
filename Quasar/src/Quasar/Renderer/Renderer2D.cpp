@@ -9,6 +9,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <array>
+
 namespace Quasar
 {
 
@@ -17,6 +19,8 @@ namespace Quasar
         glm::vec3 position;
         glm::vec4 color;
         glm::vec2 texCoord;
+        float texIndex;
+        float tilingFactor;
     };
 
     struct Renderer2DData
@@ -24,6 +28,7 @@ namespace Quasar
         const uint32_t MAX_QUADS = 10000;
         const uint32_t MAX_VERTICES = MAX_QUADS * 4;
         const uint32_t MAX_INDICES = MAX_VERTICES * 6;
+        static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
         Ref<VertexArray> quadVertexArray;
         Ref<VertexBuffer> quadVertexBuffer;
@@ -33,30 +38,36 @@ namespace Quasar
         uint32_t quadIndexCount = 0;
         QuadVertex *quadVertexBufferBase = nullptr;
         QuadVertex *quadVertexBufferPtr = nullptr;
+
+        std::array<Ref<Texture2D>, MAX_TEXTURE_SLOTS> textureSlots;
+        uint32_t textureSlotIndex = 1; // 0 = white texture
     };
 
-    static Renderer2DData s_Data;
+    static Renderer2DData *s_Data;
 
     void Renderer2D::init() 
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.quadVertexArray = VertexArray::create();
+        s_Data = new Renderer2DData();
+        s_Data->quadVertexArray = VertexArray::create();
 
-        s_Data.quadVertexBuffer = VertexBuffer::create(s_Data.MAX_VERTICES * sizeof(QuadVertex));
-        s_Data.quadVertexBuffer->setLayout({
+        s_Data->quadVertexBuffer = VertexBuffer::create(s_Data->MAX_VERTICES * sizeof(QuadVertex));
+        s_Data->quadVertexBuffer->setLayout({
             { ShaderDataType::Float3, "a_Position" },
             { ShaderDataType::Float4, "a_Color" },
-            { ShaderDataType::Float2, "a_TexCoord" }
+            { ShaderDataType::Float2, "a_TexCoord" },
+            { ShaderDataType::Float, "a_TexIndex" },
+            { ShaderDataType::Float, "a_TilingFactor" }
         });
-        s_Data.quadVertexArray->addVertexBuffer(s_Data.quadVertexBuffer);
+        s_Data->quadVertexArray->addVertexBuffer(s_Data->quadVertexBuffer);
 
-        s_Data.quadVertexBufferBase = new QuadVertex[s_Data.MAX_VERTICES]; // TODO: free this memory
+        s_Data->quadVertexBufferBase = new QuadVertex[s_Data->MAX_VERTICES]; // TODO: free this memory
 
-        uint32_t *quadIndices = new uint32_t[s_Data.MAX_INDICES];
+        uint32_t *quadIndices = new uint32_t[s_Data->MAX_INDICES];
 
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < s_Data.MAX_INDICES; i += 6)
+        for (uint32_t i = 0; i < s_Data->MAX_INDICES; i += 6)
         {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
@@ -69,41 +80,54 @@ namespace Quasar
             offset += 4;
         }
 
-        Ref<IndexBuffer> quadIB = IndexBuffer::create(quadIndices, s_Data.MAX_INDICES);
-        s_Data.quadVertexArray->setIndexBuffer(quadIB);
+        Ref<IndexBuffer> quadIB = IndexBuffer::create(quadIndices, s_Data->MAX_INDICES);
+        s_Data->quadVertexArray->setIndexBuffer(quadIB);
         delete[] quadIndices;
 
-        s_Data.whiteTexture = Texture2D::create(1, 1);
+        s_Data->whiteTexture = Texture2D::create(1, 1);
         uint32_t whiteTextureData = 0xffffffff;
-        s_Data.whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
+        s_Data->whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
 
-        s_Data.textureShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
-        s_Data.textureShader->bind();
-        s_Data.textureShader->setInt("u_Texture", 0);
+        int32_t samplers[s_Data->MAX_TEXTURE_SLOTS];
+        for (uint32_t i = 0; i < s_Data->MAX_TEXTURE_SLOTS; i++)
+        {
+            samplers[i] = i;
+        }
+        
+        s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
+        s_Data->textureShader->bind();
+        s_Data->textureShader->setIntArray("u_Textures", samplers, s_Data->MAX_TEXTURE_SLOTS);
+
+        s_Data->textureSlots[0] = s_Data->whiteTexture;
     }
     
     void Renderer2D::shutdown() 
     {
         QS_PROFILE_FUNCTION();
+
+        delete[] s_Data->quadVertexBufferBase;
+        delete s_Data;
     }
     
     void Renderer2D::beginScene(const OrthographicCamera &camera) 
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.textureShader->bind();
-        s_Data.textureShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
+        s_Data->textureShader->bind();
+        s_Data->textureShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
 
-        s_Data.quadIndexCount = 0;
-        s_Data.quadVertexBufferPtr = s_Data.quadVertexBufferBase;
+        s_Data->quadIndexCount = 0;
+        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
+
+        s_Data->textureSlotIndex = 1;
     }
     
     void Renderer2D::endScene() 
     {
         QS_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t *)s_Data.quadVertexBufferPtr - (uint8_t *)s_Data.quadVertexBufferBase;
-        s_Data.quadVertexBuffer->setData(s_Data.quadVertexBufferBase, dataSize);
+        uint32_t dataSize = (uint8_t *)s_Data->quadVertexBufferPtr - (uint8_t *)s_Data->quadVertexBufferBase;
+        s_Data->quadVertexBuffer->setData(s_Data->quadVertexBufferBase, dataSize);
 
         flush();
     }
@@ -112,7 +136,12 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        RenderCommand::drawIndexed(s_Data.quadVertexArray, s_Data.quadIndexCount);
+        for (uint32_t i = 0; i < s_Data->textureSlotIndex; i++)
+        {
+            s_Data->textureSlots[i]->bind(i);
+        }
+        
+        RenderCommand::drawIndexed(s_Data->quadVertexArray, s_Data->quadIndexCount);
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) 
@@ -124,37 +153,48 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.quadVertexBufferPtr->position = position;
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data.quadVertexBufferPtr++;
+        const float texIndex = 0.0f; // white texture
+        const float tilingFactor = 1.0f;
 
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data.quadVertexBufferPtr++;
+        s_Data->quadVertexBufferPtr->position = position;
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
+        s_Data->quadVertexBufferPtr->texIndex = texIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
 
-        s_Data.quadVertexBufferPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data.quadVertexBufferPtr++;
+        s_Data->quadVertexBufferPtr->position = { position.x + size.x, position.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
+        s_Data->quadVertexBufferPtr->texIndex = texIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
 
-        s_Data.quadVertexBufferPtr->position = { position.x, position.y + size.y, 0.0f };
-        s_Data.quadVertexBufferPtr->color = color;
-        s_Data.quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data.quadVertexBufferPtr++;
+        s_Data->quadVertexBufferPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
+        s_Data->quadVertexBufferPtr->texIndex = texIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
 
-        s_Data.quadIndexCount += 6;
+        s_Data->quadVertexBufferPtr->position = { position.x, position.y + size.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
+        s_Data->quadVertexBufferPtr->texIndex = texIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
 
-        /* s_Data.textureShader->setFloat("u_TilingFactor", 1.0f);
-        s_Data.whiteTexture->bind();
+        s_Data->quadIndexCount += 6;
+
+        /* s_Data->textureShader->setFloat("u_TilingFactor", 1.0f);
+        s_Data->whiteTexture->bind();
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data.textureShader->setMat4("u_Transform", transform);
-        s_Data.quadVertexArray->bind();
-        RenderCommand::drawIndexed(s_Data.quadVertexArray); */
+        s_Data->textureShader->setMat4("u_Transform", transform);
+        s_Data->quadVertexArray->bind();
+        RenderCommand::drawIndexed(s_Data->quadVertexArray); */
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) 
@@ -166,17 +206,66 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.textureShader->setFloat4("u_Color", tintColor);
-        s_Data.textureShader->setFloat("u_TilingFactor", tilingFactor);
+        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+        float textureIndex = 0.0f;
+        for (uint32_t i = 1; i < s_Data->textureSlotIndex; i++)
+        {
+            if (*s_Data->textureSlots[i].get() == *texture.get())
+            {
+                textureIndex = (float)i;
+                break;
+            }
+        }
+
+        if (textureIndex == 0.0f)
+        {
+            textureIndex = (float)s_Data->textureSlotIndex;
+            s_Data->textureSlots[s_Data->textureSlotIndex] = texture;
+            s_Data->textureSlotIndex++;
+        }
+
+        s_Data->quadVertexBufferPtr->position = position;
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
+        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
+
+        s_Data->quadVertexBufferPtr->position = { position.x + size.x, position.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
+        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
+
+        s_Data->quadVertexBufferPtr->position = { position.x + size.x, position.y + size.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
+        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
+
+        s_Data->quadVertexBufferPtr->position = { position.x, position.y + size.y, 0.0f };
+        s_Data->quadVertexBufferPtr->color = color;
+        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
+        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+        s_Data->quadVertexBufferPtr++;
+
+        s_Data->quadIndexCount += 6;
+
+        /* s_Data->textureShader->setFloat4("u_Color", tintColor);
+        s_Data->textureShader->setFloat("u_TilingFactor", tilingFactor);
         texture->bind();
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data.textureShader->setMat4("u_Transform", transform);
+        s_Data->textureShader->setMat4("u_Transform", transform);
 
-        s_Data.quadVertexArray->bind();
-        RenderCommand::drawIndexed(s_Data.quadVertexArray);
+        s_Data->quadVertexArray->bind();
+        RenderCommand::drawIndexed(s_Data->quadVertexArray); */
     }
     
     void Renderer2D::drawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color) 
@@ -188,18 +277,18 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.textureShader->setFloat4("u_Color", color);
-        s_Data.textureShader->setFloat("u_TilingFactor", 1.0f);
-        s_Data.whiteTexture->bind();
+        s_Data->textureShader->setFloat4("u_Color", color);
+        s_Data->textureShader->setFloat("u_TilingFactor", 1.0f);
+        s_Data->whiteTexture->bind();
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
             * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data.textureShader->setMat4("u_Transform", transform);
+        s_Data->textureShader->setMat4("u_Transform", transform);
 
-        s_Data.quadVertexArray->bind();
-        RenderCommand::drawIndexed(s_Data.quadVertexArray);
+        s_Data->quadVertexArray->bind();
+        RenderCommand::drawIndexed(s_Data->quadVertexArray);
     }
     
     void Renderer2D::drawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) 
@@ -211,18 +300,18 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        s_Data.textureShader->setFloat4("u_Color", tintColor);
-        s_Data.textureShader->setFloat("u_TilingFactor", tilingFactor);
+        s_Data->textureShader->setFloat4("u_Color", tintColor);
+        s_Data->textureShader->setFloat("u_TilingFactor", tilingFactor);
         texture->bind();
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
             * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data.textureShader->setMat4("u_Transform", transform);
+        s_Data->textureShader->setMat4("u_Transform", transform);
 
-        s_Data.quadVertexArray->bind();
-        RenderCommand::drawIndexed(s_Data.quadVertexArray);
+        s_Data->quadVertexArray->bind();
+        RenderCommand::drawIndexed(s_Data->quadVertexArray);
     }
 
 } // namespace Quasar

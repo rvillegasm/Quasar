@@ -30,6 +30,7 @@ namespace Quasar
         void unbind() const override;
 
         void setInt(const std::string &name, int value) override;
+        void setIntArray(const std::string &name, int *values, uint32_t count) override;
 
         void setFloat(const std::string &name, float value) override;
         
@@ -41,6 +42,7 @@ namespace Quasar
         const std::string &getName() const override { return m_Name; }
 
         void uploadUniformInt(const std::string& name, int value);
+        void uploadUniformIntArray(const std::string& name, int *values, uint32_t count);
 
         void uploadUniformFloat(const std::string& name, float value);
         void uploadUniformFloat2(const std::string& name, const glm::vec2 &values);
