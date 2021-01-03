@@ -25,9 +25,9 @@ namespace Quasar
 
     struct Renderer2DData
     {
-        const uint32_t MAX_QUADS = 10000;
-        const uint32_t MAX_VERTICES = MAX_QUADS * 4;
-        const uint32_t MAX_INDICES = MAX_VERTICES * 6;
+        static const uint32_t MAX_QUADS = 20000;
+        static const uint32_t MAX_VERTICES = MAX_QUADS * 4;
+        static const uint32_t MAX_INDICES = MAX_QUADS * 6;
         static const uint32_t MAX_TEXTURE_SLOTS = 32;
 
         Ref<VertexArray> quadVertexArray;
@@ -43,6 +43,8 @@ namespace Quasar
         uint32_t textureSlotIndex = 1; // 0 = white texture
 
         glm::vec4 quadVertexPositions[4];
+
+        Renderer2D::Statistics stats;
     };
 
     static Renderer2DData *s_Data;
@@ -54,7 +56,7 @@ namespace Quasar
         s_Data = new Renderer2DData();
         s_Data->quadVertexArray = VertexArray::create();
 
-        s_Data->quadVertexBuffer = VertexBuffer::create(s_Data->MAX_VERTICES * sizeof(QuadVertex));
+        s_Data->quadVertexBuffer = VertexBuffer::create(Renderer2DData::MAX_VERTICES * sizeof(QuadVertex));
         s_Data->quadVertexBuffer->setLayout({
             { ShaderDataType::Float3, "a_Position" },
             { ShaderDataType::Float4, "a_Color" },
@@ -64,12 +66,12 @@ namespace Quasar
         });
         s_Data->quadVertexArray->addVertexBuffer(s_Data->quadVertexBuffer);
 
-        s_Data->quadVertexBufferBase = new QuadVertex[s_Data->MAX_VERTICES]; // TODO: free this memory
+        s_Data->quadVertexBufferBase = new QuadVertex[Renderer2DData::MAX_VERTICES]; // TODO: free this memory
 
-        uint32_t *quadIndices = new uint32_t[s_Data->MAX_INDICES];
+        uint32_t *quadIndices = new uint32_t[Renderer2DData::MAX_INDICES];
 
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < s_Data->MAX_INDICES; i += 6)
+        for (uint32_t i = 0; i < Renderer2DData::MAX_INDICES; i += 6)
         {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
@@ -82,7 +84,7 @@ namespace Quasar
             offset += 4;
         }
 
-        Ref<IndexBuffer> quadIB = IndexBuffer::create(quadIndices, s_Data->MAX_INDICES);
+        Ref<IndexBuffer> quadIB = IndexBuffer::create(quadIndices, Renderer2DData::MAX_INDICES);
         s_Data->quadVertexArray->setIndexBuffer(quadIB);
         delete[] quadIndices;
 
@@ -90,15 +92,15 @@ namespace Quasar
         uint32_t whiteTextureData = 0xffffffff;
         s_Data->whiteTexture->setData(&whiteTextureData, sizeof(uint32_t));
 
-        int32_t samplers[s_Data->MAX_TEXTURE_SLOTS];
-        for (uint32_t i = 0; i < s_Data->MAX_TEXTURE_SLOTS; i++)
+        int32_t samplers[Renderer2DData::MAX_TEXTURE_SLOTS];
+        for (uint32_t i = 0; i < Renderer2DData::MAX_TEXTURE_SLOTS; i++)
         {
             samplers[i] = i;
         }
         
         s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
         s_Data->textureShader->bind();
-        s_Data->textureShader->setIntArray("u_Textures", samplers, s_Data->MAX_TEXTURE_SLOTS);
+        s_Data->textureShader->setIntArray("u_Textures", samplers, Renderer2DData::MAX_TEXTURE_SLOTS);
 
         s_Data->textureSlots[0] = s_Data->whiteTexture;
 
@@ -149,6 +151,17 @@ namespace Quasar
         }
         
         RenderCommand::drawIndexed(s_Data->quadVertexArray, s_Data->quadIndexCount);
+        s_Data->stats.drawCalls++;
+    }
+
+    void Renderer2D::flushAndReset()
+    {
+        endScene();
+
+        s_Data->quadIndexCount = 0;
+        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
+
+        s_Data->textureSlotIndex = 1;
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) 
@@ -160,6 +173,11 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
+        {
+            flushAndReset();
+        }
+
         const float textureIndex = 0.0f; // white texture
         const float tilingFactor = 1.0f;
 
@@ -195,6 +213,8 @@ namespace Quasar
         s_Data->quadVertexBufferPtr++;
 
         s_Data->quadIndexCount += 6;
+
+        s_Data->stats.quadCount++;
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) 
@@ -206,6 +226,11 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
+        {
+            flushAndReset();
+        }
+
         constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         float textureIndex = 0.0f;
@@ -257,6 +282,8 @@ namespace Quasar
         s_Data->quadVertexBufferPtr++;
 
         s_Data->quadIndexCount += 6;
+
+        s_Data->stats.quadCount++;
     }
     
     void Renderer2D::drawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color) 
@@ -267,6 +294,11 @@ namespace Quasar
     void Renderer2D::drawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const glm::vec4 &color) 
     {
         QS_PROFILE_FUNCTION();
+
+        if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
+        {
+            flushAndReset();
+        }
 
         const float textureIndex = 0.0f; // white texture
         const float tilingFactor = 1.0f;
@@ -304,6 +336,8 @@ namespace Quasar
         s_Data->quadVertexBufferPtr++;
 
         s_Data->quadIndexCount += 6;
+
+        s_Data->stats.quadCount++;
     }
     
     void Renderer2D::drawRotatedQuad(const glm::vec2 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) 
@@ -314,6 +348,11 @@ namespace Quasar
     void Renderer2D::drawRotatedQuad(const glm::vec3 &position, const glm::vec2 &size, float rotation, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor) 
     {
         QS_PROFILE_FUNCTION();
+
+        if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
+        {
+            flushAndReset();
+        }
 
         constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -367,6 +406,19 @@ namespace Quasar
         s_Data->quadVertexBufferPtr++;
 
         s_Data->quadIndexCount += 6;
+
+        s_Data->stats.quadCount++;
+    }
+
+    void Renderer2D::resetStats()
+    {
+        s_Data->stats.drawCalls = 0;
+        s_Data->stats.quadCount = 0;
+    }
+
+    Renderer2D::Statistics Renderer2D::getStats()
+    {
+        return s_Data->stats;
     }
 
 } // namespace Quasar
