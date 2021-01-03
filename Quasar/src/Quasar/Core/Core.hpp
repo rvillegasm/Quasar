@@ -49,6 +49,20 @@
 
 #endif
 // End of automatic platform detection
+ 
+#ifdef QS_DEBUG
+    #if defined(QS_PLATFORM_WINDOWS)
+        #define QS_DEBUGBREAK() __debugbreak()
+    #elif defined(QS_PLATFORM_LINUX)
+        #include <signal.h>
+		#define QS_DEBUGBREAK() raise(SIGTRAP)
+    #else
+        #error "Platform does not support debugbreak yet!"
+    #endif
+    #define QS_ENABLE_ASSERTS
+#else
+    #define QS_DEBUGBREAK()
+#endif
 
 #ifdef QS_ENABLE_ASSERTS
     #include <cstdlib>
@@ -57,6 +71,7 @@
             if (!(x))                                           \
             {                                                   \
                 QS_ERROR("Assertion failed: {0}", __VA_ARGS__); \
+                QS_DEBUGBREAK();                                \
                 std::exit(EXIT_FAILURE);                        \
             }                                                   \
         }
@@ -65,6 +80,7 @@
             if (!(x))                                                \
             {                                                        \
                 QS_CORE_ERROR("Assertion failed: {0}", __VA_ARGS__); \
+                QS_DEBUGBREAK();                                     \
                 std::exit(EXIT_FAILURE);                             \
             }                                                        \
         }

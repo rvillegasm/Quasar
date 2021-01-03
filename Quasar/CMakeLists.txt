@@ -90,9 +90,9 @@ target_compile_definitions(quasar PUBLIC
   GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
   # Debug flags (move to debug config later on)
   QS_DEBUG
-  QS_ENABLE_ASSERTS
   QS_PROFILE
 )
+
 # show warnings on debug build
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   target_compile_options(quasar PRIVATE

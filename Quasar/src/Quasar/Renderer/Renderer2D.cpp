@@ -173,44 +173,28 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+        const float textureIndex = 0.0f; // white texture
+        const float tilingFactor = 1.0f;
+
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
             flushAndReset();
         }
 
-        const float textureIndex = 0.0f; // white texture
-        const float tilingFactor = 1.0f;
-
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[0];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[1];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[2];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[3];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
+        
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
+            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr++;    
+        }
 
         s_Data->quadIndexCount += 6;
 
@@ -226,12 +210,14 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
             flushAndReset();
         }
-
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         float textureIndex = 0.0f;
         for (uint32_t i = 1; i < s_Data->textureSlotIndex; i++)
@@ -245,6 +231,11 @@ namespace Quasar
 
         if (textureIndex == 0.0f)
         {
+            if (s_Data->textureSlotIndex >= Renderer2DData::MAX_TEXTURE_SLOTS)
+            {
+                flushAndReset();
+            }
+
             textureIndex = (float)s_Data->textureSlotIndex;
             s_Data->textureSlots[s_Data->textureSlotIndex] = texture;
             s_Data->textureSlotIndex++;
@@ -252,35 +243,17 @@ namespace Quasar
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[0];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[1];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[2];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[3];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
+        
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
+            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr++;    
+        }
+        
         s_Data->quadIndexCount += 6;
 
         s_Data->stats.quadCount++;
@@ -295,46 +268,30 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+        const float textureIndex = 0.0f; // white texture
+        const float tilingFactor = 1.0f;
+
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
             flushAndReset();
         }
 
-        const float textureIndex = 0.0f; // white texture
-        const float tilingFactor = 1.0f;
-
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
             * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[0];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[1];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[2];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[3];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
+            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr++;
+        }
+        
         s_Data->quadIndexCount += 6;
 
         s_Data->stats.quadCount++;
@@ -349,12 +306,14 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        constexpr size_t quadVertexCount = 4;
+        constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
             flushAndReset();
         }
-
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         float textureIndex = 0.0f;
         for (uint32_t i = 1; i < s_Data->textureSlotIndex; i++)
@@ -368,6 +327,11 @@ namespace Quasar
 
         if (textureIndex == 0.0f)
         {
+            if (s_Data->textureSlotIndex >= Renderer2DData::MAX_TEXTURE_SLOTS)
+            {
+                flushAndReset();
+            }
+
             textureIndex = (float)s_Data->textureSlotIndex;
             s_Data->textureSlots[s_Data->textureSlotIndex] = texture;
             s_Data->textureSlotIndex++;
@@ -377,34 +341,16 @@ namespace Quasar
             * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
             * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[0];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[1];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 0.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[2];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 1.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
-        s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[3];
-        s_Data->quadVertexBufferPtr->color = color;
-        s_Data->quadVertexBufferPtr->texCoord = { 0.0f, 1.0f };
-        s_Data->quadVertexBufferPtr->texIndex = textureIndex;
-        s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
-        s_Data->quadVertexBufferPtr++;
-
+        for (size_t i = 0; i < quadVertexCount; i++)
+        {
+            s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
+            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
+            s_Data->quadVertexBufferPtr->texIndex = textureIndex;
+            s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr++;
+        }
+        
         s_Data->quadIndexCount += 6;
 
         s_Data->stats.quadCount++;
