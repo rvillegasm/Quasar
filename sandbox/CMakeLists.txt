@@ -50,6 +50,7 @@ add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/glad lib/glad)
 set(IMGUI_SOURCES
   ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui.cpp
   ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_widgets.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_tables.cpp
   ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_draw.cpp
   ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_demo.cpp
   ${QUASAR_DEPENDENCIES_DIR}/imgui/backends/imgui_impl_glfw.cpp
