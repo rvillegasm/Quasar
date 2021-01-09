@@ -212,7 +212,6 @@ namespace Quasar
 
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
@@ -247,7 +246,7 @@ namespace Quasar
         for (size_t i = 0; i < quadVertexCount; i++)
         {
             s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
-            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->color = tintColor;
             s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_Data->quadVertexBufferPtr->texIndex = textureIndex;
             s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
@@ -308,7 +307,6 @@ namespace Quasar
 
         constexpr size_t quadVertexCount = 4;
         constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-        constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
@@ -344,7 +342,7 @@ namespace Quasar
         for (size_t i = 0; i < quadVertexCount; i++)
         {
             s_Data->quadVertexBufferPtr->position = transform * s_Data->quadVertexPositions[i];
-            s_Data->quadVertexBufferPtr->color = color;
+            s_Data->quadVertexBufferPtr->color = tintColor;
             s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_Data->quadVertexBufferPtr->texIndex = textureIndex;
             s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
