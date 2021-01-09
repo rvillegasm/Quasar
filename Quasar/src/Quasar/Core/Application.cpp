@@ -64,11 +64,11 @@ namespace Quasar
 
         for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
         {
-            (*it)->onEvent(e);
             if (e.isHandled())
             {
                 break;
             }
+            (*it)->onEvent(e);
         }
     }
 
