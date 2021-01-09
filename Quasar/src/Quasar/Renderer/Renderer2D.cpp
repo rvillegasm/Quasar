@@ -145,6 +145,11 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        if (s_Data->quadIndexCount == 0)
+        {
+            return; // There's nothing to draw
+        }
+
         for (uint32_t i = 0; i < s_Data->textureSlotIndex; i++)
         {
             s_Data->textureSlots[i]->bind(i);
