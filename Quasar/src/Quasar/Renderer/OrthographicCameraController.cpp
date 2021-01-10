@@ -1,6 +1,6 @@
 #include "OrthographicCameraController.hpp"
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/Input.hpp"
 #include "Quasar/Core/KeyCodes.hpp"
 

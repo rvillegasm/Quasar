@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/KeyCodes.hpp"
 #include "Quasar/Core/MouseCodes.hpp"
 

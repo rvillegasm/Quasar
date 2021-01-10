@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Renderer/VertexArray.hpp"
 
 #include <glm/glm.hpp>

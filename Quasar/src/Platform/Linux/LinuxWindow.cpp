@@ -1,6 +1,6 @@
 #include "LinuxWindow.hpp"
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/Log.hpp"
 
 #include "Quasar/Events/ApplicationEvent.hpp"

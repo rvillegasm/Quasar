@@ -1,6 +1,6 @@
 #include "Renderer2D.hpp"
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Renderer/Shader.hpp"
 #include "Quasar/Renderer/VertexArray.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"

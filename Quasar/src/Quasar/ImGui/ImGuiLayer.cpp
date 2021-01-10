@@ -1,6 +1,6 @@
 #include "ImGuiLayer.hpp"
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/Application.hpp"
 
 #include "Quasar/Debug/Instrumentor.hpp"

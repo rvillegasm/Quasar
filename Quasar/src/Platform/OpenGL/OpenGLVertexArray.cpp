@@ -1,6 +1,6 @@
 #include "OpenGLVertexArray.hpp"
 
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 
 #include "Quasar/Debug/Instrumentor.hpp"
 

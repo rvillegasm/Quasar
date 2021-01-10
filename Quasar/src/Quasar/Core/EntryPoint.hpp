@@ -1,5 +1,5 @@
 #pragma once
-#include "Quasar/Core/Core.hpp"
+#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/Log.hpp"
 #include "Quasar/Core/Application.hpp"
 
