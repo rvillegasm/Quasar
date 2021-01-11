@@ -24,7 +24,7 @@ namespace Quasar
         ~OpenGLTexture2D();
 
         uint32_t getWidth() const override { return m_Width; }
-        uint32_t getheight() const override { return m_Height; }
+        uint32_t getHeight() const override { return m_Height; }
 
         void setData(void *data, uint32_t size) override;
 

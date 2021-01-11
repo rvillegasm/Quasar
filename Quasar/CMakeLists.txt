@@ -42,6 +42,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCamera.cpp
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCameraController.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Texture.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/SubTexture2D.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
