@@ -43,6 +43,8 @@ namespace Quasar
         void pushOverlay(Layer *overlay);
 
         Window &getWindow() { return *m_Window; }
+
+        void close();
         
         static Application &get() { return *s_Instance; }
     };

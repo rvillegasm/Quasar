@@ -25,6 +25,7 @@ namespace Quasar
 
         uint32_t getWidth() const override { return m_Width; }
         uint32_t getHeight() const override { return m_Height; }
+        uint32_t getRendererID() const override { return m_RendererID; }
 
         void setData(void *data, uint32_t size) override;
 

@@ -53,6 +53,13 @@ namespace Quasar
         m_LayerStack.pushOverlay(overlay);
         overlay->onAttach();
     }
+    
+    void Application::close() 
+    {
+        QS_PROFILE_FUNCTION();
+
+        m_Running = false;
+    }
 
     void Application::onEvent(Event &e)
     {
