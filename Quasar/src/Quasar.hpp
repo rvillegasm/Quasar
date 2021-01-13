@@ -22,6 +22,7 @@
 #include "Quasar/Renderer/RenderCommand.hpp"
 
 #include "Quasar/Renderer/Buffer.hpp"
+#include "Quasar/Renderer/Framebuffer.hpp"
 #include "Quasar/Renderer/Shader.hpp"
 #include "Quasar/Renderer/Texture.hpp"
 #include "Quasar/Renderer/SubTexture2D.hpp"

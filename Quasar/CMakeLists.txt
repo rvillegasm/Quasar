@@ -34,6 +34,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/GraphicsContext.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Buffer.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/Framebuffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/VertexArray.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer2D.cpp
@@ -47,6 +48,7 @@ set(SOURCES
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLFramebuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLVertexArray.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLTexture.cpp

@@ -11,6 +11,7 @@ private:
 
     Quasar::Ref<Quasar::VertexArray> m_SquareVA;
     Quasar::Ref<Quasar::Shader> m_FlatColorShader;
+    Quasar::Ref<Quasar::Framebuffer> m_Framebuffer;
 
     Quasar::Ref<Quasar::Texture2D> m_CheckerboardTexture;
 
