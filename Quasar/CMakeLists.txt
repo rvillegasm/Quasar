@@ -71,19 +71,45 @@ target_include_directories(quasar PRIVATE src)
 # ------------------------------------
 # ----- Third party dependencies -----
 # ------------------------------------
+set(QUASAR_DEPENDENCIES_DIR "vendor")
 
 # spdlog
-target_include_directories(quasar PUBLIC vendor/spdlog/include)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/spdlog/include)
+
 # GLFW (and OpenGL)
-target_include_directories(quasar PUBLIC vendor/GLFW/include)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/GLFW)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/GLFW/include)
+
 # glad
-target_include_directories(quasar PUBLIC vendor/glad/include)
+add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/glad)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glad/include)
+
 # ImGui
-target_include_directories(quasar PUBLIC vendor/imgui)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/imgui)
+set(IMGUI_SOURCES
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_widgets.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_tables.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_draw.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_demo.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/backends/imgui_impl_glfw.cpp
+  ${QUASAR_DEPENDENCIES_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+)
+add_library(imgui ${IMGUI_SOURCES})
+target_include_directories(imgui PUBLIC 
+  ${QUASAR_DEPENDENCIES_DIR}/imgui 
+  ${QUASAR_DEPENDENCIES_DIR}/GLFW/include 
+  ${QUASAR_DEPENDENCIES_DIR}/glad/include
+)
+
 # glm
-target_include_directories(quasar PUBLIC vendor/glm)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glm)
+
 # stb_image (compiled right here in this library)
-target_include_directories(quasar PUBLIC vendor/stb_image)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/stb_image)
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------

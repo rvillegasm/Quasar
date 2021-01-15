@@ -17,60 +17,33 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-# set the quasar dependencies dir in order to compile and link against them
-set(QUASAR_DEPENDENCIES_DIR "${CMAKE_SOURCE_DIR}/../Quasar/vendor")
-# set the quasar lib directory in order to link against it
-set(QUASAR_LIB_DIR "${CMAKE_SOURCE_DIR}/../Quasar/build/lib")
+# set the quasar dir in order to compile and link against it
+set(QUASAR_DIR "${CMAKE_SOURCE_DIR}/../Quasar")
+
 
 # add the executable
 add_executable(sandbox src/SandboxApp.cpp src/Sandbox2D.cpp src/ExampleLayer.cpp)
 
-# include directories
-target_include_directories(sandbox PRIVATE
-  "${CMAKE_SOURCE_DIR}/../Quasar/src"
-  "${QUASAR_DEPENDENCIES_DIR}/spdlog/include"
-  "${QUASAR_DEPENDENCIES_DIR}/glm"
-  "${QUASAR_DEPENDENCIES_DIR}/imgui"
-)
-
 # ------------------------------------
 # ----- Third party dependencies -----
 # ------------------------------------
+add_subdirectory(${QUASAR_DIR} lib/Quasar)
 
-# GLFW (and OpenGL)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/GLFW lib/GLFW)
-
-# glad
-add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/glad lib/glad)
-
-# ImGui
-set(IMGUI_SOURCES
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_widgets.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_tables.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_draw.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/imgui_demo.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/backends/imgui_impl_glfw.cpp
-  ${QUASAR_DEPENDENCIES_DIR}/imgui/backends/imgui_impl_opengl3.cpp
-)
-add_library(imgui ${IMGUI_SOURCES})
-target_include_directories(imgui PUBLIC 
-  ${QUASAR_DEPENDENCIES_DIR}/imgui 
-  ${QUASAR_DEPENDENCIES_DIR}/GLFW/include 
-  ${QUASAR_DEPENDENCIES_DIR}/glad/include
+# include directories
+target_include_directories(sandbox PRIVATE
+  "${QUASAR_DIR}/src"
+  "${QUASAR_DIR}/vendor/spdlog/include"
+  "${QUASAR_DIR}/vendor/glm"
+  "${QUASAR_DIR}/vendor/imgui"
 )
 
 # link every library
 target_link_libraries(sandbox PRIVATE 
-  "${QUASAR_LIB_DIR}/libquasar.a"
+  quasar
   imgui
   glfw
   glad
 )
-
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------
