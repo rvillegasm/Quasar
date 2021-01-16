@@ -66,11 +66,11 @@ namespace Quasar
 
     void ImGuiLayer::onEvent(Event &e)
     {
-        ImGuiIO &io = ImGui::GetIO();
-        bool isEventHandled = e.isHandled();
-        isEventHandled |= e.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
-        isEventHandled |= e.isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
-        e.setHandled(isEventHandled);
+        // ImGuiIO &io = ImGui::GetIO();
+        // bool isEventHandled = e.isHandled();
+        // isEventHandled |= e.isInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+        // isEventHandled |= e.isInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+        // e.setHandled(isEventHandled);
     }
 
     void ImGuiLayer::begin()

@@ -34,6 +34,8 @@ namespace Quasar
         void onUpdate(Timestep ts);
         void onEvent(Event &e);
 
+        void onResize(float width, float height);
+
         OrthographicCamera &getCamera() { return m_Camera; }
         const OrthographicCamera &getCamera() const { return m_Camera; }
     };
