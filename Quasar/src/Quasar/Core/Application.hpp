@@ -8,6 +8,7 @@
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 
 #include <memory>
+#include <string>
 
 int main(int argc, char **argv);
 
@@ -34,7 +35,7 @@ namespace Quasar
         friend int ::main(int argc, char **argv);
 
     public:
-        Application();
+        Application(const std::string &name = "Quasar App");
         virtual ~Application();
 
         void onEvent(Event &e);

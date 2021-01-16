@@ -15,14 +15,14 @@ namespace Quasar
 
     Application *Application::s_Instance = nullptr;
 
-    Application::Application()
+    Application::Application(const std::string &name)
     {
         QS_PROFILE_FUNCTION();
 
         QS_CORE_ASSERT(!s_Instance, "An Application already exists!");
         s_Instance = this;
 
-        m_Window = Window::create();
+        m_Window = Window::create(WindowProps(name));
         m_Window->setEventCallback(QS_BIND_EVENT_FN(Application::onEvent));
 
         Renderer::init();
