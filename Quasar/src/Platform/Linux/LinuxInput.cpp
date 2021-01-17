@@ -1,4 +1,4 @@
-#include "LinuxInput.hpp"
+#include "Quasar/Core/Input.hpp"
 
 #include "Quasar/Core/Application.hpp"
 
@@ -7,7 +7,7 @@
 namespace Quasar
 {
        
-    bool LinuxInput::isKeyPressedImpl(KeyCode key)
+    bool Input::isKeyPressed(KeyCode key)
     {
         auto window = static_cast<GLFWwindow*>(
             Application::get().getWindow().getNativeWindow()
@@ -16,7 +16,7 @@ namespace Quasar
         return state == GLFW_PRESS || state == GLFW_REPEAT;
     }
 
-    bool LinuxInput::isMouseButtonPressedImpl(MouseCode button)
+    bool Input::isMouseButtonPressed(MouseCode button)
     {
         auto window = static_cast<GLFWwindow*>(
             Application::get().getWindow().getNativeWindow()
@@ -25,7 +25,7 @@ namespace Quasar
         return state == GLFW_PRESS;
     }
 
-    std::pair<float, float> LinuxInput::getMousePositionImpl()
+    std::pair<float, float> Input::getMousePosition()
     {
         auto window = static_cast<GLFWwindow*>(
             Application::get().getWindow().getNativeWindow()
@@ -36,15 +36,15 @@ namespace Quasar
         return { (float)xpos, (float)ypos };
     }
 
-    float LinuxInput::getMouseXImpl()
+    float Input::getMouseX()
     {
-        auto [x, _] = getMousePositionImpl();
+        auto [x, _] = getMousePosition();
         return x;
     }
 
-    float LinuxInput::getMouseYImpl()
+    float Input::getMouseY()
     {
-        auto [_, y] = getMousePositionImpl();
+        auto [_, y] = getMousePosition();
         return y;
     }
 
