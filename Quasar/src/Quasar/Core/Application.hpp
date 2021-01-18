@@ -46,6 +46,8 @@ namespace Quasar
         Window &getWindow() { return *m_Window; }
 
         void close();
+
+        ImGuiLayer *getImGuiLayer() { return m_ImGuiLayer; }
         
         static Application &get() { return *s_Instance; }
     };

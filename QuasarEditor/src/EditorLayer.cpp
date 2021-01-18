@@ -43,7 +43,10 @@ namespace Quasar
         }
 
         // Update
-        m_CameraController.onUpdate(ts);
+        if (m_ViewportFocused)
+        {
+            m_CameraController.onUpdate(ts);
+        }
 
         // Render
         Renderer2D::resetStats();
@@ -165,6 +168,11 @@ namespace Quasar
 
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
         ImGui::Begin("Viewport");
+
+        m_ViewportFocused = ImGui::IsWindowFocused();
+        m_ViewportHovered = ImGui::IsWindowHovered();
+        Application::get().getImGuiLayer()->blockEvents(!m_ViewportFocused || !m_ViewportHovered);
+
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
