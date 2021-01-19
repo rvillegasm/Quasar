@@ -4,6 +4,8 @@
 
 namespace Quasar
 {
+    static const uint32_t s_MaxFramebufferSize = 8192; // TODO: thi value should depende on GPU capabilities
+
     OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification &spec) 
         : m_Specification(spec)
     {
@@ -60,6 +62,12 @@ namespace Quasar
     
     void OpenGLFramebuffer::resize(uint32_t width, uint32_t height) 
     {
+        if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+        {
+            QS_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+            return;
+        }
+
         m_Specification.width = width;
         m_Specification.height = height;
         
