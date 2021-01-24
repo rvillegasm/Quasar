@@ -17,6 +17,10 @@
 
 #include "Quasar/ImGui/ImGuiLayer.hpp"
 
+#include "Quasar/Scene/Scene.hpp"
+#include "Quasar/Scene/Entity.hpp"
+#include "Quasar/Scene/Components.hpp"
+
 #include "Quasar/Renderer/Renderer.hpp"
 #include "Quasar/Renderer/Renderer2D.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"

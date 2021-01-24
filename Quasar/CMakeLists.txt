@@ -44,6 +44,9 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/Texture.cpp
   ${SOURCE_DIR}/Quasar/Renderer/SubTexture2D.cpp
 
+  ${SOURCE_DIR}/Quasar/Scene/Scene.cpp
+  ${SOURCE_DIR}/Quasar/Scene/Entity.cpp
+
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
@@ -109,6 +112,9 @@ target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glm)
 
 # stb_image (compiled right here in this library)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/stb_image)
+
+# entt
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/entt/src)
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------

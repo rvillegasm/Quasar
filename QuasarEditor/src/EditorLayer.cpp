@@ -22,6 +22,13 @@ namespace Quasar
         fbSpec.width = 1280;
         fbSpec.height = 720;
         m_Framebuffer = Framebuffer::create(fbSpec);
+
+        m_ActiveScene = createRef<Scene>();
+
+        auto square = m_ActiveScene->createEntity("Square");
+        square.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
+
+        m_SquareEntity = square;
     }
 
     void EditorLayer::onDetach() 
@@ -50,38 +57,19 @@ namespace Quasar
 
         // Render
         Renderer2D::resetStats();
-        {
-            QS_PROFILE_SCOPE("Renderer Prep");
-            m_Framebuffer->bind();
-            RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-            RenderCommand::clear();
-        }
+        m_Framebuffer->bind();
+        RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+        RenderCommand::clear();
 
-        {
-            static float rotation = 0.0f;
-            rotation += ts * 50.0f;
 
-            QS_PROFILE_SCOPE("Renderer Draw");
-            Renderer2D::beginScene(m_CameraController.getCamera());
-            Renderer2D::drawRotatedQuad({ 1.0f, 0.0f }, { 0.8f, 0.8f }, glm::radians(-45.0f), { 0.8f, 0.2f, 0.3f, 1.0f });
-            Renderer2D::drawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-            Renderer2D::drawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, m_SquareColor);
-            Renderer2D::drawQuad({ 0.0f, 0.0f, -0.1f }, { 20.0f, 20.0f }, m_CheckerboardTexture, 10.0f);
-            Renderer2D::drawRotatedQuad({ -2.0f, 0.0f, 0.0f }, { 1.0f, 1.0f }, glm::radians(rotation), m_CheckerboardTexture, 20.0f);
-            Renderer2D::endScene();
+        Renderer2D::beginScene(m_CameraController.getCamera());
 
-            Renderer2D::beginScene(m_CameraController.getCamera());
-            for (float y = -5.0f; y < 5.0f; y += 0.5f)
-            {
-                for (float x = -5.0f; x < 5.0f; x += 0.5f)
-                {
-                    glm::vec4 color = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.7f };
-                    Renderer2D::drawQuad({ x, y }, { 0.45f, 0.45f }, color);
-                }
-            }
-            Renderer2D::endScene();
-            m_Framebuffer->unbind();
-        }
+        // Update scene
+        m_ActiveScene->onUpdate(ts);        
+        
+        Renderer2D::endScene();
+
+        m_Framebuffer->unbind();
     }
 
     void EditorLayer::onImGuiRender() 
@@ -146,7 +134,7 @@ namespace Quasar
                 // ImGui::MenuItem("Padding", NULL, &opt_padding);
                 // ImGui::Separator();
 
-                if (ImGui::MenuItem("Exit")) { Quasar::Application::get().close(); }
+                if (ImGui::MenuItem("Exit")) { Application::get().close(); }
                 ImGui::EndMenu();
             }
 
@@ -155,14 +143,23 @@ namespace Quasar
 
         ImGui::Begin("Settings");
 
-        auto stats = Quasar::Renderer2D::getStats();
+        auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
         ImGui::Text("Draw Calls: %d", stats.drawCalls);
         ImGui::Text("Quad Count: %d", stats.quadCount);
         ImGui::Text("Vertex Count: %d", stats.getTotalVertexCount());
         ImGui::Text("Index Count: %d", stats.getTotalIndexCount());
 
-        ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+        if (m_SquareEntity)
+        {
+            ImGui::Separator(); 
+            auto &tag = m_SquareEntity.getComponent<TagComponent>().tag;
+            ImGui::Text("%s", tag.c_str());
+
+            auto & squareColor = m_SquareEntity.getComponent<SpriteRendererComponent>().color;
+            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+            ImGui::Separator();
+        }
         
         ImGui::End();
 

@@ -35,6 +35,7 @@ target_include_directories(sandbox PRIVATE
   "${QUASAR_DIR}/vendor/spdlog/include"
   "${QUASAR_DIR}/vendor/glm"
   "${QUASAR_DIR}/vendor/imgui"
+  "${QUASAR_DIR}/vendor/entt/src"
 )
 
 # link every library
