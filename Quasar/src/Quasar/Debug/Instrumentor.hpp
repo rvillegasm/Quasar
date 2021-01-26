@@ -38,9 +38,17 @@ namespace Quasar
         std::ofstream m_OutputStream;
 
     public:
+        Instrumentor(const Instrumentor &) = delete;
+        Instrumentor(Instrumentor &&) = delete;
+
         Instrumentor()
             : m_CurrentSession(nullptr)
         {
+        }
+
+        ~Instrumentor()
+        {
+            endSession();
         }
 
         void beginSession(const std::string &name, const std::string &filepath = "results.json")
