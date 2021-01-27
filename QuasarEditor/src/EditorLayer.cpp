@@ -29,6 +29,13 @@ namespace Quasar
         square.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
         m_SquareEntity = square;
+
+        m_CameraEntity = m_ActiveScene->createEntity("Camera Entity");
+        m_CameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+
+        m_SecondCameraEntity = m_ActiveScene->createEntity("Clip-space Camera Entity");
+        auto &cc = m_SecondCameraEntity.addComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+        cc.primary = false;
     }
 
     void EditorLayer::onDetach() 
@@ -61,13 +68,8 @@ namespace Quasar
         RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         RenderCommand::clear();
 
-
-        Renderer2D::beginScene(m_CameraController.getCamera());
-
         // Update scene
         m_ActiveScene->onUpdate(ts);        
-        
-        Renderer2D::endScene();
 
         m_Framebuffer->unbind();
     }
@@ -159,6 +161,13 @@ namespace Quasar
             auto & squareColor = m_SquareEntity.getComponent<SpriteRendererComponent>().color;
             ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
             ImGui::Separator();
+        }
+
+        ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.getComponent<TransformComponent>().transform[3]));
+        if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+        {
+            m_CameraEntity.getComponent<CameraComponent>().primary = m_PrimaryCamera;
+            m_SecondCameraEntity.getComponent<CameraComponent>().primary = !m_PrimaryCamera;
         }
         
         ImGui::End();

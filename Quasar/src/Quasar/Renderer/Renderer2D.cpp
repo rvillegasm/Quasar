@@ -118,6 +118,21 @@ namespace Quasar
         delete s_Data;
     }
     
+    void Renderer2D::beginScene(const Camera &camera, const glm::mat4 &transform) 
+    {
+        QS_PROFILE_FUNCTION();
+
+        glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
+
+        s_Data->textureShader->bind();
+        s_Data->textureShader->setMat4("u_ViewProjection", viewProj);
+
+        s_Data->quadIndexCount = 0;
+        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
+
+        s_Data->textureSlotIndex = 1;
+    }
+    
     void Renderer2D::beginScene(const OrthographicCamera &camera) 
     {
         QS_PROFILE_FUNCTION();

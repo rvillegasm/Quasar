@@ -3,6 +3,7 @@
 #include "Quasar/Core/Base.hpp"
 #include "Quasar/Renderer/Texture.hpp"
 #include "Quasar/Renderer/SubTexture2D.hpp"
+#include "Quasar/Renderer/Camera.hpp"
 #include "Quasar/Renderer/OrthographicCamera.hpp"
 
 #include <glm/glm.hpp>
@@ -16,7 +17,8 @@ namespace Quasar
         static void init();
         static void shutdown();
 
-        static void beginScene(const OrthographicCamera &camera);
+        static void beginScene(const Camera &camera, const glm::mat4 &transform);
+        static void beginScene(const OrthographicCamera &camera); // TODO: Remove later
         static void endScene();
         static void flush();
 
