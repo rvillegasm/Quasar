@@ -36,6 +36,46 @@ namespace Quasar
         m_SecondCameraEntity = m_ActiveScene->createEntity("Clip-space Camera Entity");
         auto &cc = m_SecondCameraEntity.addComponent<CameraComponent>();
         cc.primary = false;
+
+        class CameraController : public  ScriptableEntity
+        {
+        public:
+            void onCreate()
+            {
+                auto &transform = getComponent<TransformComponent>().transform;
+                transform[3][0] = rand() % 10 - 5.0f;
+            }
+            void onDestroy()
+            {
+            }
+
+            void onUpdate(Timestep ts)
+            {
+                auto &transform = getComponent<TransformComponent>().transform;
+
+                float speed = 5.0f;
+
+                if (Input::isKeyPressed(KeyCode::A))
+                {
+                    transform[3][0] -= speed * ts;
+                }
+                if (Input::isKeyPressed(KeyCode::D))
+                {
+                    transform[3][0] += speed * ts;
+                }
+                if (Input::isKeyPressed(KeyCode::W))
+                {
+                    transform[3][1] += speed * ts;
+                }
+                if (Input::isKeyPressed(KeyCode::S))
+                {
+                    transform[3][1] -= speed * ts;
+                }
+            }
+        };
+
+        m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+        m_SecondCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
     }
 
     void EditorLayer::onDetach() 

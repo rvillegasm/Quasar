@@ -23,6 +23,20 @@ namespace Quasar
     
     void Scene::onUpdate(Timestep ts)
     {
+        // Update Native Scripts
+        m_Registry.view<NativeScriptComponent>().each([this, ts](auto entity, NativeScriptComponent &nsc)
+        {
+            // TODO: Move to Scene::onScenePlay
+            if (!nsc.instance)
+            {
+                nsc.instance = nsc.instantiateScript();
+                nsc.instance->m_Entity = Entity{ entity, this };
+                nsc.instance->onCreate();
+            }
+            
+            nsc.instance->onUpdate(ts);
+        });
+
         // Render 2D
         Camera *mainCamera = nullptr;
         glm::mat4 *cameraTransform = nullptr;

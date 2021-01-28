@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Quasar/Scene/SceneCamera.hpp"
+#include "Quasar/Scene/ScriptableEntity.hpp"
 
 #include <glm/glm.hpp>
 
@@ -56,6 +57,21 @@ namespace Quasar
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent &) = default;
+    };
+
+    struct NativeScriptComponent
+    {
+        ScriptableEntity *instance = nullptr;
+
+        ScriptableEntity *(*instantiateScript)();
+        void (*destroyScript)(NativeScriptComponent *);
+
+        template<typename T>
+        void bind()
+        {
+            instantiateScript = []() { return static_cast<ScriptableEntity *>(new T()); };
+            destroyScript = [](NativeScriptComponent *nsc) { delete nsc->instance; nsc->instance = nullptr; };
+        }
     };
 
 } // namespace Quasar
