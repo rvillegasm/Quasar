@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quasar/Renderer/Camera.hpp"
+#include "Quasar/Scene/SceneCamera.hpp"
 
 #include <glm/glm.hpp>
 
@@ -50,15 +50,12 @@ namespace Quasar
 
     struct CameraComponent
     {
-        Camera camera;
+        SceneCamera camera;
         bool primary = true; // TODO: think about moving to scene
+        bool fixedAspectRatio = false;
 
         CameraComponent() = default;
         CameraComponent(const CameraComponent &) = default;
-        CameraComponent(const glm::mat4 &projection)
-            : camera(projection)
-        {
-        }
     };
 
 } // namespace Quasar

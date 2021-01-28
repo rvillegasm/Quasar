@@ -45,6 +45,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/SubTexture2D.cpp
 
   ${SOURCE_DIR}/Quasar/Scene/Scene.cpp
+  ${SOURCE_DIR}/Quasar/Scene/SceneCamera.cpp
   ${SOURCE_DIR}/Quasar/Scene/Entity.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp

@@ -31,10 +31,10 @@ namespace Quasar
         m_SquareEntity = square;
 
         m_CameraEntity = m_ActiveScene->createEntity("Camera Entity");
-        m_CameraEntity.addComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+        m_CameraEntity.addComponent<CameraComponent>();
 
         m_SecondCameraEntity = m_ActiveScene->createEntity("Clip-space Camera Entity");
-        auto &cc = m_SecondCameraEntity.addComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+        auto &cc = m_SecondCameraEntity.addComponent<CameraComponent>();
         cc.primary = false;
     }
 
@@ -48,12 +48,15 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
+        // Resize
         FramebufferSpecification spec = m_Framebuffer->getSpecification();
         if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f 
             && (spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
         {
             m_Framebuffer->resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
             m_CameraController.onResize(m_ViewportSize.x, m_ViewportSize.y);
+
+            m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
 
         // Update
@@ -168,6 +171,15 @@ namespace Quasar
         {
             m_CameraEntity.getComponent<CameraComponent>().primary = m_PrimaryCamera;
             m_SecondCameraEntity.getComponent<CameraComponent>().primary = !m_PrimaryCamera;
+        }
+
+        {
+            auto &camera = m_SecondCameraEntity.getComponent<CameraComponent>().camera;
+            float orthoSize = camera.getOrthographicSize();
+            if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
+            {
+                camera.setOrthographicSize(orthoSize);
+            }
         }
         
         ImGui::End();

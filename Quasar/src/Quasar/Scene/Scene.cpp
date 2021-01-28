@@ -56,5 +56,22 @@ namespace Quasar
         }
 
     }
+    
+    void Scene::onViewportResize(uint32_t width, uint32_t height) 
+    {
+        m_ViewportWidth = width;
+        m_ViewportHeight = height;
+
+        // Resize our non-fixed aspect ratio cameras
+        auto cView = m_Registry.view<CameraComponent>();
+        for (auto entity : cView)
+        {
+            auto &cameraComponent = cView.get<CameraComponent>(entity);
+            if (!cameraComponent.fixedAspectRatio)
+            {
+                cameraComponent.camera.setViewportSize(width, height);
+            }
+        }
+    }
 
 } // namespace Quasar
