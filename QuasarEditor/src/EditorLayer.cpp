@@ -76,6 +76,8 @@ namespace Quasar
 
         m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
         m_SecondCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+
+        m_SceneHierarchyPanel.setContext(m_ActiveScene);
     }
 
     void EditorLayer::onDetach() 
@@ -185,6 +187,8 @@ namespace Quasar
 
             ImGui::EndMenuBar();
         }
+
+        m_SceneHierarchyPanel.onImGuiRender();
 
         ImGui::Begin("Settings");
 

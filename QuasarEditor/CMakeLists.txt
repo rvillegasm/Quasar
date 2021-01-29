@@ -25,6 +25,7 @@ set(SOURCE_DIR "src")
 set(SOURCES
   ${SOURCE_DIR}/QuasarEditorApp.cpp
   ${SOURCE_DIR}/EditorLayer.cpp
+  ${SOURCE_DIR}/Panels/SceneHierarchyPanel.cpp
 )
 
 # add the executable

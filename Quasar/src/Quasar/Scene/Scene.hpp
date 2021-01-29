@@ -14,6 +14,7 @@ namespace Quasar
     class Scene
     {
         friend class Entity;
+        friend class SceneHierarchyPanel;
 
     private:
         entt::registry m_Registry;
