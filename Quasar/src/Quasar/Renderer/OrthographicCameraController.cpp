@@ -20,23 +20,23 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        if (Input::isKeyPressed(QS_KEY_A))
+        if (Input::isKeyPressed(Key::A))
         {
             m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
             m_CameraPosition.y -= sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
         }
-        else if (Input::isKeyPressed(QS_KEY_D))
+        else if (Input::isKeyPressed(Key::D))
         {
             m_CameraPosition.x += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
             m_CameraPosition.y += sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
         }
 
-        if (Input::isKeyPressed(QS_KEY_W))
+        if (Input::isKeyPressed(Key::W))
         {
             m_CameraPosition.x += -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
             m_CameraPosition.y += cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
         }
-        else if (Input::isKeyPressed(QS_KEY_S))
+        else if (Input::isKeyPressed(Key::S))
         {
             m_CameraPosition.x -= -sin(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
             m_CameraPosition.y -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
@@ -44,11 +44,11 @@ namespace Quasar
 
         if (m_WithRotation)
         {
-            if (Input::isKeyPressed(QS_KEY_Q))
+            if (Input::isKeyPressed(Key::Q))
             {
                 m_CameraRotation += m_CameraRotationSpeed * ts;
             }
-            else if (Input::isKeyPressed(QS_KEY_E))
+            else if (Input::isKeyPressed(Key::E))
             {
                 m_CameraRotation -= m_CameraRotationSpeed * ts;
             }

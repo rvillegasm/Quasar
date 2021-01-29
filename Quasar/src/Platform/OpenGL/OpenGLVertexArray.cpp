@@ -108,7 +108,7 @@ namespace Quasar
                         shaderDataTypeToOpenGLBaseType(element.type),
                         element.normalized ? GL_TRUE : GL_FALSE,
                         layout.getStride(),
-                        (const void *)(sizeof(float) * i)
+                        (const void *)(element.offset + sizeof(float) * count * i)
                     );
                     glVertexAttribDivisor(m_VertexBuffersIndex, 1);
                     m_VertexBuffersIndex++;

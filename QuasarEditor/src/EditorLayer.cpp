@@ -55,19 +55,19 @@ namespace Quasar
 
                 float speed = 5.0f;
 
-                if (Input::isKeyPressed(KeyCode::A))
+                if (Input::isKeyPressed(Key::A))
                 {
                     transform[3][0] -= speed * ts;
                 }
-                if (Input::isKeyPressed(KeyCode::D))
+                if (Input::isKeyPressed(Key::D))
                 {
                     transform[3][0] += speed * ts;
                 }
-                if (Input::isKeyPressed(KeyCode::W))
+                if (Input::isKeyPressed(Key::W))
                 {
                     transform[3][1] += speed * ts;
                 }
-                if (Input::isKeyPressed(KeyCode::S))
+                if (Input::isKeyPressed(Key::S))
                 {
                     transform[3][1] -= speed * ts;
                 }
@@ -234,8 +234,8 @@ namespace Quasar
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-        uint32_t textureID = m_Framebuffer->getColorAttachmentRendererID();
-        ImGui::Image((void *)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+        uint64_t textureID = m_Framebuffer->getColorAttachmentRendererID();
+        ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
         ImGui::End();
         ImGui::PopStyleVar();
 

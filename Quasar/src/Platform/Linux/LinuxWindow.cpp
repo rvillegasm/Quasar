@@ -87,7 +87,7 @@ namespace Quasar
 
         glfwSetWindowSizeCallback(m_Window, [](GLFWwindow *window, int width, int height)
         {
-            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
             data.width = width;
             data.height = height;
 
@@ -97,32 +97,32 @@ namespace Quasar
 
         glfwSetWindowCloseCallback(m_Window, [](GLFWwindow *window)
         {
-            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
             WindowCloseEvent event;
             data.eventCallback(event);
         });
 
         glfwSetKeyCallback(m_Window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
         {QS_PROFILE_FUNCTION();
-            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
             switch (action)
             {
                 case GLFW_PRESS:
                 {
-                    KeyPressedEvent event(static_cast<KeyCode>(key), 0);
+                    KeyPressedEvent event(key, 0);
                     data.eventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE:
                 {
-                    KeyReleasedEvent event(static_cast<KeyCode>(key));
+                    KeyReleasedEvent event(key);
                     data.eventCallback(event);
                     break;
                 }
                 case GLFW_REPEAT:
                 {
-                    KeyPressedEvent event(static_cast<KeyCode>(key), 1);
+                    KeyPressedEvent event(key, 1);
                     data.eventCallback(event);
                     break;
                 }
@@ -133,27 +133,27 @@ namespace Quasar
 
         glfwSetCharCallback(m_Window, [](GLFWwindow *window, unsigned int keycode)
         {
-            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
-            KeyTypedEvent event(static_cast<KeyCode>(keycode));
+            KeyTypedEvent event(keycode);
             data.eventCallback(event);
         });
 
         glfwSetMouseButtonCallback(m_Window, [](GLFWwindow *window, int button, int action, int mods)
         {
-            WindowData &data = *(WindowData *) glfwGetWindowUserPointer(window);
+            WindowData &data = *(WindowData *)glfwGetWindowUserPointer(window);
 
             switch (action)
             {
                 case GLFW_PRESS:
                 {
-                    MouseButtonPressedEvent event(static_cast<MouseCode>(button));
+                    MouseButtonPressedEvent event(button);
                     data.eventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE:
                 {
-                    MouseButtonReleasedEvent event(static_cast<MouseCode>(button));
+                    MouseButtonReleasedEvent event(button);
                     data.eventCallback(event);
                     break;
                 }

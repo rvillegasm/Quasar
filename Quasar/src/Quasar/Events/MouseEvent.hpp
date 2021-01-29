@@ -13,7 +13,7 @@ namespace Quasar
         float m_MouseX, m_MouseY;
 
     public:
-        MouseMovedEvent(float x, float y)
+        MouseMovedEvent(const float x, const float y)
             : m_MouseX(x), m_MouseY(y) {}
 
         float getMouseX() const { return m_MouseX; }
@@ -36,7 +36,7 @@ namespace Quasar
         float m_XOffset, m_YOffset;
 
     public:
-        MouseScrolledEvent(float xOffset, float yOffset)
+        MouseScrolledEvent(const float xOffset, const float yOffset)
             : m_XOffset(xOffset), m_YOffset(yOffset) {}
 
         float getXOffset() const { return m_XOffset; }
@@ -58,11 +58,11 @@ namespace Quasar
     protected:
         MouseCode m_Button;
 
-        MouseButtonEvent(MouseCode button)
+        MouseButtonEvent(const MouseCode button)
             : m_Button(button) {}
 
     public:
-        inline MouseCode getMouseButton() const { return m_Button; }
+        MouseCode getMouseButton() const { return m_Button; }
 
         EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput) 
     };
@@ -70,7 +70,7 @@ namespace Quasar
     class MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonPressedEvent(MouseCode button)
+        MouseButtonPressedEvent(const MouseCode button)
             : MouseButtonEvent(button) {}
 
         std::string toString() const override
@@ -86,7 +86,7 @@ namespace Quasar
     class MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonReleasedEvent(MouseCode button)
+        MouseButtonReleasedEvent(const MouseCode button)
             : MouseButtonEvent(button) {}
 
         std::string toString() const override

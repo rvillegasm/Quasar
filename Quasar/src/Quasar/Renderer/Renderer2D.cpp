@@ -258,7 +258,7 @@ namespace Quasar
         float textureIndex = 0.0f;
         for (uint32_t i = 1; i < s_Data->textureSlotIndex; i++)
         {
-            if (*s_Data->textureSlots[i].get() == *texture.get())
+            if (*s_Data->textureSlots[i] == *texture)
             {
                 textureIndex = (float)i;
                 break;

@@ -13,7 +13,7 @@ namespace Quasar
     protected:
         KeyCode m_KeyCode;
 
-        KeyEvent(KeyCode keyCode)
+        KeyEvent(const KeyCode keyCode)
             : m_KeyCode(keyCode) {}
 
     public:
@@ -25,13 +25,13 @@ namespace Quasar
     class KeyPressedEvent : public KeyEvent
     {
     private:
-        int m_RepeatCount;
+        uint16_t m_RepeatCount;
 
     public:
-        KeyPressedEvent(KeyCode keyCode, int repeatCount)
+        KeyPressedEvent(const KeyCode keyCode, const uint16_t repeatCount)
             : KeyEvent(keyCode), m_RepeatCount(repeatCount) {}
 
-        int getRepeatCount() const { return m_RepeatCount; }
+        uint16_t getRepeatCount() const { return m_RepeatCount; }
 
         std::string toString() const override
         {
@@ -46,7 +46,7 @@ namespace Quasar
     class KeyReleasedEvent : public KeyEvent
     {
     public:
-        KeyReleasedEvent(KeyCode keyCode)
+        KeyReleasedEvent(const KeyCode keyCode)
             : KeyEvent(keyCode) {}
 
         std::string toString() const override
@@ -62,7 +62,7 @@ namespace Quasar
     class KeyTypedEvent : public KeyEvent
     {
     public:
-        KeyTypedEvent(KeyCode keyCode)
+        KeyTypedEvent(const KeyCode keyCode)
             : KeyEvent(keyCode) {}
 
         std::string toString() const override

@@ -9,6 +9,7 @@
 #include <chrono>
 #include <algorithm>
 #include <thread>
+#include <mutex>
 
 namespace Quasar
 {

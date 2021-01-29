@@ -1,10 +1,9 @@
 #pragma once
 
-#include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/KeyCodes.hpp"
 #include "Quasar/Core/MouseCodes.hpp"
 
-#include <utility>
+#include <glm/glm.hpp>
 
 namespace Quasar
 {
@@ -15,7 +14,7 @@ namespace Quasar
         static bool isKeyPressed(KeyCode key);
 
         static bool isMouseButtonPressed(MouseCode button);
-        static std::pair<float, float> getMousePosition();
+        static glm::vec2 getMousePosition();
         static float getMouseX();
         static float getMouseY();
     };
