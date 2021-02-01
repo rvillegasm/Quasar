@@ -2,6 +2,8 @@
 
 #include <Quasar/Scene/Components.hpp>
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Quasar
 {
     
@@ -25,6 +27,20 @@ namespace Quasar
             drawEntityNode(entity);
         });
 
+        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+        {
+            m_SelectionContext = {};
+        }
+
+        ImGui::End();
+
+        ImGui::Begin("Properties");
+
+        if (m_SelectionContext)
+        {
+            drawComponents(m_SelectionContext);
+        }
+
         ImGui::End();
     }
 
@@ -42,6 +58,33 @@ namespace Quasar
         if (opened)
         {
             ImGui::TreePop();
+        }
+    }
+    
+    void SceneHierarchyPanel::drawComponents(Entity entity)
+    {
+        if (entity.hasComponent<TagComponent>())
+        {
+            auto &tag = entity.getComponent<TagComponent>().tag;
+
+            char buffer[256];
+            memset(buffer, 0, sizeof(buffer));
+            strncpy(buffer, tag.c_str(), sizeof(buffer));
+            if (ImGui::InputText("Tag", buffer, sizeof(buffer)))
+            {
+                tag = std::string(buffer);
+            }
+        }
+
+        if (entity.hasComponent<TransformComponent>())
+        {
+            if (ImGui::TreeNodeEx((void *)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+            {
+                auto &transform = entity.getComponent<TransformComponent>().transform;
+                ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+
+                ImGui::TreePop();
+            }
         }
     }
 

@@ -16,6 +16,7 @@ namespace Quasar
         Entity m_SelectionContext;
 
         void drawEntityNode(Entity entity);
+        void drawComponents(Entity entity);
 
     public:
         SceneHierarchyPanel() = default;

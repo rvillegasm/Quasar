@@ -40,16 +40,16 @@ namespace Quasar
         class CameraController : public  ScriptableEntity
         {
         public:
-            void onCreate()
+            void onCreate() override
             {
                 auto &transform = getComponent<TransformComponent>().transform;
                 transform[3][0] = rand() % 10 - 5.0f;
             }
-            void onDestroy()
+            void onDestroy() override
             {
             }
 
-            void onUpdate(Timestep ts)
+            void onUpdate(Timestep ts) override
             {
                 auto &transform = getComponent<TransformComponent>().transform;
 
