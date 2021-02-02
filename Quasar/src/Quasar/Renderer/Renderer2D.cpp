@@ -127,10 +127,7 @@ namespace Quasar
         s_Data->textureShader->bind();
         s_Data->textureShader->setMat4("u_ViewProjection", viewProj);
 
-        s_Data->quadIndexCount = 0;
-        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
-
-        s_Data->textureSlotIndex = 1;
+        startBatch();
     }
     
     void Renderer2D::beginScene(const OrthographicCamera &camera) 
@@ -140,20 +137,22 @@ namespace Quasar
         s_Data->textureShader->bind();
         s_Data->textureShader->setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
 
-        s_Data->quadIndexCount = 0;
-        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
-
-        s_Data->textureSlotIndex = 1;
+        startBatch();
     }
     
     void Renderer2D::endScene() 
     {
         QS_PROFILE_FUNCTION();
 
-        uint32_t dataSize = (uint8_t *)s_Data->quadVertexBufferPtr - (uint8_t *)s_Data->quadVertexBufferBase;
-        s_Data->quadVertexBuffer->setData(s_Data->quadVertexBufferBase, dataSize);
-
         flush();
+    }
+
+    void Renderer2D::startBatch()
+    {
+        s_Data->quadIndexCount = 0;
+        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
+
+        s_Data->textureSlotIndex = 1;
     }
 
     void Renderer2D::flush()
@@ -165,6 +164,9 @@ namespace Quasar
             return; // There's nothing to draw
         }
 
+        uint32_t dataSize = (uint32_t)((uint8_t *)s_Data->quadVertexBufferPtr - (uint8_t *)s_Data->quadVertexBufferBase);
+        s_Data->quadVertexBuffer->setData(s_Data->quadVertexBufferBase, dataSize);
+
         for (uint32_t i = 0; i < s_Data->textureSlotIndex; i++)
         {
             s_Data->textureSlots[i]->bind(i);
@@ -174,14 +176,10 @@ namespace Quasar
         s_Data->stats.drawCalls++;
     }
 
-    void Renderer2D::flushAndReset()
+    void Renderer2D::nextBatch()
     {
-        endScene();
-
-        s_Data->quadIndexCount = 0;
-        s_Data->quadVertexBufferPtr = s_Data->quadVertexBufferBase;
-
-        s_Data->textureSlotIndex = 1;
+        flush();
+        startBatch();
     }
     
     void Renderer2D::drawQuad(const glm::vec2 &position, const glm::vec2 &size, const glm::vec4 &color) 
@@ -225,7 +223,7 @@ namespace Quasar
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
-            flushAndReset();
+            nextBatch();
         }
         
         for (size_t i = 0; i < quadVertexCount; i++)
@@ -252,7 +250,7 @@ namespace Quasar
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
-            flushAndReset();
+            nextBatch();
         }
 
         float textureIndex = 0.0f;
@@ -269,7 +267,7 @@ namespace Quasar
         {
             if (s_Data->textureSlotIndex >= Renderer2DData::MAX_TEXTURE_SLOTS)
             {
-                flushAndReset();
+                nextBatch();
             }
 
             textureIndex = (float)s_Data->textureSlotIndex;
@@ -307,7 +305,7 @@ namespace Quasar
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
-            flushAndReset();
+            nextBatch();
         }
 
         float textureIndex = 0.0f;
@@ -324,7 +322,7 @@ namespace Quasar
         {
             if (s_Data->textureSlotIndex >= Renderer2DData::MAX_TEXTURE_SLOTS)
             {
-                flushAndReset();
+                nextBatch();
             }
 
             textureIndex = (float)s_Data->textureSlotIndex;
@@ -397,7 +395,7 @@ namespace Quasar
 
         if (s_Data->quadIndexCount >= Renderer2DData::MAX_INDICES)
         {
-            flushAndReset();
+            nextBatch();
         }
 
         float textureIndex = 0.0f;
@@ -414,7 +412,7 @@ namespace Quasar
         {
             if (s_Data->textureSlotIndex >= Renderer2DData::MAX_TEXTURE_SLOTS)
             {
-                flushAndReset();
+                nextBatch();
             }
 
             textureIndex = (float)s_Data->textureSlotIndex;
