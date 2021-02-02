@@ -33,10 +33,10 @@ namespace Quasar
 
         m_SquareEntity = square;
 
-        m_CameraEntity = m_ActiveScene->createEntity("Camera Entity");
+        m_CameraEntity = m_ActiveScene->createEntity("Camera A");
         m_CameraEntity.addComponent<CameraComponent>();
 
-        m_SecondCameraEntity = m_ActiveScene->createEntity("Clip-space Camera Entity");
+        m_SecondCameraEntity = m_ActiveScene->createEntity("Camera B");
         auto &cc = m_SecondCameraEntity.addComponent<CameraComponent>();
         cc.primary = false;
 
@@ -193,7 +193,7 @@ namespace Quasar
 
         m_SceneHierarchyPanel.onImGuiRender();
 
-        ImGui::Begin("Settings");
+        ImGui::Begin("Stats");
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");
@@ -201,33 +201,6 @@ namespace Quasar
         ImGui::Text("Quad Count: %d", stats.quadCount);
         ImGui::Text("Vertex Count: %d", stats.getTotalVertexCount());
         ImGui::Text("Index Count: %d", stats.getTotalIndexCount());
-
-        if (m_SquareEntity)
-        {
-            ImGui::Separator(); 
-            auto &tag = m_SquareEntity.getComponent<TagComponent>().tag;
-            ImGui::Text("%s", tag.c_str());
-
-            auto & squareColor = m_SquareEntity.getComponent<SpriteRendererComponent>().color;
-            ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-            ImGui::Separator();
-        }
-
-        ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.getComponent<TransformComponent>().transform[3]));
-        if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
-        {
-            m_CameraEntity.getComponent<CameraComponent>().primary = m_PrimaryCamera;
-            m_SecondCameraEntity.getComponent<CameraComponent>().primary = !m_PrimaryCamera;
-        }
-
-        {
-            auto &camera = m_SecondCameraEntity.getComponent<CameraComponent>().camera;
-            float orthoSize = camera.getOrthographicSize();
-            if (ImGui::DragFloat("Second Camera Ortho Size", &orthoSize))
-            {
-                camera.setOrthographicSize(orthoSize);
-            }
-        }
         
         ImGui::End();
 

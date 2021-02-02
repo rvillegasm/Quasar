@@ -165,6 +165,17 @@ namespace Quasar
                 ImGui::TreePop();
             }
         }
+
+        if (entity.hasComponent<SpriteRendererComponent>())
+        {
+            if (ImGui::TreeNodeEx((void *)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Sprite Renderer"))
+            {
+                auto &spriteRendererComponent = entity.getComponent<SpriteRendererComponent>();
+                ImGui::ColorEdit4("Color", glm::value_ptr(spriteRendererComponent.color));
+                
+                ImGui::TreePop();
+            }
+        }
     }
 
 } // namespace Quasar
