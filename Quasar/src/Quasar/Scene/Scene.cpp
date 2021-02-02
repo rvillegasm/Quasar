@@ -56,7 +56,7 @@ namespace Quasar
 
         if (mainCamera)
         {
-            Renderer2D::beginScene(mainCamera->getProjection(), *cameraTransform);
+            Renderer2D::beginScene(*mainCamera, *cameraTransform);
 
             auto tsGroup = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for (auto entity : tsGroup)

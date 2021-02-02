@@ -64,7 +64,7 @@ namespace Quasar
     public:
         MouseCode getMouseButton() const { return m_Button; }
 
-        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput) 
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryMouseButton | EventCategoryInput)
     };
 
     class MouseButtonPressedEvent : public MouseButtonEvent
