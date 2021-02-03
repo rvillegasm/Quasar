@@ -45,8 +45,8 @@ namespace Quasar
         void calculateOffsetsAndStride();
 
     public:
-        BufferLayout() {}
-        BufferLayout(const std::initializer_list<BufferElement> &elements);
+        BufferLayout() = default;
+        BufferLayout(const std::initializer_list<BufferElement> elements);
 
         uint32_t getStride() const { return m_Stride; }
         const std::vector<BufferElement> &getElements() const { return m_Elements; }
