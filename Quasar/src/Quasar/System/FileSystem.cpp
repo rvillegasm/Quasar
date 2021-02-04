@@ -1,24 +1,13 @@
 #include "FileSystem.hpp"
 
-#include <filesystem>
-
 namespace Quasar
 {
 
-    FileSystem::FileSystem()
-    {
-        m_CurrentPath = std::filesystem::current_path();
-    }
+    std::filesystem::path FileSystem::s_CurrentPath = std::filesystem::current_path();
     
-    FileSystem &FileSystem::get()
+    std::string FileSystem::getAbsolutePath(std::string_view filepath)
     {
-        static FileSystem instance;
-        return instance;
-    }
-    
-    std::string FileSystem::getRealFilepath(std::string_view filepath) 
-    {
-        return (FileSystem::get().m_CurrentPath + '/').append(filepath);
+        return (s_CurrentPath / filepath).string();
     }
 
 } // namespace Quasar

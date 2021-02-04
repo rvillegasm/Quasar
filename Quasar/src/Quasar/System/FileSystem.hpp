@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 namespace Quasar
 {
@@ -8,18 +9,11 @@ namespace Quasar
     class FileSystem
     {
     private:
-        std::string m_CurrentPath;
-
-        static FileSystem &get();
+        static std::filesystem::path s_CurrentPath;
+        static std::filesystem::path s_LoggingDirectoryPath;
 
     public:
-        FileSystem();
-        FileSystem(const FileSystem&) = delete;
-        FileSystem &operator=(const FileSystem&) = delete;
-
-        virtual ~FileSystem() = default;
-
-        static std::string getRealFilepath(std::string_view filepath);
+        static std::string getAbsolutePath(std::string_view filepath);
     };
 
 } // namespace Quasar

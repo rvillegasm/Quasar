@@ -16,7 +16,7 @@ namespace Quasar
 
     void Log::init()
     {
-        const std::string LOG_FILEPATH = FileSystem::getRealFilepath("Quasar.log");
+        const std::string LOG_FILEPATH = FileSystem::getAbsolutePath("Quasar.log");
 
         std::vector<spdlog::sink_ptr> logSinks;
         logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());

@@ -13,15 +13,15 @@ int main(int argc, char **argv)
 {
     Quasar::Log::init();
 
-    QS_PROFILE_BEGIN_SESSION("Startup", Quasar::FileSystem::getRealFilepath("QuasarProfile-Startup.json"));
+    QS_PROFILE_BEGIN_SESSION("Startup", Quasar::FileSystem::getAbsolutePath("QuasarProfile-Startup.json"));
     auto app = Quasar::createApplication();
     QS_PROFILE_END_SESSION();
 
-    QS_PROFILE_BEGIN_SESSION("Runtime", Quasar::FileSystem::getRealFilepath("QuasarProfile-Runtime.json"));
+    QS_PROFILE_BEGIN_SESSION("Runtime", Quasar::FileSystem::getAbsolutePath("QuasarProfile-Runtime.json"));
     app->run();
     QS_PROFILE_END_SESSION();
 
-    QS_PROFILE_BEGIN_SESSION("Shutdown", Quasar::FileSystem::getRealFilepath("QuasarProfile-Shutdown.json"));
+    QS_PROFILE_BEGIN_SESSION("Shutdown", Quasar::FileSystem::getAbsolutePath("QuasarProfile-Shutdown.json"));
     delete app;
     QS_PROFILE_END_SESSION();
 }
