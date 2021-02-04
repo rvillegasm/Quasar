@@ -45,8 +45,8 @@ namespace Quasar
         public:
             void onCreate() override
             {
-                auto &transform = getComponent<TransformComponent>().transform;
-                transform[3][0] = rand() % 10 - 5.0f;
+                auto &translation = getComponent<TransformComponent>().translation;
+                translation.x = rand() % 10 - 5.0f;
             }
             void onDestroy() override
             {
@@ -54,25 +54,25 @@ namespace Quasar
 
             void onUpdate(Timestep ts) override
             {
-                auto &transform = getComponent<TransformComponent>().transform;
+                auto &translation = getComponent<TransformComponent>().translation;
 
                 float speed = 5.0f;
 
                 if (Input::isKeyPressed(Key::A))
                 {
-                    transform[3][0] -= speed * ts;
+                    translation.x -= speed * ts;
                 }
                 if (Input::isKeyPressed(Key::D))
                 {
-                    transform[3][0] += speed * ts;
+                    translation.x += speed * ts;
                 }
                 if (Input::isKeyPressed(Key::W))
                 {
-                    transform[3][1] += speed * ts;
+                    translation.y += speed * ts;
                 }
                 if (Input::isKeyPressed(Key::S))
                 {
-                    transform[3][1] -= speed * ts;
+                    translation.y -= speed * ts;
                 }
             }
         };

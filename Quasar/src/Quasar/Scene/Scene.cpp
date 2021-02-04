@@ -39,7 +39,7 @@ namespace Quasar
 
         // Render 2D
         Camera *mainCamera = nullptr;
-        glm::mat4 *cameraTransform = nullptr;
+        glm::mat4 cameraTransform;
         
         auto tcView = m_Registry.view<TransformComponent, CameraComponent>();
         for (auto entity : tcView)
@@ -49,21 +49,21 @@ namespace Quasar
             if (cameraComponent.primary)
             {
                 mainCamera = &cameraComponent.camera;
-                cameraTransform = &transformComponent.transform;
+                cameraTransform = transformComponent.getTransform();
                 break;
             }
         }
 
         if (mainCamera)
         {
-            Renderer2D::beginScene(*mainCamera, *cameraTransform);
+            Renderer2D::beginScene(*mainCamera, cameraTransform);
 
             auto tsGroup = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for (auto entity : tsGroup)
             {
-                auto [transform, sprite] = tsGroup.get<TransformComponent, SpriteRendererComponent>(entity);
+                auto [transformComponent, spriteComponent] = tsGroup.get<TransformComponent, SpriteRendererComponent>(entity);
                 
-                Renderer2D::drawQuad(transform, sprite.color);
+                Renderer2D::drawQuad(transformComponent.getTransform(), spriteComponent.color);
             }
 
             Renderer2D::endScene();

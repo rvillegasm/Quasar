@@ -4,8 +4,6 @@
 #include <Quasar/Scene/Scene.hpp>
 #include <Quasar/Scene/Entity.hpp>
 
-#include <imgui.h>
-
 namespace Quasar
 {
     
