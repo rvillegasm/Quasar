@@ -8,7 +8,7 @@
 namespace Quasar
 {
     Scene::Scene() 
-    {   
+    {
     }
     
     Entity Scene::createEntity(const std::string &name)
@@ -19,6 +19,11 @@ namespace Quasar
         tagComponent.tag = name.empty() ? "Entity" : name;
 
         return entity;
+    }
+
+    void Scene::destroyEntity(Entity entity) 
+    {
+        m_Registry.destroy(entity);
     }
     
     void Scene::onUpdate(Timestep ts)
@@ -86,6 +91,37 @@ namespace Quasar
                 cameraComponent.camera.setViewportSize(width, height);
             }
         }
+    }
+
+    template<typename T>
+    void Scene::onComponentAdded(Entity entity, T &component)
+    { // There should always be a template specialization
+    }
+
+    template<>
+    void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent &component)
+    { // Nothing for now; Maybe do something in the future
+    }
+
+    template<>
+    void Scene::onComponentAdded<TransformComponent>(Entity entity, TransformComponent &component)
+    { // Nothing for now; Maybe do something in the future
+    }
+
+    template<>
+    void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent &component)
+    { // Nothing for now; Maybe do something in the future
+    }
+
+    template<>
+    void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent &component)
+    {
+        component.camera.setViewportSize(m_ViewportWidth, m_ViewportHeight);
+    }
+
+    template<>
+    void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent &component)
+    { // Nothing for now; Maybe do something in the future
     }
 
 } // namespace Quasar
