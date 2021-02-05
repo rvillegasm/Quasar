@@ -26,6 +26,8 @@ namespace Quasar
         void end();
 
         void blockEvents(bool block) { m_BlockEvents = block; }
+
+        void setDarkThemeColors();
     };
 
 } // namespace Quasar
