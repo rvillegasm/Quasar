@@ -1,5 +1,8 @@
 #include "EditorLayer.hpp"
 
+#include <Quasar/Scene/SceneSerializer.hpp>
+#include <Quasar/System/FileSystem.hpp>
+
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -188,6 +191,18 @@ namespace Quasar
                 // ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
                 // ImGui::MenuItem("Padding", NULL, &opt_padding);
                 // ImGui::Separator();
+
+                if (ImGui::MenuItem("Serialize"))
+                {
+                    SceneSerializer serializer(m_ActiveScene);
+                    serializer.serializeToText("Example.qscene");
+                }
+
+                if (ImGui::MenuItem("Deserialize"))
+                {
+                    SceneSerializer serializer(m_ActiveScene);
+                    serializer.deserializeFromText("Example.qscene");
+                }
 
                 if (ImGui::MenuItem("Exit")) { Application::get().close(); }
                 ImGui::EndMenu();

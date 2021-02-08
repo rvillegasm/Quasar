@@ -36,6 +36,7 @@ target_include_directories(sandbox PRIVATE
   "${QUASAR_DIR}/vendor/glm"
   "${QUASAR_DIR}/vendor/imgui"
   "${QUASAR_DIR}/vendor/entt/src"
+  "${QUASAR_DIR}/vendor/yaml-cpp/include"
 )
 
 # link every library
@@ -44,6 +45,7 @@ target_link_libraries(sandbox PRIVATE
   imgui
   glfw
   glad
+  yaml-cpp
 )
 # ------------------------------------
 # --------------- END ----------------

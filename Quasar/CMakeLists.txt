@@ -47,6 +47,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Scene/Scene.cpp
   ${SOURCE_DIR}/Quasar/Scene/SceneCamera.cpp
   ${SOURCE_DIR}/Quasar/Scene/Entity.cpp
+  ${SOURCE_DIR}/Quasar/Scene/SceneSerializer.cpp
 
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
@@ -116,6 +117,11 @@ target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/stb_image)
 
 # entt
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/entt/src)
+
+# yaml-cpp
+set(YAML_CPP_BUILD_TOOLS OFF)
+add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
 # ------------------------------------
 # --------------- END ----------------
 # ------------------------------------
