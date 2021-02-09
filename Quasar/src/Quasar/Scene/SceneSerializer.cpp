@@ -152,7 +152,7 @@ namespace Quasar
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "Scene";
-        out << YAML::Value << "Untitled Scene";
+        out << YAML::Value << "Untitled Scene"; // TODO: Scene name variable will go here later
         out << YAML::Key << "Entities";
         out << YAML::Value << YAML::BeginSeq;
         m_Scene->m_Registry.each([&](auto entityID)
@@ -170,6 +170,8 @@ namespace Quasar
 
         std::ofstream fout(filepath);
         fout << out.c_str();
+
+        QS_CORE_TRACE("Serialized scene 'Untitled Scene'");
     }
     
     void SceneSerializer::serializeToBinary(const std::string &filepath) 

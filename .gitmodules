@@ -20,3 +20,6 @@
 [submodule "Quasar/vendor/yaml-cpp"]
 	path = Quasar/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "Quasar/vendor/pfd"]
+	path = Quasar/vendor/pfd
+	url = https://github.com/samhocevar/portable-file-dialogs.git

@@ -59,6 +59,7 @@ set(SOURCES
 
   ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
   ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
+  ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
 
   vendor/stb_image/stb_image.cpp
 )
@@ -122,9 +123,12 @@ target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/entt/src)
 set(YAML_CPP_BUILD_TOOLS OFF)
 add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
-# ------------------------------------
-# --------------- END ----------------
-# ------------------------------------
+
+# portable-file-dialogs
+target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/pfd)
+# -------------------------------------------------------------
+# --------------- END Third party dependencies ----------------
+# -------------------------------------------------------------
 
 # compiler definitions
 target_compile_definitions(quasar PUBLIC

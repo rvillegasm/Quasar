@@ -37,6 +37,12 @@ namespace Quasar
         // Panels
         SceneHierarchyPanel m_SceneHierarchyPanel;
 
+        bool onKeyPressed(KeyPressedEvent &e);
+
+        void startNewScene();
+        void openScene();
+        void saveSceneAs();
+
     public:
         EditorLayer();
         virtual ~EditorLayer() = default;

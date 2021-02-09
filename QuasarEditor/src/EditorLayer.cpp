@@ -2,6 +2,7 @@
 
 #include <Quasar/Scene/SceneSerializer.hpp>
 #include <Quasar/System/FileSystem.hpp>
+#include <Quasar/Utils/PlatformUtils.hpp>
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -9,7 +10,7 @@
 
 namespace Quasar
 {
-    
+
     EditorLayer::EditorLayer()
         : Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
     {
@@ -27,7 +28,7 @@ namespace Quasar
         m_Framebuffer = Framebuffer::create(fbSpec);
 
         m_ActiveScene = createRef<Scene>();
-
+#if 0
         auto square = m_ActiveScene->createEntity("Green Square");
         square.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
 
@@ -82,7 +83,7 @@ namespace Quasar
 
         m_CameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
         m_SecondCameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
-
+#endif
         m_SceneHierarchyPanel.setContext(m_ActiveScene);
     }
 
@@ -192,16 +193,19 @@ namespace Quasar
                 // ImGui::MenuItem("Padding", NULL, &opt_padding);
                 // ImGui::Separator();
 
-                if (ImGui::MenuItem("Serialize"))
+                if (ImGui::MenuItem("New", "Ctrl+N"))
                 {
-                    SceneSerializer serializer(m_ActiveScene);
-                    serializer.serializeToText("Example.qscene");
+                    startNewScene();
                 }
 
-                if (ImGui::MenuItem("Deserialize"))
+                if (ImGui::MenuItem("Open...", "Ctrl+O"))
                 {
-                    SceneSerializer serializer(m_ActiveScene);
-                    serializer.deserializeFromText("Example.qscene");
+                    openScene();
+                }
+
+                if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+                {
+                    saveSceneAs();
                 }
 
                 if (ImGui::MenuItem("Exit")) { Application::get().close(); }
@@ -246,6 +250,79 @@ namespace Quasar
     void EditorLayer::onEvent(Event &e) 
     {
         m_CameraController.onEvent(e);
+
+        EventDispatcher dispatcher(e);
+        dispatcher.dispatch<KeyPressedEvent>(QS_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+    }
+
+    bool EditorLayer::onKeyPressed(KeyPressedEvent &e) 
+    {
+        // Editor-level Shortcuts
+        if (e.getRepeatCount() > 0)
+        {
+            return false;
+        }
+
+        bool isControlKeyPressed = Input::isKeyPressed(Key::LeftControl) || Input::isKeyPressed(Key::RightControl);
+        bool isShiftKeyPressed = Input::isKeyPressed(Key::LeftShift) || Input::isKeyPressed(Key::RightShift);
+        switch (e.getKeyCode())
+        {
+        case Key::N:
+            if (isControlKeyPressed)
+            {
+                startNewScene();
+                return true;
+            }
+            break;
+
+        case Key::O:
+            if (isControlKeyPressed)
+            {
+                openScene();
+                return true;
+            }
+            break;
+
+        case Key::S:
+            if (isControlKeyPressed && isShiftKeyPressed)
+            {
+                saveSceneAs();
+                return true;
+            }
+            break;
+        
+        default:
+            break;
+        }
+        return false;
+    }
+
+    void EditorLayer::startNewScene() 
+    {
+        m_ActiveScene = createRef<Scene>();
+        m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+        m_SceneHierarchyPanel.setContext(m_ActiveScene);
+    }
+
+    void EditorLayer::openScene() 
+    {
+        std::string filepath = FileDialogs::openFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
+        if (!filepath.empty())
+        {
+            startNewScene();
+            SceneSerializer serializer(m_ActiveScene);
+            serializer.deserializeFromText(filepath);   
+        }
+    }
+
+    void EditorLayer::saveSceneAs() 
+    {
+        std::string filepath = FileDialogs::saveFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
+        if (!filepath.empty())
+        {
+            SceneSerializer serializer(m_ActiveScene);
+            serializer.serializeToText(filepath);
+        }
     }
 
 } // namespace Quasar

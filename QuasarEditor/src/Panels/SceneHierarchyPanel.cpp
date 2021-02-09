@@ -18,6 +18,7 @@ namespace Quasar
     void SceneHierarchyPanel::setContext(const Ref<Scene> &context) 
     {
         m_Context = context;
+        m_SelectionContext = {};
     }
     
     void SceneHierarchyPanel::onImGuiRender() 
