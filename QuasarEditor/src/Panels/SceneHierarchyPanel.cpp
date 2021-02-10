@@ -241,13 +241,33 @@ namespace Quasar
         {
             if (ImGui::MenuItem("Camera"))
             {
-                m_SelectionContext.addComponent<CameraComponent>();
+                if (!m_SelectionContext.hasComponent<CameraComponent>())
+                {
+                    m_SelectionContext.addComponent<CameraComponent>();
+                }
+                else
+                {
+                    QS_CORE_WARN(
+                        "Could not add CameraComponent to entity '{0}' because it already has one!",
+                        m_SelectionContext.getComponent<TagComponent>().tag
+                    );
+                }
                 ImGui::CloseCurrentPopup();
             }
 
             if (ImGui::MenuItem("Sprite Renderer"))
             {
-                m_SelectionContext.addComponent<SpriteRendererComponent>();
+                if (!m_SelectionContext.hasComponent<SpriteRendererComponent>())
+                {
+                    m_SelectionContext.addComponent<SpriteRendererComponent>();
+                }
+                else
+                {
+                    QS_CORE_WARN(
+                        "Could not add SpriteRendererComponent to entity '{0}' because it already has one!",
+                        m_SelectionContext.getComponent<TagComponent>().tag
+                    );
+                }
                 ImGui::CloseCurrentPopup();
             }
 
