@@ -1,12 +1,14 @@
 #include "EditorLayer.hpp"
 
 #include <Quasar/Scene/SceneSerializer.hpp>
+#include <Quasar/Math/Math.hpp>
 #include <Quasar/System/FileSystem.hpp>
 #include <Quasar/Utils/PlatformUtils.hpp>
 
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <ImGuizmo.h>
 
 namespace Quasar
 {
@@ -233,13 +235,67 @@ namespace Quasar
 
         m_ViewportFocused = ImGui::IsWindowFocused();
         m_ViewportHovered = ImGui::IsWindowHovered();
-        Application::get().getImGuiLayer()->blockEvents(!m_ViewportFocused || !m_ViewportHovered);
+        Application::get().getImGuiLayer()->blockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
         uint64_t textureID = m_Framebuffer->getColorAttachmentRendererID();
         ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+        // Gizmos
+        Entity selectedEntity = m_SceneHierarchyPanel.getSelectedEntity();
+        if (selectedEntity && m_GizmoType != -1)
+        {
+            ImGuizmo::SetOrthographic(false); // TODO: make orthigraphic guizmos work
+            ImGuizmo::SetDrawlist();
+
+            float windowWidth = (float)ImGui::GetWindowWidth();
+            float windowHeight = (float)ImGui::GetWindowHeight();
+            ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+            // camera
+            auto cameraEntity = m_ActiveScene->getPrimaryCameraEntity();
+            const auto &camera = cameraEntity.getComponent<CameraComponent>().camera;
+            const glm::mat4 &cameraProjection = camera.getProjection();
+            glm::mat4 cameraView = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
+
+            // Entity transform
+            auto &transformComponent = selectedEntity.getComponent<TransformComponent>();
+            glm::mat4 transform = transformComponent.getTransform();
+
+            // Snapping
+            bool snap = Input::isKeyPressed(Key::LeftControl);
+            float snapValue = 0.5f; // snap to 0.5m for T and S
+            if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+            {
+                snapValue = 45.0f; // snap to 45 degrees for R
+            }
+
+            float snapValues[3] = { snapValue, snapValue, snapValue };
+
+            ImGuizmo::Manipulate(
+                glm::value_ptr(cameraView),
+                glm::value_ptr(cameraProjection),
+                static_cast<ImGuizmo::OPERATION>(m_GizmoType),
+                ImGuizmo::LOCAL,
+                glm::value_ptr(transform),
+                nullptr,
+                snap ? snapValues : nullptr
+            );
+
+            if (ImGuizmo::IsUsing())
+            {
+                glm::vec3 translation, rotation, scale;
+                Math::decomposeTransform(transform, translation, rotation, scale);
+
+                glm::vec3 deltaRotation = rotation - transformComponent.rotation;
+                transformComponent.translation = translation;
+                transformComponent.rotation += deltaRotation; // prevent gimbal lock (according to cherno) TODO: Look into that
+                transformComponent.scale = scale;
+            }
+        }
+        
         ImGui::End();
         ImGui::PopStyleVar();
 
@@ -291,6 +347,23 @@ namespace Quasar
             }
             break;
         
+        // Gizmos
+        case Key::Q:
+            m_GizmoType = -1;
+            break;
+
+        case Key::W:
+            m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+            break;
+
+        case Key::E:
+            m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+            break;
+
+        case Key::R:
+            m_GizmoType = ImGuizmo::OPERATION::SCALE;
+            break;
+
         default:
             break;
         }

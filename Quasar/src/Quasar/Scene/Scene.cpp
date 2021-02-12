@@ -92,6 +92,20 @@ namespace Quasar
             }
         }
     }
+    
+    Entity Scene::getPrimaryCameraEntity() 
+    {
+        auto cView = m_Registry.view<CameraComponent>();
+        for (auto entity : cView)
+        {
+            const auto &cameraComponent = cView.get<CameraComponent>(entity);
+            if (cameraComponent.primary)
+            {
+                return Entity{ entity, this };
+            }
+        }
+        return {};
+    }
 
     template<typename T>
     void Scene::onComponentAdded(Entity entity, T &component)

@@ -44,7 +44,7 @@ target_include_directories(quasar-editor PRIVATE
   "${QUASAR_DIR}/vendor/glm"
   "${QUASAR_DIR}/vendor/imgui"
   "${QUASAR_DIR}/vendor/entt/src"
-  "${QUASAR_DIR}/vendor/yaml-cpp/include"
+  "${QUASAR_DIR}/vendor/ImGuizmo"
 )
 
 # link every library

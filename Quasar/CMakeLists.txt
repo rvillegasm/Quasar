@@ -49,6 +49,8 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Scene/Entity.cpp
   ${SOURCE_DIR}/Quasar/Scene/SceneSerializer.cpp
 
+  ${SOURCE_DIR}/Quasar/Math/Math.cpp
+
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLContext.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
@@ -62,6 +64,7 @@ set(SOURCES
   ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
 
   vendor/stb_image/stb_image.cpp
+  vendor/ImGuizmo/ImGuizmo.cpp
 )
 
 # Add the library
@@ -109,6 +112,9 @@ target_include_directories(imgui PUBLIC
   ${QUASAR_DEPENDENCIES_DIR}/GLFW/include 
   ${QUASAR_DEPENDENCIES_DIR}/glad/include
 )
+
+# # ImGuizmo - built with quasar (not standalone)
+target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/ImGuizmo)
 
 # glm
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glm)

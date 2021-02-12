@@ -23,6 +23,8 @@ namespace Quasar
         void setContext(const Ref<Scene> &scene);
 
         void onImGuiRender();
+
+        Entity getSelectedEntity() const { return m_SelectionContext; }
     };
 
 } // namespace Quasar

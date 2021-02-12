@@ -33,6 +33,8 @@ namespace Quasar
 
         void onUpdate(Timestep ts);
         void onViewportResize(uint32_t width, uint32_t height);
+
+        Entity getPrimaryCameraEntity();
     };
 
 } // namespace Quasar
