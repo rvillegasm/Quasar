@@ -30,6 +30,8 @@ namespace Quasar
         m_Framebuffer = Framebuffer::create(fbSpec);
 
         m_ActiveScene = createRef<Scene>();
+
+        m_EditorCamera = EditorCamera(glm::radians(30.0f), 1.778f, 0.1f, 1000.f);
 #if 0
         auto square = m_ActiveScene->createEntity("Green Square");
         square.addComponent<SpriteRendererComponent>(glm::vec4{ 0.0f, 1.0f, 0.0f, 1.0f });
@@ -106,6 +108,7 @@ namespace Quasar
         {
             m_Framebuffer->resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
             m_CameraController.onResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorCamera.setViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 
             m_ActiveScene->onViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
         }
@@ -116,6 +119,8 @@ namespace Quasar
             m_CameraController.onUpdate(ts);
         }
 
+        m_EditorCamera.onUpdate(ts);
+
         // Render
         Renderer2D::resetStats();
         m_Framebuffer->bind();
@@ -123,7 +128,7 @@ namespace Quasar
         RenderCommand::clear();
 
         // Update scene
-        m_ActiveScene->onUpdate(ts);        
+        m_ActiveScene->onUpdateEditor(ts, m_EditorCamera);
 
         m_Framebuffer->unbind();
     }
@@ -255,10 +260,17 @@ namespace Quasar
             ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
             // camera
-            auto cameraEntity = m_ActiveScene->getPrimaryCameraEntity();
-            const auto &camera = cameraEntity.getComponent<CameraComponent>().camera;
-            const glm::mat4 &cameraProjection = camera.getProjection();
-            glm::mat4 cameraView = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
+
+            // Runtime Camera from entity
+            // auto cameraEntity = m_ActiveScene->getPrimaryCameraEntity();
+            // const auto &camera = cameraEntity.getComponent<CameraComponent>().camera;
+
+            // const glm::mat4 &cameraProjection = camera.getProjection();
+            // glm::mat4 cameraView = glm::inverse(cameraEntity.getComponent<TransformComponent>().getTransform());
+
+            // Editor Camera
+            const glm::mat4 &cameraProjection = m_EditorCamera.getProjection();
+            glm::mat4 cameraView = m_EditorCamera.getViewMatrix();
 
             // Entity transform
             auto &transformComponent = selectedEntity.getComponent<TransformComponent>();
@@ -306,6 +318,7 @@ namespace Quasar
     void EditorLayer::onEvent(Event &e) 
     {
         m_CameraController.onEvent(e);
+        m_EditorCamera.onEvent(e);
 
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<KeyPressedEvent>(QS_BIND_EVENT_FN(EditorLayer::onKeyPressed));

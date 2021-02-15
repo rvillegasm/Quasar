@@ -26,7 +26,7 @@ namespace Quasar
         m_Registry.destroy(entity);
     }
     
-    void Scene::onUpdate(Timestep ts)
+    void Scene::onUpdateRuntime(Timestep ts)
     {
         // Update Native Scripts
         m_Registry.view<NativeScriptComponent>().each([this, ts](auto entity, NativeScriptComponent &nsc)
@@ -73,7 +73,21 @@ namespace Quasar
 
             Renderer2D::endScene();
         }
+    }
 
+    void Scene::onUpdateEditor(Timestep ts, EditorCamera &camera)
+    {
+        Renderer2D::beginScene(camera);
+
+        auto tsGroup = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+        for (auto entity : tsGroup)
+        {
+            auto [transformComponent, spriteComponent] = tsGroup.get<TransformComponent, SpriteRendererComponent>(entity);
+            
+            Renderer2D::drawQuad(transformComponent.getTransform(), spriteComponent.color);
+        }
+
+        Renderer2D::endScene();
     }
     
     void Scene::onViewportResize(uint32_t width, uint32_t height) 

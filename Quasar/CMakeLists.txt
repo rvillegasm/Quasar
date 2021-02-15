@@ -39,6 +39,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/Renderer2D.cpp
   ${SOURCE_DIR}/Quasar/Renderer/RenderCommand.cpp
   ${SOURCE_DIR}/Quasar/Renderer/RendererAPI.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/EditorCamera.cpp
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCamera.cpp
   ${SOURCE_DIR}/Quasar/Renderer/OrthographicCameraController.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Texture.cpp

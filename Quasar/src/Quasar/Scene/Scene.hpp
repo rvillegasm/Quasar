@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Quasar/Core/Timestep.hpp"
+#include "Quasar/Renderer/EditorCamera.hpp"
 
 #include <entt/entity/registry.hpp>
 
@@ -31,7 +32,8 @@ namespace Quasar
         Entity createEntity(const std::string &name = std::string());
         void destroyEntity(Entity entity);
 
-        void onUpdate(Timestep ts);
+        void onUpdateRuntime(Timestep ts);
+        void onUpdateEditor(Timestep ts, EditorCamera &camera);
         void onViewportResize(uint32_t width, uint32_t height);
 
         Entity getPrimaryCameraEntity();

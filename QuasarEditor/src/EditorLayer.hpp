@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Quasar.hpp>
+#include <Quasar/Renderer/EditorCamera.hpp>
 #include "Panels/SceneHierarchyPanel.hpp"
 
 #include <glm/glm.hpp>
@@ -25,6 +26,8 @@ namespace Quasar
         Entity m_SecondCameraEntity;
         
         bool m_PrimaryCamera = true;
+
+        EditorCamera m_EditorCamera;
 
         Ref<Texture2D> m_CheckerboardTexture;
 
