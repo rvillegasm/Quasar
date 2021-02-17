@@ -3,13 +3,49 @@
 #include "Quasar/Core/Base.hpp"
 
 #include <cstdint>
+#include <vector>
 
 namespace Quasar
 {
-    
+
+    enum class FramebufferTextureFormat
+    {
+        None = 0,
+        // Color
+        RGBA8,
+        // Depth/Stencil
+        DEPTH24STENCIL8,
+        // Default depth
+        Depth = DEPTH24STENCIL8
+    };
+
+    struct FramebufferTextureSpecification
+    {
+        FramebufferTextureFormat textureFormat = FramebufferTextureFormat::None;
+
+        FramebufferTextureSpecification() = default;
+        FramebufferTextureSpecification(FramebufferTextureFormat format)
+            : textureFormat(format)
+        {
+        }
+        // TODO: filtering and wrap
+    };
+
+    struct FramebufferAttachmentSpecification
+    {
+        std::vector<FramebufferTextureSpecification> attachments;
+
+        FramebufferAttachmentSpecification() = default;
+        FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> attachments)
+            : attachments(attachments)
+        {
+        }
+    };
+
     struct FramebufferSpecification
     {
         uint32_t width = 0, height = 0;
+        FramebufferAttachmentSpecification attachments;
         uint32_t samples = 1;
 
         bool swapChainTarget = false;
@@ -25,7 +61,7 @@ namespace Quasar
 
         virtual void resize(uint32_t width, uint32_t height) = 0;
 
-        virtual uint32_t getColorAttachmentRendererID() const = 0;
+        virtual uint32_t getColorAttachmentRendererID(uint32_t index = 0) const = 0;
 
         virtual const FramebufferSpecification &getSpecification() const = 0;
 

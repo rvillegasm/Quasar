@@ -25,6 +25,7 @@ namespace Quasar
         m_CheckerboardTexture = Texture2D::create("/home/rvillegasm/dev/Quasar/QuasarEditor/assets/textures/Checkerboard.png");
 
         FramebufferSpecification fbSpec;
+        fbSpec.attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
         fbSpec.width = 1280;
         fbSpec.height = 720;
         m_Framebuffer = Framebuffer::create(fbSpec);
@@ -245,7 +246,7 @@ namespace Quasar
         ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-        uint64_t textureID = m_Framebuffer->getColorAttachmentRendererID();
+        uint64_t textureID = m_Framebuffer->getColorAttachmentRendererID(0);
         ImGui::Image(reinterpret_cast<void *>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
         // Gizmos
