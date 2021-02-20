@@ -77,11 +77,6 @@ namespace Quasar
             case ShaderDataType::Float2:
             case ShaderDataType::Float3:
             case ShaderDataType::Float4:
-            case ShaderDataType::Int:
-            case ShaderDataType::Int2:
-            case ShaderDataType::Int3:
-            case ShaderDataType::Int4:
-            case ShaderDataType::Bool:
             {
                 glEnableVertexAttribArray(m_VertexBuffersIndex);
                 glVertexAttribPointer(
@@ -89,6 +84,23 @@ namespace Quasar
                     element.getComponentCount(),
                     shaderDataTypeToOpenGLBaseType(element.type),
                     element.normalized ? GL_TRUE : GL_FALSE,
+                    layout.getStride(),
+                    (const void *)element.offset
+                );
+                m_VertexBuffersIndex++;
+                break;
+            }
+            case ShaderDataType::Int:
+            case ShaderDataType::Int2:
+            case ShaderDataType::Int3:
+            case ShaderDataType::Int4:
+            case ShaderDataType::Bool:
+            {
+                glEnableVertexAttribArray(m_VertexBuffersIndex);
+                glVertexAttribIPointer(
+                    m_VertexBuffersIndex,
+                    element.getComponentCount(),
+                    shaderDataTypeToOpenGLBaseType(element.type),
                     layout.getStride(),
                     (const void *)element.offset
                 );
