@@ -68,7 +68,7 @@ namespace Quasar
             {
                 auto [transformComponent, spriteComponent] = tsGroup.get<TransformComponent, SpriteRendererComponent>(entity);
                 
-                Renderer2D::drawQuad(transformComponent.getTransform(), spriteComponent.color);
+                Renderer2D::drawSprite(transformComponent.getTransform(), spriteComponent, (int)entity);
             }
 
             Renderer2D::endScene();
@@ -84,7 +84,7 @@ namespace Quasar
         {
             auto [transformComponent, spriteComponent] = tsGroup.get<TransformComponent, SpriteRendererComponent>(entity);
             
-            Renderer2D::drawQuad(transformComponent.getTransform(), spriteComponent.color);
+            Renderer2D::drawSprite(transformComponent.getTransform(), spriteComponent, (int)entity);
         }
 
         Renderer2D::endScene();

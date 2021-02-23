@@ -146,7 +146,7 @@ namespace Quasar
         if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
         {
             int pixelData = m_Framebuffer->readPixel(1, mouseX, mouseY);
-            QS_CORE_WARN("Pixel Data = {0}", pixelData);
+            m_HoveredEntity = pixelData != -1 ? Entity((entt::entity)pixelData,  m_ActiveScene.get()) : Entity();
         }
 
         m_Framebuffer->unbind();
@@ -244,6 +244,13 @@ namespace Quasar
         m_SceneHierarchyPanel.onImGuiRender();
 
         ImGui::Begin("Stats");
+
+        std::string name = "None";
+        if (m_HoveredEntity)
+        {
+            name = m_HoveredEntity.getComponent<TagComponent>().tag;
+        }
+        ImGui::Text("Havered Entity: %s", name.c_str());
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");

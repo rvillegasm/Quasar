@@ -21,6 +21,9 @@ namespace Quasar
         glm::vec2 texCoord;
         float texIndex;
         float tilingFactor;
+        
+        // Editor-only section
+        int entityID;
     };
 
     struct Renderer2DData
@@ -58,11 +61,12 @@ namespace Quasar
 
         s_Data->quadVertexBuffer = VertexBuffer::create(Renderer2DData::MAX_VERTICES * sizeof(QuadVertex));
         s_Data->quadVertexBuffer->setLayout({
-            { ShaderDataType::Float3, "a_Position" },
-            { ShaderDataType::Float4, "a_Color" },
-            { ShaderDataType::Float2, "a_TexCoord" },
-            { ShaderDataType::Float, "a_TexIndex" },
-            { ShaderDataType::Float, "a_TilingFactor" }
+            { ShaderDataType::Float3, "a_Position"     },
+            { ShaderDataType::Float4, "a_Color"        },
+            { ShaderDataType::Float2, "a_TexCoord"     },
+            { ShaderDataType::Float,  "a_TexIndex"     },
+            { ShaderDataType::Float,  "a_TilingFactor" },
+            { ShaderDataType::Int,    "a_EntityID"     }
         });
         s_Data->quadVertexArray->addVertexBuffer(s_Data->quadVertexBuffer);
 
@@ -98,7 +102,7 @@ namespace Quasar
             samplers[i] = i;
         }
         
-        s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
+        s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/QuasarEditor/assets/shaders/Texture.glsl");
         s_Data->textureShader->bind();
         s_Data->textureShader->setIntArray("u_Textures", samplers, Renderer2DData::MAX_TEXTURE_SLOTS);
 
@@ -224,7 +228,7 @@ namespace Quasar
         drawQuad(transform, texture, tilingFactor, tintColor);
     }
 
-    void Renderer2D::drawQuad(const glm::mat4 &transform, const glm::vec4 &color) 
+    void Renderer2D::drawQuad(const glm::mat4 &transform, const glm::vec4 &color, int entityID) 
     {
         QS_PROFILE_FUNCTION();
 
@@ -245,6 +249,7 @@ namespace Quasar
             s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_Data->quadVertexBufferPtr->texIndex = textureIndex;
             s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr->entityID = entityID;
             s_Data->quadVertexBufferPtr++;    
         }
 
@@ -253,7 +258,7 @@ namespace Quasar
         s_Data->stats.quadCount++;
     }
 
-    void Renderer2D::drawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor)
+    void Renderer2D::drawQuad(const glm::mat4 &transform, const Ref<Texture2D> &texture, float tilingFactor, const glm::vec4 &tintColor, int entityID)
     {
         QS_PROFILE_FUNCTION();
 
@@ -294,6 +299,7 @@ namespace Quasar
             s_Data->quadVertexBufferPtr->texCoord = textureCoords[i];
             s_Data->quadVertexBufferPtr->texIndex = textureIndex;
             s_Data->quadVertexBufferPtr->tilingFactor = tilingFactor;
+            s_Data->quadVertexBufferPtr->entityID = entityID;
             s_Data->quadVertexBufferPtr++;    
         }
         
@@ -449,6 +455,11 @@ namespace Quasar
         s_Data->quadIndexCount += 6;
 
         s_Data->stats.quadCount++;
+    }
+    
+    void Renderer2D::drawSprite(const glm::mat4 &transform, SpriteRendererComponent &spriteComponent, int entityID) 
+    {
+        drawQuad(transform, spriteComponent.color, entityID);
     }
 
     void Renderer2D::resetStats()
