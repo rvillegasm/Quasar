@@ -128,6 +128,9 @@ namespace Quasar
         RenderCommand::setClearColor({ 0.1f, 0.1f, 0.1f, 1 });
         RenderCommand::clear();
 
+        // Clear entity Id attachment to -1
+        m_Framebuffer->clearAttachment(1, -1);
+
         // Update scene
         m_ActiveScene->onUpdateEditor(ts, m_EditorCamera);
 

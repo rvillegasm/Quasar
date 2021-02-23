@@ -78,6 +78,22 @@ namespace Quasar
             }
         }
 
+        static GLenum getGLFormatFromFBTextureFormat(FramebufferTextureFormat format)
+        {
+            switch (format)
+            {
+            case FramebufferTextureFormat::RGBA8:
+                return GL_RGBA8;
+            
+            case FramebufferTextureFormat::RED_INTEGER:
+                return GL_RED_INTEGER;
+            
+            default:
+                QS_CORE_ASSERT(false);
+                return 0;
+            }
+        }
+
     } // namespace Utils
     
 
@@ -209,10 +225,25 @@ namespace Quasar
     int OpenGLFramebuffer::readPixel(uint32_t attachmentIndex, int x, int y) 
     {
         QS_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+
         glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
         int pixelData;
         glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
         return pixelData;
+    }
+    
+    void OpenGLFramebuffer::clearAttachment(uint32_t attachmentIndex, int value) 
+    {
+        QS_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+
+        auto &spec = m_ColorAttachmetSpecifications[attachmentIndex];
+        glClearTexImage(
+            m_ColorAttachments[attachmentIndex],
+            0,
+            Utils::getGLFormatFromFBTextureFormat(spec.textureFormat),
+            GL_INT,
+            &value
+        );
     }
 
 } // namespace Quasar
