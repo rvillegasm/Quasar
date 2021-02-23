@@ -25,6 +25,7 @@ namespace Quasar
         void onImGuiRender();
 
         Entity getSelectedEntity() const { return m_SelectionContext; }
+        void setSelectedEntity(Entity entity);
     };
 
 } // namespace Quasar

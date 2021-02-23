@@ -352,6 +352,7 @@ namespace Quasar
 
         EventDispatcher dispatcher(e);
         dispatcher.dispatch<KeyPressedEvent>(QS_BIND_EVENT_FN(EditorLayer::onKeyPressed));
+        dispatcher.dispatch<MouseButtonPressedEvent>(QS_BIND_EVENT_FN(EditorLayer::onMouseButtonPressed));
     }
 
     bool EditorLayer::onKeyPressed(KeyPressedEvent &e) 
@@ -422,6 +423,20 @@ namespace Quasar
         default:
             break;
         }
+        return false;
+    }
+    
+    bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent &e) 
+    {
+        if (e.getMouseButton() == Mouse::ButtonLeft)
+        {
+            if (m_ViewportHovered && !ImGuizmo::IsOver() && !Input::isKeyPressed(Key::LeftAlt))
+            {
+                m_SceneHierarchyPanel.setSelectedEntity(m_HoveredEntity);
+                return true;
+            }
+        }
+
         return false;
     }
 

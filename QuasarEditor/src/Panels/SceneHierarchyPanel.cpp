@@ -58,6 +58,11 @@ namespace Quasar
 
         ImGui::End();
     }
+    
+    void SceneHierarchyPanel::setSelectedEntity(Entity entity) 
+    {
+        m_SelectionContext = entity;
+    }
 
     void SceneHierarchyPanel::drawEntityNode(Entity entity) 
     {

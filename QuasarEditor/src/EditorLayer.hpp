@@ -46,6 +46,7 @@ namespace Quasar
         SceneHierarchyPanel m_SceneHierarchyPanel;
 
         bool onKeyPressed(KeyPressedEvent &e);
+        bool onMouseButtonPressed(MouseButtonPressedEvent &e);
 
         void startNewScene();
         void openScene();
