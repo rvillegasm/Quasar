@@ -7,7 +7,12 @@ namespace Quasar
     
     std::string FileSystem::getAbsolutePath(std::string_view filepath)
     {
-        return (s_CurrentPath / filepath).string();
+        return (s_CurrentPath / filepath);
+    }
+    
+    std::string FileSystem::getAssetPath(std::string_view assetPath) 
+    {
+        return (s_CurrentPath / "assets" / assetPath);
     }
 
 } // namespace Quasar

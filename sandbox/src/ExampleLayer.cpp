@@ -127,10 +127,10 @@ ExampleLayer::ExampleLayer()
 
     m_FlatColorShader = Quasar::Shader::create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-    auto textureShader = m_ShaderLibrary.load("/home/rvillegasm/dev/Quasar/sandbox/assets/shaders/Texture.glsl");
+    auto textureShader = m_ShaderLibrary.load(Quasar::FileSystem::getAssetPath("shaders/Texture.glsl"));
 
-    m_Texture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
-    m_ChernoLogoTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/ChernoLogo.png");
+    m_Texture = Quasar::Texture2D::create(Quasar::FileSystem::getAssetPath("textures/Checkerboard.png"));
+    m_ChernoLogoTexture = Quasar::Texture2D::create(Quasar::FileSystem::getAssetPath("textures/ChernoLogo.png"));
 
     textureShader->bind();
     textureShader->setInt("u_Texture", 0);

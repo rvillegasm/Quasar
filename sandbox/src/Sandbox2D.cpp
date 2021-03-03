@@ -13,7 +13,7 @@ void Sandbox2D::onAttach()
 {
     QS_PROFILE_FUNCTION();
 
-    m_CheckerboardTexture = Quasar::Texture2D::create("/home/rvillegasm/dev/Quasar/sandbox/assets/textures/Checkerboard.png");
+    m_CheckerboardTexture = Quasar::Texture2D::create(Quasar::FileSystem::getAssetPath("textures/Checkerboard.png"));
 }
 
 void Sandbox2D::onDetach() 

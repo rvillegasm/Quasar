@@ -15,6 +15,7 @@ endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(SOURCE_DIR "src")
 
 # Source files
@@ -153,3 +154,20 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     $<$<CXX_COMPILER_ID:MSVC>:
       /W4>)
 endif()
+
+# ---------------------------------------
+# ---------- Post Build Events ----------
+# ---------------------------------------
+# TODO: make them per platform later on
+
+# Copy assets folder to the directory containing the binaries of the program that uses quasar
+add_custom_command(
+  TARGET quasar
+  POST_BUILD
+  COMMAND cp -r "${CMAKE_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+  VERBATIM
+)
+
+# -------------------------------------------
+# ---------- END Post Build Events ----------
+# -------------------------------------------

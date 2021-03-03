@@ -22,7 +22,7 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        m_CheckerboardTexture = Texture2D::create("/home/rvillegasm/dev/Quasar/QuasarEditor/assets/textures/Checkerboard.png");
+        m_CheckerboardTexture = Texture2D::create(FileSystem::getAssetPath("textures/Checkerboard.png"));
 
         FramebufferSpecification fbSpec;
         fbSpec.attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -250,7 +250,7 @@ namespace Quasar
         {
             name = m_HoveredEntity.getComponent<TagComponent>().tag;
         }
-        ImGui::Text("Havered Entity: %s", name.c_str());
+        ImGui::Text("Hovered Entity: %s", name.c_str());
 
         auto stats = Renderer2D::getStats();
         ImGui::Text("Renderer2D Stats:");

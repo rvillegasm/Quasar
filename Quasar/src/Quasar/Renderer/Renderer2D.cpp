@@ -5,6 +5,8 @@
 #include "Quasar/Renderer/VertexArray.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"
 
+#include "Quasar/System/FileSystem.hpp"
+
 #include "Quasar/Debug/Instrumentor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -102,7 +104,7 @@ namespace Quasar
             samplers[i] = i;
         }
         
-        s_Data->textureShader = Shader::create("/home/rvillegasm/dev/Quasar/QuasarEditor/assets/shaders/Texture.glsl");
+        s_Data->textureShader = Shader::create(FileSystem::getAssetPath("shaders/Texture.glsl"));
         s_Data->textureShader->bind();
         s_Data->textureShader->setIntArray("u_Textures", samplers, Renderer2DData::MAX_TEXTURE_SLOTS);
 

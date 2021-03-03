@@ -3,6 +3,8 @@
 #include "Quasar/Core/Base.hpp"
 #include "Quasar/Core/Application.hpp"
 
+#include "Quasar/System/FileSystem.hpp"
+
 #include "Quasar/Debug/Instrumentor.hpp"
 
 #include <imgui.h>
@@ -38,8 +40,8 @@ namespace Quasar
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcon;
         // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-        io.Fonts->AddFontFromFileTTF("/home/rvillegasm/dev/Quasar/Quasar/assets/fonts/open_sans/OpenSans-Bold.ttf", 18.0f); // Fonts[0] is bold
-        io.FontDefault = io.Fonts->AddFontFromFileTTF("/home/rvillegasm/dev/Quasar/Quasar/assets/fonts/open_sans/OpenSans-Regular.ttf", 18.0f); // Fonts[1] is regular
+        io.Fonts->AddFontFromFileTTF(FileSystem::getAssetPath("fonts/open_sans/OpenSans-Bold.ttf").c_str(), 18.0f); // Fonts[0] is bold
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(FileSystem::getAssetPath("fonts/open_sans/OpenSans-Regular.ttf").c_str(), 18.0f); // Fonts[1] is regular
 
         ImGui::StyleColorsDark();
 
