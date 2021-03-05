@@ -11,7 +11,7 @@
 
 #include "Platform/OpenGL/OpenGLContext.hpp"
 
-#include"Quasar/Debug/Instrumentor.hpp"
+#include "Quasar/Debug/Instrumentor.hpp"
 
 namespace Quasar
 {
@@ -20,6 +20,11 @@ namespace Quasar
     static void GLFWErrorCallback(int error, const char *description)
     {
         QS_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+    }
+
+    Scope<Window> Window::create(const WindowProps &props)
+    {
+        return createScope<LinuxWindow>(props);
     }
 
     LinuxWindow::LinuxWindow(const WindowProps &props)

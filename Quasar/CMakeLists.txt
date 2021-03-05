@@ -24,7 +24,6 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Core/Log.cpp
   ${SOURCE_DIR}/Quasar/Core/Layer.cpp
   ${SOURCE_DIR}/Quasar/Core/LayerStack.cpp
-  ${SOURCE_DIR}/Quasar/Core/Window.cpp
 
   ${SOURCE_DIR}/Quasar/System/FileSystem.cpp
 
@@ -61,16 +60,23 @@ set(SOURCES
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLTexture.cpp
 
-  ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
-  ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
-  ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
-
   vendor/stb_image/stb_image.cpp
   vendor/ImGuizmo/ImGuizmo.cpp
 )
 
+# Separate platform dependent sources
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  
+  set(OS_DEPENDENT_SOURCES 
+    ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
+    ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
+    ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
+  )
+
+endif()
+
 # Add the library
-add_library(quasar STATIC ${SOURCES})
+add_library(quasar STATIC ${SOURCES} ${OS_DEPENDENT_SOURCES})
 
 # Set public API
 set_target_properties(quasar PROPERTIES PUBLIC_HEADER src/Quasar.h)
@@ -128,7 +134,7 @@ target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/stb_image)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/entt/src)
 
 # yaml-cpp
-set(YAML_CPP_BUILD_TOOLS OFF)
+option(YAML_CPP_BUILD_TOOLS "Disable yaml-cpp parse tools" OFF)
 add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
 

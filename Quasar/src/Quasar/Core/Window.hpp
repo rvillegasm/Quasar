@@ -24,9 +24,6 @@ namespace Quasar
         }
     };
 
-    /**
-     * Interface representing a desktop based window
-     */
     class Window
     {
     public:
