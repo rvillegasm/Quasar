@@ -1,15 +1,14 @@
 #pragma once
 
 #include "Quasar/Core/Log.hpp"
-#include "Quasar/Core/PlatformDetection.hpp"
 
 #include <memory>
 #include <filesystem>
- 
+
 #ifdef QS_DEBUG
     #if defined(QS_PLATFORM_WINDOWS)
         #define QS_DEBUGBREAK() __debugbreak()
-    #elif defined(QS_PLATFORM_LINUX)
+    #elif defined(QS_PLATFORM_LINUX) || defined(QS_PLATFORM_MACOS)
         #include <signal.h>
 		#define QS_DEBUGBREAK() raise(SIGTRAP)
     #else

@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: Deprecate in favor of build system platform detection
+
 #ifdef _WIN32
     #ifdef _WIN64
         /* Windows x64 */

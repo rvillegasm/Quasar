@@ -9,8 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Disable in-source builds to prevent source tree corruption.
 if(" ${CMAKE_SOURCE_DIR}" STREQUAL " ${CMAKE_BINARY_DIR}")
-  message(FATAL_ERROR "ERROR: In-source builds are not allowed!. 
-  You should create a separate directory for build files.")
+  message(FATAL_ERROR "ERROR: In-source builds are not allowed!. You should create a separate directory for build files.")
 endif()
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
@@ -64,45 +63,50 @@ set(SOURCES
   vendor/ImGuizmo/ImGuizmo.cpp
 )
 
-# Separate platform dependent sources
+# Platform dependent sources
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  
   set(OS_DEPENDENT_SOURCES 
     ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
     ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
     ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
   )
-
 endif()
 
 # Add the library
 add_library(quasar STATIC ${SOURCES} ${OS_DEPENDENT_SOURCES})
 
-# Set public API
-set_target_properties(quasar PROPERTIES PUBLIC_HEADER src/Quasar.h)
-
 # Top level include directories
 target_include_directories(quasar PRIVATE src)
+
+# Compiler definitions
+target_compile_definitions(quasar PUBLIC
+  GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
+)
+
+# Define platform specific macros so that they are available to the sources
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  target_compile_definitions(quasar PUBLIC QS_PLATFORM_LINUX)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+  target_compile_definitions(quasar PUBLIC QS_PLATFORM_MACOS)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  target_compile_definitions(quasar PUBLIC QS_PLATFORM_WINDOWS)
+endif()
 
 # ------------------------------------
 # ----- Third party dependencies -----
 # ------------------------------------
 set(QUASAR_DEPENDENCIES_DIR "vendor")
-
 # spdlog
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/spdlog/include)
-
 # GLFW (and OpenGL)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/GLFW)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/GLFW/include)
-
 # glad
 add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/glad)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glad/include)
-
 # ImGui
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/imgui)
 set(IMGUI_SOURCES
@@ -120,60 +124,62 @@ target_include_directories(imgui PUBLIC
   ${QUASAR_DEPENDENCIES_DIR}/GLFW/include 
   ${QUASAR_DEPENDENCIES_DIR}/glad/include
 )
-
-# # ImGuizmo - built with quasar (not standalone)
+# ImGuizmo - built with quasar (not standalone)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/ImGuizmo)
-
 # glm
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/glm)
-
 # stb_image (compiled right here in this library)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/stb_image)
-
 # entt
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/entt/src)
-
 # yaml-cpp
 option(YAML_CPP_BUILD_TOOLS "Disable yaml-cpp parse tools" OFF)
 add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
-
 # portable-file-dialogs
 target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/pfd)
 # -------------------------------------------------------------
 # --------------- END Third party dependencies ----------------
 # -------------------------------------------------------------
 
-# compiler definitions
-target_compile_definitions(quasar PUBLIC
-  GLFW_INCLUDE_NONE # do not include opengl with glfw, since glad already does that
-  # Debug flags (move to debug config later on)
-  QS_DEBUG
-  QS_PROFILE
-)
-
-# show warnings on debug build
+# --------------------------------------------------------
+# ---------- Configure Debug and Release builds ----------
+# --------------------------------------------------------
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  # Turn on compiler warnings
   target_compile_options(quasar PRIVATE
-    $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-      -Wall>
-    $<$<CXX_COMPILER_ID:MSVC>:
-      /W4>)
+    $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-Wall>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+  )
+  # set debug defines
+  target_compile_definitions(quasar PUBLIC
+    QS_DEBUG
+    QS_PROFILE
+  )
 endif()
+# ------------------------------------------------------------
+# ---------- END Configure Debug and Release builds ----------
+# ------------------------------------------------------------
 
 # ---------------------------------------
 # ---------- Post Build Events ----------
 # ---------------------------------------
-# TODO: make them per platform later on
+# Per-platform commands
+if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+  set(COPY_DIR_COMMAND cp -r)
+elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+  set(COPY_DIR_COMMAND copy /y)
+else()
+  message(FATAL_ERROR "Host platform not supported!")
+endif()
 
 # Copy assets folder to the directory containing the binaries of the program that uses quasar
 add_custom_command(
   TARGET quasar
   POST_BUILD
-  COMMAND cp -r "${CMAKE_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+  COMMAND ${COPY_DIR_COMMAND} "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
   VERBATIM
 )
-
 # -------------------------------------------
 # ---------- END Post Build Events ----------
 # -------------------------------------------
