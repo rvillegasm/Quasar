@@ -1,5 +1,5 @@
 # Quasar
-Quasar is a rendering engine written in modern C++ (17+), with portability 
+Quasar is a rendering engine written in modern C++, with portability 
 in mind.
 
 Currently, it only supports Linux, because it is being developed in
