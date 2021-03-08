@@ -152,4 +152,6 @@ namespace Quasar
     { // Nothing for now; Maybe do something in the future
     }
 
+    // TODO: add onComponentRemoved as well (for example for destraying script instances)
+
 } // namespace Quasar
