@@ -23,3 +23,6 @@
 [submodule "Quasar/vendor/pfd"]
 	path = Quasar/vendor/pfd
 	url = https://github.com/samhocevar/portable-file-dialogs.git
+[submodule "Quasar/vendor/ImGuizmo"]
+	path = Quasar/vendor/ImGuizmo
+	url = https://github.com/rvillegasm/ImGuizmo.git
