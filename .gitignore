@@ -35,9 +35,14 @@
 CMakeCache.txt
 CMakeFiles
 build
+cmake-build-debug
+cmake-build-release
+out
 
 # Editor config
 .vscode
+.idea
+.vs
 
 # Profiling Output
 QuasarProfile-*
