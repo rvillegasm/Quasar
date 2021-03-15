@@ -449,22 +449,22 @@ namespace Quasar
 
     void EditorLayer::openScene() 
     {
-        std::optional<std::string> filepath = FileDialogs::openFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
-        if (filepath)
+        std::string filepath = FileDialogs::openFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
+        if (!filepath.empty())
         {
             startNewScene();
             SceneSerializer serializer(m_ActiveScene);
-            serializer.deserializeFromText(filepath.value());
+            serializer.deserializeFromText(filepath);
         }
     }
 
     void EditorLayer::saveSceneAs() 
     {
-        std::optional<std::string> filepath = FileDialogs::saveFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
-        if (filepath)
+        std::string filepath = FileDialogs::saveFile({ "Quasar Scenes (*.qscene)", "*.qscene" });
+        if (!filepath.empty())
         {
             SceneSerializer serializer(m_ActiveScene);
-            serializer.serializeToText(filepath.value());
+            serializer.serializeToText(filepath);
         }
     }
 

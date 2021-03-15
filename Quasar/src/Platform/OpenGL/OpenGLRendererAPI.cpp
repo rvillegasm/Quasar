@@ -9,7 +9,7 @@
 namespace Quasar
 {
 
-    void openGLMesssageCallback(
+    void openGLMessageCallback(
         unsigned int source,
         unsigned int type,
         unsigned int id,
@@ -49,7 +49,7 @@ namespace Quasar
 #ifdef QS_DEBUG
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        glDebugMessageCallback(openGLMesssageCallback, nullptr);
+        glDebugMessageCallback((GLDEBUGPROC)openGLMessageCallback, nullptr);
 
         glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
 #endif
