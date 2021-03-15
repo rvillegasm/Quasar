@@ -174,20 +174,11 @@ endif()
 # ---------------------------------------
 # ---------- Post Build Events ----------
 # ---------------------------------------
-# Per-platform commands
-if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux" OR ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-  set(COPY_DIR_COMMAND cp -r)
-elseif(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-  set(COPY_DIR_COMMAND copy /y)
-else()
-  message(FATAL_ERROR "Host platform not supported!")
-endif()
-
 # Copy assets folder to the directory containing the binaries of the program that uses quasar
 add_custom_command(
   TARGET quasar
   POST_BUILD
-  COMMAND ${COPY_DIR_COMMAND} "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+  COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
   VERBATIM
 )
 # -------------------------------------------
