@@ -9,6 +9,7 @@ namespace Quasar
     class ScriptableEntity
     {
         friend class Scene;
+        friend struct NativeScriptComponent;
 
     private:
         Entity m_Entity;

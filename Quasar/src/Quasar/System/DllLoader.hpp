@@ -22,7 +22,7 @@ namespace Quasar
          * The instance is only valid during the DllLoader's lifetime.
          * 
          * @param allocClassSymbol exported dll symbol used to create an instance of class T (default = "create").
-         * @param destroyClassSymbol exported dll symbol used to destoy an instance of class T (deafult = "destroy").
+         * @param destroyClassSymbol exported dll symbol used to destroy an instance of class T (default = "destroy").
          * @return Reference to the instance.
          */
         virtual Ref<T> getClassInstance(const std::string &allocClassSymbol = "create", const std::string &destroyClassSymbol = "destroy") = 0;

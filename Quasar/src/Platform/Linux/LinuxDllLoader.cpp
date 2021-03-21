@@ -25,7 +25,7 @@ namespace Quasar
     }
 
     template<typename T>
-    Ref<T> LinuxDllLoader<T>::getClassInstance(const std::string &allocClassSymbol, const std::string &destroyClassSymbol) 
+    Ref<T> LinuxDllLoader<T>::getClassInstance(const std::string &allocClassSymbol, const std::string &destroyClassSymbol)
     {
         using AllocClassFunc = T *(*)(); // typedef T *(*AllocClassFunc)()
         using DestroyClassFunc = void (*)(T *); // typedef void (*DestroyClassFunc)()

@@ -25,7 +25,7 @@ namespace Quasar
     }
     
     template<typename T>
-    Ref<T> WindowsDllLoader<T>::getClassInstance(const std::string &allocClassSymbol, const std::string &destroyClassSymbol) 
+    Ref<T> WindowsDllLoader<T>::getClassInstance(const std::string &allocClassSymbol, const std::string &destroyClassSymbol)
     {
         using AllocClassFunc = T *(*)(); // typedef T *(*AllocClassFunc)()
         using DestroyClassFunc = void (*)(T *); // typedef void (*DestroyClassFunc)()
@@ -38,7 +38,7 @@ namespace Quasar
             closeDll();
             QS_CORE_ASSERT(false, "Failed to find alloc or destroy symbols in Dll!");
         }
-        // Use Ref's constructor that sepcifies a destroy function
+        // Use Ref's constructor that specifies a destroy function
         // Note that since the Dll is closed upon the DllLoader's destruction,
         // the Ref returned is only going tho be valid while the DllLoader is alive.
         return Ref<T>(allocFunc(), [destroyFunc](T *pointer) { destroyFunc(pointer); });
