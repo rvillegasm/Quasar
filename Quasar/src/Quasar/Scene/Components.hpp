@@ -2,6 +2,7 @@
 
 #include "Quasar/Scene/SceneCamera.hpp"
 #include "Quasar/Scene/ScriptableEntity.hpp"
+#include "Quasar/System/DllLoader.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -20,12 +21,12 @@ namespace Quasar
 
         TagComponent() = default;
         TagComponent(const TagComponent &) = default;
-        TagComponent(const std::string &tag)
+        explicit TagComponent(const std::string &tag)
             : tag(tag)
         {
         }
     };
-    
+
     struct TransformComponent
     {
         glm::vec3 translation = { 0.0f, 0.0f, 0.0f };
@@ -34,7 +35,7 @@ namespace Quasar
 
         TransformComponent() = default;
         TransformComponent(const TransformComponent &) = default;
-        TransformComponent(const glm::vec3 &translation)
+        explicit TransformComponent(const glm::vec3 &translation)
             : translation(translation)
         {
         }
@@ -55,7 +56,7 @@ namespace Quasar
 
         SpriteRendererComponent() = default;
         SpriteRendererComponent(const SpriteRendererComponent &) = default;
-        SpriteRendererComponent(const glm::vec4 &color)
+        explicit SpriteRendererComponent(const glm::vec4 &color)
             : color(color)
         {
         }
@@ -73,16 +74,29 @@ namespace Quasar
 
     struct NativeScriptComponent
     {
-        ScriptableEntity *instance = nullptr;
+        Ref<ScriptableEntity> instance = nullptr;
+        Scope<DllLoader<ScriptableEntity>> dllLoader = nullptr;
 
-        ScriptableEntity *(*instantiateScript)();
-        void (*destroyScript)(NativeScriptComponent *);
+        std::function<Ref<ScriptableEntity>()> instantiateScript; // using instead of func pointer because of lambda capture in bindDll
+
+        NativeScriptComponent() = default;
+        explicit NativeScriptComponent(const std::string &dllPath)
+        {
+            dllLoader = DllLoader<ScriptableEntity>::create(dllPath);
+        }
 
         template<typename T>
         void bind()
         {
-            instantiateScript = []() { return static_cast<ScriptableEntity *>(new T()); };
-            destroyScript = [](NativeScriptComponent *nsc) { delete nsc->instance; nsc->instance = nullptr; };
+            instantiateScript = []()
+            {
+                return Ref<ScriptableEntity>(new T(), [](T *pointer) { static_cast<ScriptableEntity *>(pointer)->onDestroy(); delete pointer; });
+            };
+        }
+
+        void bindDLL()
+        {
+            instantiateScript = [this]() { return dllLoader->getClassInstance(); };
         }
     };
 

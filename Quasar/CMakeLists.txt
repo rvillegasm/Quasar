@@ -69,15 +69,17 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     ${SOURCE_DIR}/Platform/Linux/LinuxWindow.cpp
     ${SOURCE_DIR}/Platform/Linux/LinuxInput.cpp
     ${SOURCE_DIR}/Platform/Linux/LinuxPlatformUtils.cpp
+    ${SOURCE_DIR}/Platform/Linux/LinuxDllLoader.cpp
   )
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   set(OS_DEPENDENT_SOURCES 
     ${SOURCE_DIR}/Platform/Windows/WindowsWindow.cpp
     ${SOURCE_DIR}/Platform/Windows/WindowsInput.cpp
     ${SOURCE_DIR}/Platform/Windows/WindowsPlatformUtils.cpp
+    ${SOURCE_DIR}/Platform/Windows/WindowsDllLoader.cpp
   )
 else()
-  message(FATAL_ERROR "Target platform not supported!")
+  message(FATAL_ERROR "Target platform not yet supported!")
 endif()
 
 # Add the library
