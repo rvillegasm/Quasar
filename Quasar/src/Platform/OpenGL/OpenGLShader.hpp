@@ -12,12 +12,15 @@ namespace Quasar
     private:
         uint32_t m_RendererID;
         std::string m_Name;
+        std::string m_Filepath;
 
         mutable std::unordered_map<std::string, GLint> m_UniformLocationCache;
 
         std::string readFile(const std::string &filepath);
         std::unordered_map<GLenum, std::string> preProcess(const std::string &source);
         void compile(const std::unordered_map<GLenum, std::string> &shaderSources);
+        void compileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string> &shaderSources);
+        void reflect(GLenum stage, const std::vector<uint32_t> &shaderData);
         
         GLint getUniformLocation(const std::string &name) const;
 

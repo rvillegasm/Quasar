@@ -148,6 +148,14 @@ add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
 # portable-file-dialogs
 target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/pfd)
+# VulkanSDK
+target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/VulkanSDK/Include)
+
+# Platform specific dependencies
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/shaderc_sharedd.lib)
+  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/spirv-cross-cored.lib)
+endif()
 # -------------------------------------------------------------
 # --------------- END Third party dependencies ----------------
 # -------------------------------------------------------------
@@ -181,6 +189,16 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
   VERBATIM
 )
+
+# Copy necessary Dlls to the executable location
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  add_custom_command(
+    TARGET quasar
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Bin/shaderc_sharedd.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_sharedd.dll"
+  )
+endif()
+
 # -------------------------------------------
 # ---------- END Post Build Events ----------
 # -------------------------------------------

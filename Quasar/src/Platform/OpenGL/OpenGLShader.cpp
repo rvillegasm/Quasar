@@ -6,6 +6,8 @@
 #include "Quasar/Debug/Instrumentor.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <shaderc/shaderc.hpp>
+#include <spirv_cross/spirv_cross.hpp>
 
 #include <fstream>
 #include <filesystem>
@@ -14,13 +16,67 @@
 
 namespace Quasar
 {
+
+    namespace Utils
+    {
+
+        static GLenum shaderTypeFromString(const std::string &type)
+        {
+            if (type == "vertex")
+            {
+                return GL_VERTEX_SHADER;
+            }
+            else if (type == "fragment" || type == "pixel")
+            {
+                return GL_FRAGMENT_SHADER;
+            }
+            else
+            {
+                QS_CORE_ASSERT(false, "Unkown shader type!");
+                return 0;
+            }
+        }
+
+        static shaderc_shader_kind glShaderStageToShaderC(GLenum stage)
+        {
+            switch (stage)
+            {
+                case GL_VERTEX_SHADER:
+                    return shaderc_glsl_vertex_shader;
+                case GL_FRAGMENT_SHADER:
+                    return shaderc_glsl_fragment_shader;
+                default:
+                    QS_CORE_ASSERT(false);
+                    return (shaderc_shader_kind)0;
+            }
+        }
+
+        static const char *glShaderStageToString(GLenum stage)
+        {
+            switch (stage)
+            {
+                case GL_VERTEX_SHADER:
+                    return "GL_VERTEX_SHADER";
+                case GL_FRAGMENT_SHADER:
+                    return "GL_FRAGMENT_SHADER";
+                default:
+                    QS_CORE_ASSERT(false);
+                    return nullptr;
+            }
+        }
+
+    } // namespace Utils
     
     OpenGLShader::OpenGLShader(const std::string &filepath) 
+        : m_Filepath(filepath)
     {
         QS_PROFILE_FUNCTION();
 
         std::string source = readFile(filepath);
         auto shaderSources = preProcess(source);
+
+        compileOrGetVulkanBinaries(shaderSources);
+
         compile(shaderSources);
 
         std::filesystem::path path = filepath;
@@ -166,23 +222,6 @@ namespace Quasar
 
     // ----- PRIVATE -----
 
-    static GLenum shaderTypeFromString(const std::string &type)
-    {
-        if (type == "vertex")
-        {
-            return GL_VERTEX_SHADER;
-        }
-        else if (type == "fragment" || type == "pixel")
-        {
-            return GL_FRAGMENT_SHADER;
-        }
-        else
-        {
-            QS_CORE_ASSERT(false, "Unkown shader type!");
-            return 0;
-        }
-    }
-
     std::string OpenGLShader::readFile(const std::string &filepath)
     {
         QS_PROFILE_FUNCTION();
@@ -232,7 +271,7 @@ namespace Quasar
             QS_CORE_ASSERT(nextLinePos != std::string::npos, "Syntax error in shader file");
 
             pos = source.find(typeToken, nextLinePos); //Start of next shader type declaration line
-            shaderSources[shaderTypeFromString(type)] = pos == std::string::npos ? 
+            shaderSources[Utils::shaderTypeFromString(type)] = pos == std::string::npos ?
                 source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
         }
 
@@ -310,6 +349,69 @@ namespace Quasar
         }
 
         m_RendererID = program;
+    }
+
+    void OpenGLShader::compileOrGetVulkanBinaries(const std::unordered_map<GLenum, std::string> &shaderSources)
+    {
+        QS_PROFILE_FUNCTION();
+
+        GLuint program = glCreateProgram();
+
+        shaderc::Compiler compiler;
+        shaderc::CompileOptions options;
+        options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_2);
+        options.SetOptimizationLevel(shaderc_optimization_level_performance);
+
+        std::unordered_map<GLenum, std::vector<uint32_t>> shaderData;
+        for (auto &&[stage, source] : shaderSources)
+        {
+            std::vector<uint32_t> &shaderStageData = shaderData[stage];
+            // TODO: Retrieve results from cache
+
+            shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::glShaderStageToShaderC(stage), m_Filepath.c_str(), options);
+            if (module.GetCompilationStatus() != shaderc_compilation_status_success)
+            {
+                QS_CORE_ERROR(module.GetErrorMessage());
+                QS_CORE_ASSERT(false);
+            }
+
+            shaderStageData = std::vector<uint32_t>(module.cbegin(), module.cend());
+
+            GLuint shaderID = glCreateShader(stage);
+            glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, shaderStageData.data(), static_cast<int>(shaderStageData.size() * sizeof(uint32_t)));
+            glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
+            glAttachShader(program, shaderID);
+        }
+
+        for (auto &&[stage, data] : shaderData)
+        {
+            reflect(stage, data);
+        }
+
+    }
+
+    void OpenGLShader::reflect(GLenum stage, const std::vector<uint32_t> &shaderData)
+    {
+        spirv_cross::Compiler compiler(shaderData);
+        spirv_cross::ShaderResources resources = compiler.get_shader_resources();
+
+        QS_CORE_TRACE("OpenGLShader::reflect - {0} {1}", Utils::glShaderStageToString(stage), m_Filepath);
+        QS_CORE_TRACE("  {0} uniform buffers", resources.uniform_buffers.size());
+        QS_CORE_TRACE("  {0} resources", resources.sampled_images.size());
+
+        QS_CORE_TRACE("  Uniform buffers:");
+        for (const auto &resource : resources.uniform_buffers)
+        {
+            const auto &bufferType = compiler.get_type(resource.base_type_id);
+            uint32_t bufferSize = compiler.get_declared_struct_size(bufferType);
+            uint32_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
+            size_t memberCount = bufferType.member_types.size();
+
+            QS_CORE_TRACE("    {0}", resource.name);
+            QS_CORE_TRACE("      Size = {0}", bufferSize);
+            QS_CORE_TRACE("      Binding = {0}", binding);
+            QS_CORE_TRACE("      Members = {0}", memberCount);
+        }
     }
 
     GLint OpenGLShader::getUniformLocation(const std::string &name) const
