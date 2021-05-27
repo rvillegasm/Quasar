@@ -5,6 +5,12 @@
 
 namespace Quasar
 {
+    enum class ShaderCacheAPI
+    {
+        None = 0,
+        OpenGL,
+        Vulkan
+    };
     
     class FileSystem
     {
@@ -14,6 +20,9 @@ namespace Quasar
     public:
         static std::string getAbsolutePath(std::string_view filepath);
         static std::string getAssetPath(std::string_view assetPath); // should maybe be inside the asset manager later on
+
+        static std::filesystem::path getShaderCacheDirectory(ShaderCacheAPI api);
+        static void createShaderCacheDirectoryIfNeeded(ShaderCacheAPI api);
 
         // Look into making these constexpr when the c++20 constexpr std::string standard gets implemented by mayor compilers (not only msvc)
     };

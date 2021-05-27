@@ -4,12 +4,14 @@
 #include "Quasar/Renderer/Shader.hpp"
 #include "Quasar/Renderer/VertexArray.hpp"
 #include "Quasar/Renderer/RenderCommand.hpp"
+#include "Quasar/Renderer/UniformBuffer.hpp"
 
 #include "Quasar/System/FileSystem.hpp"
 
 #include "Quasar/Debug/Instrumentor.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <array>
 
@@ -50,6 +52,13 @@ namespace Quasar
         glm::vec4 quadVertexPositions[4];
 
         Renderer2D::Statistics stats;
+
+        struct CameraData
+        {
+            glm::mat4 viewProjection;
+        } cameraBuffer;
+
+        Ref<UniformBuffer> cameraUniformBuffer;
     };
 
     static Renderer2DData *s_Data;
@@ -114,6 +123,8 @@ namespace Quasar
         s_Data->quadVertexPositions[1] = {  0.5f, -0.5, 0.0f, 1.0f };
         s_Data->quadVertexPositions[2] = {  0.5f,  0.5, 0.0f, 1.0f };
         s_Data->quadVertexPositions[3] = { -0.5f,  0.5, 0.0f, 1.0f };
+
+        s_Data->cameraUniformBuffer = UniformBuffer::create(sizeof(Renderer2DData::CameraData), 0);
     }
     
     void Renderer2D::shutdown() 
@@ -128,10 +139,8 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        glm::mat4 viewProj = camera.getProjection() * glm::inverse(transform);
-
-        s_Data->textureShader->bind();
-        s_Data->textureShader->setMat4("u_ViewProjection", viewProj);
+        s_Data->cameraBuffer.viewProjection = camera.getProjection() * glm::inverse(transform);
+        s_Data->cameraUniformBuffer->setData(&s_Data->cameraBuffer, sizeof(Renderer2DData::CameraData));
 
         startBatch();
     }
@@ -140,10 +149,8 @@ namespace Quasar
     {
         QS_PROFILE_FUNCTION();
 
-        glm::mat4 viewProj = camera.getViewProjection();
-
-        s_Data->textureShader->bind();
-        s_Data->textureShader->setMat4("u_ViewProjection", viewProj);
+        s_Data->cameraBuffer.viewProjection = camera.getViewProjection();
+        s_Data->cameraUniformBuffer->setData(&s_Data->cameraBuffer, sizeof(Renderer2DData::CameraData));
 
         startBatch();
     }

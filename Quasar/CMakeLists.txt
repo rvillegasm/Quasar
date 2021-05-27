@@ -33,6 +33,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Buffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Framebuffer.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/UniformBuffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/VertexArray.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer2D.cpp
@@ -55,6 +56,7 @@ set(SOURCES
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLFramebuffer.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLUniformBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLVertexArray.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLTexture.cpp
@@ -155,6 +157,7 @@ target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/VulkanSDK/I
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/shaderc_sharedd.lib)
   target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/spirv-cross-cored.lib)
+  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/spirv-cross-glsld.lib)
 endif()
 # -------------------------------------------------------------
 # --------------- END Third party dependencies ----------------
