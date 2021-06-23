@@ -51,4 +51,7 @@ QuasarProfile-*
 *.log
 
 # Dependencies
-vendor/VulkanSDK/
+vendor/VulkanSDK
+
+# Python venv
+/venv/

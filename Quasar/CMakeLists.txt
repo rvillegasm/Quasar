@@ -17,8 +17,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(SOURCE_DIR "src")
 
-# Source files
-set(SOURCES 
+# ----------------------------------
+# ---------- Source files ----------
+#-----------------------------------
+set(SOURCES
   ${SOURCE_DIR}/Quasar/Core/Application.cpp
   ${SOURCE_DIR}/Quasar/Core/Log.cpp
   ${SOURCE_DIR}/Quasar/Core/Layer.cpp
@@ -83,6 +85,9 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 else()
   message(FATAL_ERROR "Target platform not yet supported!")
 endif()
+# --------------------------------------
+# ---------- END Source files ----------
+#---------------------------------------
 
 # Add the library
 add_library(quasar STATIC ${SOURCES} ${OS_DEPENDENT_SOURCES})
@@ -150,14 +155,28 @@ add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
 # portable-file-dialogs
 target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/pfd)
-# VulkanSDK
-target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/VulkanSDK/Include)
 
 # Platform specific dependencies
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/shaderc_sharedd.lib)
-  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/spirv-cross-cored.lib)
-  target_link_libraries(quasar PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Lib/spirv-cross-glsld.lib)
+  # VulkanSDK
+  set(VULKAN_SDK_DEBUG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK)
+  target_include_directories(quasar PRIVATE $ENV{VULKAN_SDK}/Include)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/shaderc_sharedd.lib)
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/spirv-cross-cored.lib)
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/spirv-cross-glsld.lib)
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/shaderc_shared.lib)
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/spirv-cross-core.lib)
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/spirv-cross-glsl.lib)
+  endif()
+
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  # VulkanSDK
+  target_include_directories(quasar PRIVATE $ENV{VULKAN_SDK}/include)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libshaderc_shared.so)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libspirv-cross-core.a)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libspirv-cross-glsl.a)
 endif()
 # -------------------------------------------------------------
 # --------------- END Third party dependencies ----------------
@@ -195,11 +214,19 @@ add_custom_command(
 
 # Copy necessary Dlls to the executable location
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
-  add_custom_command(
-    TARGET quasar
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Bin/shaderc_sharedd.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_sharedd.dll"
-  )
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_custom_command(
+      TARGET quasar
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Bin/shaderc_sharedd.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_sharedd.dll"
+    )
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_custom_command(
+      TARGET quasar
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "$ENV{VULKAN_SDK}/Bin/shaderc_shared.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_shared.dll"
+    )
+  endif()
 endif()
 
 # -------------------------------------------

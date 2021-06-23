@@ -15,9 +15,22 @@ int main(int argc, char **argv);
 namespace Quasar
 {
 
+    struct ApplicationCommandLineArgs
+    {
+        int count = 0;
+        char **args = nullptr;
+
+        const char *operator[](int index) const
+        {
+            QS_CORE_ASSERT(index < count);
+            return args[index];
+        }
+    };
+
     class Application
     {
     private:
+        ApplicationCommandLineArgs m_CommandLineArgs;
         Scope<Window> m_Window;
         ImGuiLayer *m_ImGuiLayer;
         bool m_Running = true;
@@ -35,7 +48,7 @@ namespace Quasar
         friend int ::main(int argc, char **argv);
 
     public:
-        Application(const std::string &name = "Quasar App");
+        Application(const std::string &name = "Quasar App", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
         virtual ~Application();
 
         void onEvent(Event &e);
@@ -48,11 +61,13 @@ namespace Quasar
         void close();
 
         ImGuiLayer *getImGuiLayer() { return m_ImGuiLayer; }
-        
+
+        ApplicationCommandLineArgs getCommandLineArgs() const { return m_CommandLineArgs; };
+
         static Application &get() { return *s_Instance; }
     };
 
     // To be defined in the CLIENT
-    Application *createApplication();
+    Application *createApplication(ApplicationCommandLineArgs args);
 
 } // namespace Quasar

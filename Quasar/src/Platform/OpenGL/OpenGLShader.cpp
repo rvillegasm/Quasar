@@ -104,7 +104,6 @@ namespace Quasar
         QS_PROFILE_FUNCTION();
 
         FileSystem::createShaderCacheDirectoryIfNeeded(ShaderCacheAPI::OpenGL);
-        FileSystem::createShaderCacheDirectoryIfNeeded(ShaderCacheAPI::Vulkan);
 
         std::string source = readFile(filepath);
         auto shaderSources = preProcess(source);
@@ -329,7 +328,7 @@ namespace Quasar
         options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_2);
         options.SetOptimizationLevel(shaderc_optimization_level_performance);
 
-        std::filesystem::path cacheDirectory = FileSystem::getShaderCacheDirectory(ShaderCacheAPI::Vulkan);
+        std::filesystem::path cacheDirectory = FileSystem::getShaderCacheDirectory(ShaderCacheAPI::OpenGL);
 
         auto &shaderData = m_VulkanSPIRV;
         shaderData.clear();
