@@ -32,6 +32,14 @@ namespace Quasar
 
         m_ActiveScene = createRef<Scene>();
 
+        auto commandLineArgs = Application::get().getCommandLineArgs();
+        if (commandLineArgs.count > 1)
+        {
+            auto sceneFilePath = commandLineArgs[1];
+            SceneSerializer serializer(m_ActiveScene);
+            serializer.deserializeFromText(sceneFilePath);
+        }
+
         m_EditorCamera = EditorCamera(glm::radians(30.0f), 1.778f, 0.1f, 1000.f);
 #if 0
         auto square = m_ActiveScene->createEntity("Green Square");

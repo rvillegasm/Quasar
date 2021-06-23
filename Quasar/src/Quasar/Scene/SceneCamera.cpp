@@ -1,5 +1,7 @@
 #include "SceneCamera.hpp"
 
+#include "Quasar/Core/Base.hpp"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Quasar
@@ -32,6 +34,7 @@ namespace Quasar
     
     void SceneCamera::setViewportSize(uint32_t width, uint32_t height) 
     {
+        QS_CORE_ASSERT(width > 0 && height > 0);
         m_AspectRatio = (float)width / (float)height;
         recalculateProjection();
     }

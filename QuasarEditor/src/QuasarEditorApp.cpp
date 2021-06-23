@@ -9,8 +9,8 @@ namespace Quasar
     class QuasarEditor : public Application
     {
     public:
-        QuasarEditor()
-            : Application("Quasar Editor")
+        QuasarEditor(ApplicationCommandLineArgs args)
+            : Application("Quasar Editor", args)
         {
             pushLayer(new EditorLayer());
         }
@@ -20,9 +20,9 @@ namespace Quasar
         }
     };
 
-    Application *createApplication()
+    Application *createApplication(ApplicationCommandLineArgs args)
     {
-        return new QuasarEditor();
+        return new QuasarEditor(args);
     }
     
 } // namespace Quasar

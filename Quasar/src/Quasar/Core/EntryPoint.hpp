@@ -7,14 +7,14 @@
 
 #include "Quasar/Debug/Instrumentor.hpp"
 
-extern Quasar::Application *Quasar::createApplication();
+extern Quasar::Application *Quasar::createApplication(ApplicationCommandLineArgs args);
 
 int main(int argc, char **argv)
 {
     Quasar::Log::init();
 
     QS_PROFILE_BEGIN_SESSION("Startup", Quasar::FileSystem::getAbsolutePath("QuasarProfile-Startup.json"));
-    auto app = Quasar::createApplication();
+    auto app = Quasar::createApplication({ argc, argv });
     QS_PROFILE_END_SESSION();
 
     QS_PROFILE_BEGIN_SESSION("Runtime", Quasar::FileSystem::getAbsolutePath("QuasarProfile-Runtime.json"));

@@ -17,8 +17,10 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(SOURCE_DIR "src")
 
-# Source files
-set(SOURCES 
+# ----------------------------------
+# ---------- Source files ----------
+#-----------------------------------
+set(SOURCES
   ${SOURCE_DIR}/Quasar/Core/Application.cpp
   ${SOURCE_DIR}/Quasar/Core/Log.cpp
   ${SOURCE_DIR}/Quasar/Core/Layer.cpp
@@ -33,6 +35,7 @@ set(SOURCES
   ${SOURCE_DIR}/Quasar/Renderer/Shader.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Buffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Framebuffer.cpp
+  ${SOURCE_DIR}/Quasar/Renderer/UniformBuffer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/VertexArray.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer.cpp
   ${SOURCE_DIR}/Quasar/Renderer/Renderer2D.cpp
@@ -55,6 +58,7 @@ set(SOURCES
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLShader.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLFramebuffer.cpp
+  ${SOURCE_DIR}/Platform/OpenGL/OpenGLUniformBuffer.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLVertexArray.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLRendererAPI.cpp
   ${SOURCE_DIR}/Platform/OpenGL/OpenGLTexture.cpp
@@ -81,6 +85,9 @@ elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
 else()
   message(FATAL_ERROR "Target platform not yet supported!")
 endif()
+# --------------------------------------
+# ---------- END Source files ----------
+#---------------------------------------
 
 # Add the library
 add_library(quasar STATIC ${SOURCES} ${OS_DEPENDENT_SOURCES})
@@ -148,6 +155,29 @@ add_subdirectory(${QUASAR_DEPENDENCIES_DIR}/yaml-cpp)
 target_include_directories(quasar PUBLIC ${QUASAR_DEPENDENCIES_DIR}/yaml-cpp/include)
 # portable-file-dialogs
 target_include_directories(quasar PRIVATE ${QUASAR_DEPENDENCIES_DIR}/pfd)
+
+# Platform specific dependencies
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  # VulkanSDK
+  set(VULKAN_SDK_DEBUG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK)
+  target_include_directories(quasar PRIVATE $ENV{VULKAN_SDK}/Include)
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/shaderc_sharedd.lib)
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/spirv-cross-cored.lib)
+    target_link_libraries(quasar PRIVATE ${VULKAN_SDK_DEBUG_DIR}/Lib/spirv-cross-glsld.lib)
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/shaderc_shared.lib)
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/spirv-cross-core.lib)
+    target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/Lib/spirv-cross-glsl.lib)
+  endif()
+
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  # VulkanSDK
+  target_include_directories(quasar PRIVATE $ENV{VULKAN_SDK}/include)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libshaderc_shared.so)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libspirv-cross-core.a)
+  target_link_libraries(quasar PRIVATE $ENV{VULKAN_SDK}/lib/libspirv-cross-glsl.a)
+endif()
 # -------------------------------------------------------------
 # --------------- END Third party dependencies ----------------
 # -------------------------------------------------------------
@@ -181,6 +211,24 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
   VERBATIM
 )
+
+# Copy necessary Dlls to the executable location
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_custom_command(
+      TARGET quasar
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanSDK/Bin/shaderc_sharedd.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_sharedd.dll"
+    )
+  elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    add_custom_command(
+      TARGET quasar
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy "$ENV{VULKAN_SDK}/Bin/shaderc_shared.dll" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shaderc_shared.dll"
+    )
+  endif()
+endif()
+
 # -------------------------------------------
 # ---------- END Post Build Events ----------
 # -------------------------------------------
