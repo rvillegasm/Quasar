@@ -1,20 +1,15 @@
 import os
-import sys
 
-import check_python
+from setup_python import PythonSetup
+from setup_vulkan import VulkanSetup
 
 
-# verify that every package is installed
-check_python.validate_packages()
-
-import vulkan
+# verify that the python environment is setup correctly
+PythonSetup.validate()
 
 # change active dir to root
 os.chdir("../")
 
-if not vulkan.check_vulkan_sdk():
-    print("Vulkan sdk not installed")
+VulkanSetup.validate()
 
-if sys.platform == "win32":
-    if not vulkan.check_vulkan_sdk_debug_libs():
-        print("Vulkan sdk debug libs not found")
+print("\nSetup Complete!")
