@@ -250,6 +250,7 @@ namespace Quasar
         }
 
         m_SceneHierarchyPanel.onImGuiRender();
+        m_ContentBrowserPanel.onImGuiRender();
 
         ImGui::Begin("Stats");
 
