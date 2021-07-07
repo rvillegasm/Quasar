@@ -3,6 +3,7 @@
 #include <Quasar.hpp>
 #include <Quasar/Renderer/EditorCamera.hpp>
 #include "Panels/SceneHierarchyPanel.hpp"
+#include "Panels/ContentBrowserPanel.hpp"
 
 #include <glm/glm.hpp>
 
@@ -44,6 +45,7 @@ namespace Quasar
 
         // Panels
         SceneHierarchyPanel m_SceneHierarchyPanel;
+        ContentBrowserPanel m_ContentBrowserPanel;
 
         bool onKeyPressed(KeyPressedEvent &e);
         bool onMouseButtonPressed(MouseButtonPressedEvent &e);
